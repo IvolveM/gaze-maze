@@ -1,4 +1,0 @@
-/home/ivan/Documents/School/bach2/Computer Graphics/gaze-maze/build/CMakeFiles/GLAD.dir
-/home/ivan/Documents/School/bach2/Computer Graphics/gaze-maze/build/CMakeFiles/gaze-maze.dir
-/home/ivan/Documents/School/bach2/Computer Graphics/gaze-maze/build/CMakeFiles/edit_cache.dir
-/home/ivan/Documents/School/bach2/Computer Graphics/gaze-maze/build/CMakeFiles/rebuild_cache.dir

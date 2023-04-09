@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(opengl_project)
+project(gaze-maze)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -21,5 +21,5 @@ add_library(GLAD "glad.c")
 set(LIBS ${LIBS} GLAD)
 
 include_directories(${CMAKE_SOURCE_DIR}/includes)
-add_executable(opengl_project main.cpp stb_image.cpp stb_image.h)
-target_link_libraries(opengl_project ${LIBS}) # -lglfw3 -lGL -lGLU -lX11 -lXxf86vm -lXrandr -lpthread -lXi
+add_executable(gaze-maze main.cpp stb_image.cpp stb_image.h)
+target_link_libraries(gaze-maze ${LIBS}) # -lglfw3 -lGL -lGLU -lX11 -lXxf86vm -lXrandr -lpthread -lXi
