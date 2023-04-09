@@ -1,7 +1,6 @@
 #pragma once
 #include <glad/glad.h> 
 #include <iostream>
-#include <sstream>
 #include <string>
 
 #include <glm/glm.hpp>
@@ -12,6 +11,7 @@ class Shader
 {
     public:
         unsigned int ID;
+        Shader();
         Shader(const char* vertexPath, const char* fragmentPath);
 
         void use();

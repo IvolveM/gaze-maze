@@ -13,15 +13,20 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "stb_image.h"
+#include "Game.h"
 
 void processInput(GLFWwindow *window);
 
-int main(){
-
+int main() {
+    try {
+        Game(800,800);
+    }
+    catch(std::exception e) {
+        std::cerr << e.what() << std::endl;
+    }
 
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // setup wire
     // glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //  set back to fill
-	glEnable(GL_DEPTH_TEST); // enable depth testing
 
     // SETUP SHADERS
 

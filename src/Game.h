@@ -11,7 +11,8 @@
 #include <exception>
 
 #include "stb_image.h"
-#include "Shader.h"
+
+#include "shaders/Shader.h"
 
 class Game{
     private:

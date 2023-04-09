@@ -6,6 +6,8 @@ Game::Game(int width, int height) {
     initGlfw();
     initShaders();
 
+	glEnable(GL_DEPTH_TEST); // enable depth testing
+
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         throw FailedGLADInit();
     }

@@ -1,4 +1,8 @@
-#include "shaders/Shader.h"
+#include "Shader.h"
+
+Shader::Shader() {
+    
+}
 
 Shader::Shader(const char* vertexCode, const char* fragmentCode)
 {
