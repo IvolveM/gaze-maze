@@ -4,9 +4,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 Game::Game(int width, int height) {
     initGlfw();
-    initShaders();
-
-	glEnable(GL_DEPTH_TEST); // enable depth testing
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         throw FailedGLADInit();
@@ -14,6 +11,11 @@ Game::Game(int width, int height) {
     glViewport(0, 0, 800, 600);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     stbi_set_flip_vertically_on_load(true); // before loading any image
+
+
+    initShaders();
+
+	glEnable(GL_DEPTH_TEST); // enable depth testing
 }
 
 Game::~Game() {
