@@ -20,7 +20,7 @@
 *.mod
 *.smod
 
-# Compiled Static libraries
+# Compiled Static libraries/.gitignore
 *.lai
 *.la
 *.a
