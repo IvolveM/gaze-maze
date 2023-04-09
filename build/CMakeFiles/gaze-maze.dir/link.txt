@@ -1,0 +1,1 @@
+/usr/bin/c++ "CMakeFiles/gaze-maze.dir/main.cpp.o" "CMakeFiles/gaze-maze.dir/stb_image.cpp.o" -o gaze-maze  -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl libGLAD.a 
