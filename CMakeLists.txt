@@ -17,9 +17,9 @@ message(STATUS "Found GLFW3 in ${GLFW3_INCLUDE_DIR}")
 
 set(LIBS glfw GL X11 pthread Xrandr Xi dl)
 
-add_library(GLAD "glad.c")
+add_library(GLAD "src/glad.c")
 set(LIBS ${LIBS} GLAD)
 
 include_directories(${CMAKE_SOURCE_DIR}/includes)
-add_executable(gaze-maze main.cpp stb_image.cpp stb_image.h)
+add_executable(gaze-maze src/main.cpp src/stb_image.cpp src/stb_image.h src/Game.h src/Game.cpp src/shaders/Shader.h src/shaders/Shader.cpp)
 target_link_libraries(gaze-maze ${LIBS}) # -lglfw3 -lGL -lGLU -lX11 -lXxf86vm -lXrandr -lpthread -lXi
