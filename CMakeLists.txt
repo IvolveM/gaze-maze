@@ -21,5 +21,13 @@ add_library(GLAD "src/glad.c")
 set(LIBS ${LIBS} GLAD)
 
 include_directories(${CMAKE_SOURCE_DIR}/includes)
-add_executable(gaze-maze src/main.cpp src/stb_image.cpp src/stb_image.h src/Game.h src/Game.cpp src/shaders/Shader.h src/shaders/Shader.cpp)
+add_executable(gaze-maze 
+    src/main.cpp 
+    src/stb_image.cpp 
+    src/stb_image.h 
+    src/Game.h 
+    src/Game.cpp 
+    src/resources/shaders/Shader.h 
+    src/resources/shaders/Shader.cpp
+)
 target_link_libraries(gaze-maze ${LIBS}) # -lglfw3 -lGL -lGLU -lX11 -lXxf86vm -lXrandr -lpthread -lXi
