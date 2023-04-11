@@ -1,14 +1,15 @@
+#pragma once
+#include <vector>
 
+#include "../Mesh.h"
+#include "../../resources/ResourceManager.h"
 
-#include "Mesh.h"
-
-class Cube : Mesh {
+class Cube : public Mesh {
+    private:
+        unsigned int VAO;
+        std::vector<float> vertices;
     public:
         Cube();
-        ~Cube();
 
-        void draw(const Shader &shader);
-
-    private:
-
+        void draw() override;
 };

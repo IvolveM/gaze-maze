@@ -2,7 +2,7 @@
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
-Game::Game(int width, int height) {
+Game::Game(int width, int height){
     initGlfw();
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -13,9 +13,21 @@ Game::Game(int width, int height) {
     stbi_set_flip_vertically_on_load(true); // before loading any image
 
 
-    initShaders();
-
 	glEnable(GL_DEPTH_TEST); // enable depth testing
+
+    initShaders();
+    initTextures();
+
+    Shader shader = ResourceManager::getShader("defaultShader");
+
+    // init view matrices
+	this->proj = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
+	shader.setMatrixFloat4("projection", proj);
+
+	this->view = glm::mat4(1.0f);
+    this->view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+	shader.setMatrixFloat4("view", view);
+    this->cube = new Cube();
 }
 
 Game::~Game() {
@@ -40,7 +52,10 @@ void Game::initGlfw() {
 void Game::initShaders(){
     const char* vertShader = R"(
         #version 330 core
-        layout (location = 0) in vec3 aPos;
+        layout (location = 0) in vec3 pos;
+        layout (location = 1) in vec2 texCoord;
+
+        out vec2 TexCoord;
 
         uniform mat4 model;
         uniform mat4 view;
@@ -48,7 +63,8 @@ void Game::initShaders(){
 
         void main()
         {
-            gl_Position = projection * view * model * vec4(aPos, 1.0);
+            gl_Position = projection * view * model * vec4(pos, 1.0);
+            TexCoord = texCoord;
         }
     )";
 
@@ -58,13 +74,22 @@ void Game::initShaders(){
 
         out vec4 FragColor;
 
+        in vec2 TexCoord;
+
+        uniform sampler2D texture0;
+
         void main()
         {
-            FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+            FragColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+            // FragColor = texture(texture0, TexCoord);
         }
     )";
 
-    this->shader = Shader(vertShader, fragShader);
+    ResourceManager::setShader("defaultShader", vertShader, fragShader);
+}
+
+void Game::initTextures(){
+    ResourceManager::setTexture("defaultTexture", "../assets/wall.jpg");
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
@@ -82,16 +107,8 @@ void Game::render() {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // fills the screen with the color configured by glClearColor, and clears the depth buffer bit
 
-    shader.use();
-
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-    shader.setMatrixFloat4("model", model);
-
-    shader.setFloat3("ourColor", 1.0f, 1.0f, 0.4f);
-
-    // glBindVertexArray(VAO);
-    // glDrawArrays(GL_TRIANGLES, 0, 36);
+    // handle render calls here
+    this->cube->draw();
 
     // check and call events and swap the buffers
     glfwPollEvents();

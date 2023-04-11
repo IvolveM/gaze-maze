@@ -13,15 +13,21 @@
 #include "stb_image.h"
 
 #include "resources/shaders/Shader.h"
+#include "resources/ResourceManager.h"
+#include "objects/based/Cube.h"
 
 class Game{
     private:
         GLFWwindow* window;
 
-        Shader shader;
+        glm::mat4 proj;
+        glm::mat4 view;
+
+        Cube* cube;
 
         void initGlfw();
         void initShaders();
+        void initTextures();
 
         void render();
         void processInput();

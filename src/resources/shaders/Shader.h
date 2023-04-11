@@ -9,10 +9,13 @@
 
 class Shader
 {
+    private:
+        unsigned int id;
     public:
-        unsigned int ID;
-        Shader();
         Shader(const char* vertexPath, const char* fragmentPath);
+        Shader(const Shader& shader){
+            this->id = shader.id;
+        }
 
         void use();
         void setBool(const std::string &name, bool value) const;

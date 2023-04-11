@@ -24,14 +24,14 @@ void ResourceManager::setShader(std::string shaderName, const char *vertexCode, 
 }
 
 Texture ResourceManager::getTexture(std::string textureName) {
-    if (shaders.count(textureName) != 0){
+    if (textures.count(textureName) == 0){
         throw NoResourceFoundException("Texture -> " + textureName);
     }
     return textures.at(textureName);
 }
 
 Shader ResourceManager::getShader(std::string shaderName) {
-    if (shaders.count(shaderName) != 0){
+    if (shaders.count(shaderName) == 0){
         throw NoResourceFoundException("Shader -> " + shaderName);
     }
     return shaders.at(shaderName);

@@ -6,6 +6,8 @@ Texture::Texture(const char* texturePath)
     unsigned char *data;
 
     glGenTextures(1, &this->textureId);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, textureId);
 
     // set the texture wrapping/filtering options
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

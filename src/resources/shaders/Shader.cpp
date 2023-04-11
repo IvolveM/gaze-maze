@@ -1,9 +1,5 @@
 #include "Shader.h"
 
-Shader::Shader() {
-    
-}
-
 Shader::Shader(const char* vertexCode, const char* fragmentCode)
 {
     unsigned int vertex, fragment;
@@ -34,15 +30,15 @@ Shader::Shader(const char* vertexCode, const char* fragmentCode)
         infoLog << std::endl;
     };
     // shader Program
-    ID = glCreateProgram();
-    glAttachShader(ID, vertex);
-    glAttachShader(ID, fragment);
-    glLinkProgram(ID);
+    id = glCreateProgram();
+    glAttachShader(id, vertex);
+    glAttachShader(id, fragment);
+    glLinkProgram(id);
     // print linking errors if any
-    glGetProgramiv(ID, GL_LINK_STATUS, &success);
+    glGetProgramiv(id, GL_LINK_STATUS, &success);
     if(!success)
     {
-        glGetProgramInfoLog(ID, 512, NULL, infoLog);
+        glGetProgramInfoLog(id, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" <<
         infoLog << std::endl;
     }
@@ -53,35 +49,35 @@ Shader::Shader(const char* vertexCode, const char* fragmentCode)
 
 void Shader::use()
 {
-    glUseProgram(ID);
+    glUseProgram(id);
 }
 
 void Shader::setBool(const std::string &name, bool value) const
 {
-    glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
+    glUniform1i(glGetUniformLocation(id, name.c_str()), (int)value);
 }
 
 void Shader::setInt(const std::string &name, int value) const
 {
-    glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+    glUniform1i(glGetUniformLocation(id, name.c_str()), value);
 }
 
 void Shader::setFloat(const std::string &name, float value) const
 {
-    glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
+    glUniform1f(glGetUniformLocation(id, name.c_str()), value);
 }
 
 void Shader::setFloat3(const std::string &name, float value1, float value2, float value3) const
 {
-    glUniform3f(glGetUniformLocation(ID, name.c_str()), value1, value2, value3);
+    glUniform3f(glGetUniformLocation(id, name.c_str()), value1, value2, value3);
 }
 
 void Shader::setFloat4(const std::string &name, float value1, float value2, float value3, float value4) const
 {
-    glUniform4f(glGetUniformLocation(ID, name.c_str()), value1, value2, value3, value4);
+    glUniform4f(glGetUniformLocation(id, name.c_str()), value1, value2, value3, value4);
 }
 
 void Shader::setMatrixFloat4(const std::string &name, glm::mat4 matrix) const
 {
-    glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(matrix));
+    glUniformMatrix4fv(glGetUniformLocation(id, name.c_str()), 1, GL_FALSE, glm::value_ptr(matrix));
 }

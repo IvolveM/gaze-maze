@@ -7,9 +7,11 @@
 
 class ResourceManager{
     private:
+        ResourceManager() = default;
+
         static std::map<std::string, Shader> shaders;
         static std::map<std::string, Texture> textures;
-        
+
     public:
         ResourceManager(ResourceManager &other) = delete;
         void operator=(const ResourceManager &) = delete;

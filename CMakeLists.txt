@@ -27,7 +27,15 @@ add_executable(gaze-maze
     src/stb_image.h 
     src/Game.h 
     src/Game.cpp 
+    src/objects/Mesh.h
+    src/objects/Mesh.cpp
+    src/objects/based/Cube.h
+    src/objects/based/Cube.cpp
+    src/resources/ResourceManager.h 
+    src/resources/ResourceManager.cpp
     src/resources/shaders/Shader.h 
     src/resources/shaders/Shader.cpp
+    src/resources/textures/Texture.h 
+    src/resources/textures/Texture.cpp
 )
 target_link_libraries(gaze-maze ${LIBS}) # -lglfw3 -lGL -lGLU -lX11 -lXxf86vm -lXrandr -lpthread -lXi
