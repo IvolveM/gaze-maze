@@ -19,7 +19,7 @@ void processInput(GLFWwindow *window);
 
 int main() {
     try {
-        Game(800,800);
+        Game game = Game(800,800);
     }
     catch(std::exception e) {
         std::cerr << e.what() << std::endl;
