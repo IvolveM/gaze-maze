@@ -12,7 +12,7 @@
 
 #include "stb_image.h"
 
-#include "shaders/Shader.h"
+#include "resources/shaders/Shader.h"
 
 class Game{
     private:
