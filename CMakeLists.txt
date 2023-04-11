@@ -27,6 +27,10 @@ add_executable(gaze-maze
     src/stb_image.h 
     src/Game.h 
     src/Game.cpp 
+    src/core/Camera.h
+    src/core/Camera.cpp
+    src/core/Player.h
+    src/core/Player.cpp
     src/objects/Mesh.h
     src/objects/Mesh.cpp
     src/objects/based/Cube.h

@@ -9,12 +9,14 @@
 
 #include <iostream>
 #include <exception>
+#include <functional> // for std::bind
 
 #include "stb_image.h"
 
 #include "resources/shaders/Shader.h"
 #include "resources/ResourceManager.h"
 #include "objects/based/Cube.h"
+#include "core/Player.h"
 
 class Game{
     private:
@@ -24,6 +26,7 @@ class Game{
         glm::mat4 view;
 
         Cube* cube;
+        Player player;
 
         void initGlfw();
         void initShaders();
@@ -31,6 +34,9 @@ class Game{
 
         void render();
         void processInput();
+        void processEvents();
+
+        void handleMouse();
     public:
         Game(int width, int height);
         ~Game();

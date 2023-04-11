@@ -8,6 +8,9 @@ class Cube : public Mesh {
     private:
         unsigned int VAO;
         std::vector<float> vertices;
+
+        Shader shader;
+        Texture texture;
     public:
         Cube();
 

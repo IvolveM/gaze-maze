@@ -47,9 +47,10 @@ Shader::Shader(const char* vertexCode, const char* fragmentCode)
     glDeleteShader(fragment);
 }
 
-void Shader::use()
+Shader Shader::use()
 {
     glUseProgram(id);
+    return *this;
 }
 
 void Shader::setBool(const std::string &name, bool value) const

@@ -10,22 +10,26 @@ Game::Game(int width, int height){
     }
     glViewport(0, 0, 800, 600);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
     stbi_set_flip_vertically_on_load(true); // before loading any image
 
 	glEnable(GL_DEPTH_TEST); // enable depth testing
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     initShaders();
     initTextures();
 
     // init view matrices
-    ResourceManager::getShader("defaultShader").use();
+    Shader shader = ResourceManager::getShader("defaultShader");
+    shader.use();
 	this->proj = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
-	ResourceManager::getShader("defaultShader").setMatrixFloat4("projection", proj);
+	shader.setMatrixFloat4("projection", proj);
 
 	this->view = glm::mat4(1.0f);
     this->view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-	ResourceManager::getShader("defaultShader").setMatrixFloat4("view", view);
+	shader.setMatrixFloat4("view", view);
     this->cube = new Cube();
+    this->player = Player();
 }
 
 Game::~Game() {
@@ -85,7 +89,7 @@ void Game::initShaders(){
 }
 
 void Game::initTextures(){
-    ResourceManager::setTexture("defaultTexture", "../assets/wall.jpg");
+    ResourceManager::setTexture("defaultTexture", "../assets/textures/wall1.jpg");
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
@@ -95,12 +99,15 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 void Game::mainloop() {
     while(!glfwWindowShouldClose(window)) {
         processInput();
+        processEvents();
+        this->view = player.getView();
+        ResourceManager::getShader("defaultShader").use().setMatrixFloat4("view", view);
         render();
     }
 }
 
 void Game::render() {
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClearColor(37.0f/255.0f, 124.0f/255.0f, 190.0f/255.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // fills the screen with the color configured by glClearColor, and clears the depth buffer bit
 
     // handle render calls here
@@ -114,8 +121,36 @@ void Game::render() {
 
 
 void Game::processInput() {
+    handleMouse();
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
         glfwSetWindowShouldClose(window, true);
-
     }
+
+    if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS){
+        player.handleKeyInput(Player::InputEvent::FORWARDS);
+    }
+    if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS || glfwGetKey(window, GLFW_PRESS) == GLFW_PRESS){
+        player.handleKeyInput(Player::InputEvent::BACKWARDS);
+    }
+    if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS){
+        player.handleKeyInput(Player::InputEvent::LEFT);
+    }
+    if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS){
+        player.handleKeyInput(Player::InputEvent::RIGHT);
+    }
+    if(glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS){
+        player.handleKeyInput(Player::InputEvent::JUMP);
+    }
+}
+
+void Game::processEvents()
+{
+    player.update();
+}
+
+void Game::handleMouse()
+{
+    GLdouble xPos, yPos;
+    glfwGetCursorPos(window, &xPos, &yPos);
+    player.setDirectionByMouse((float)xPos, (float)yPos);
 }
