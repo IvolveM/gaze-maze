@@ -12,21 +12,19 @@ Game::Game(int width, int height){
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     stbi_set_flip_vertically_on_load(true); // before loading any image
 
-
 	glEnable(GL_DEPTH_TEST); // enable depth testing
 
     initShaders();
     initTextures();
 
-    Shader shader = ResourceManager::getShader("defaultShader");
-
     // init view matrices
+    ResourceManager::getShader("defaultShader").use();
 	this->proj = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
-	shader.setMatrixFloat4("projection", proj);
+	ResourceManager::getShader("defaultShader").setMatrixFloat4("projection", proj);
 
 	this->view = glm::mat4(1.0f);
     this->view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-	shader.setMatrixFloat4("view", view);
+	ResourceManager::getShader("defaultShader").setMatrixFloat4("view", view);
     this->cube = new Cube();
 }
 
@@ -71,17 +69,15 @@ void Game::initShaders(){
 
     const char* fragShader = R"(
         #version 330 core
-
         out vec4 FragColor;
 
         in vec2 TexCoord;
-
         uniform sampler2D texture0;
 
         void main()
         {
-            FragColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
-            // FragColor = texture(texture0, TexCoord);
+            FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+            FragColor = texture(texture0, TexCoord);
         }
     )";
 
