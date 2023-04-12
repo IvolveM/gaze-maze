@@ -42,5 +42,5 @@ void Player::update()
     this->velocity += acceleration;
     this->acceleration /= (2.0f*decelerationSpeed);
     this->velocity /= (2.0f*decelerationSpeed);
-    this->incrementPosition(this->acceleration);
+    this->incrementPosition(this->velocity);
 }
