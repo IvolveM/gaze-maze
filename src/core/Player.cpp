@@ -14,16 +14,16 @@ void Player::handleKeyInput(InputEvent event)
     float speed = 0.5f;
     switch (event){
         case InputEvent::FORWARDS:
-            accelerate(glm::vec3{0.0f, 0.0f, -speed});
+            accelerate(glm::vec3{speed, 0.0f, 0.0f});
             break;
         case InputEvent::BACKWARDS:
-            accelerate(glm::vec3{0.0f, 0.0f, speed});
-            break;
-        case InputEvent::LEFT:
             accelerate(glm::vec3{-speed, 0.0f, 0.0f});
             break;
+        case InputEvent::LEFT:
+            accelerate(glm::vec3{0.0f, 0.0f , -speed});
+            break;
         case InputEvent::RIGHT:
-            accelerate(glm::vec3{speed, 0.0f, 0.0f});
+            accelerate(glm::vec3{0.0f, 0.0f, speed});
             break;
         case InputEvent::JUMP:
             accelerate(glm::vec3{0.0f, speed, 0.0f});
@@ -42,5 +42,5 @@ void Player::update()
     this->velocity += acceleration;
     this->acceleration /= (2.0f*decelerationSpeed);
     this->velocity /= (2.0f*decelerationSpeed);
-    this->incrementPosition(this->velocity);
+    this->incrementPosition(this->acceleration);
 }

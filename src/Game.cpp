@@ -129,7 +129,7 @@ void Game::processInput() {
     if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS){
         player.handleKeyInput(Player::InputEvent::FORWARDS);
     }
-    if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS || glfwGetKey(window, GLFW_PRESS) == GLFW_PRESS){
+    if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS){
         player.handleKeyInput(Player::InputEvent::BACKWARDS);
     }
     if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS){
