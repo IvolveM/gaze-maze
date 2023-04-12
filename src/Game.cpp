@@ -28,8 +28,9 @@ Game::Game(int width, int height){
 	this->view = glm::mat4(1.0f);
     this->view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 	shader.setMatrixFloat4("view", view);
-    this->cube = new Cube();
     this->player = Player();
+
+    this->mazeCubes = MazeLoader().loadMazeFromFile("../assets/maze.txt");
 }
 
 Game::~Game() {
@@ -111,7 +112,9 @@ void Game::render() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // fills the screen with the color configured by glClearColor, and clears the depth buffer bit
 
     // handle render calls here
-    this->cube->draw();
+    for (Cube* cube : this->mazeCubes) {
+        cube->draw();
+    }
 
     // check and call events and swap the buffers
     glfwPollEvents();

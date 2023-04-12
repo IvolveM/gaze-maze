@@ -2,25 +2,24 @@
 #include <iostream>
 #include <fstream> 
 #include <string>
+#include <vector>
+#include "../objects/based/Cube.h"
 
 class MazeLoader {
+    static constexpr char* WALLCHAR = "#";
+    static constexpr char* EMPTYCHAR = " ";
+
     public:
-        MazeLoader(std::string fileName);
+        MazeLoader();
         ~MazeLoader();
 
-        String loadLine();
+        std::vector<Cube*> loadMazeFromFile(std::string fileName);
 
     private:
-        std::ifstream mazeFile;
-}
+        void loadMaze();
+        void loadLine(const std::string& line);
+        void addCube(Cube* cube);
 
-class ReadingClosedFileException : public std::exception {
-    public:
-        ReadingClosedFileException(std::string name){
-            this->name = name;
-        };
-
-        const char * what () const throw () {
-            return strcat("You tried to read a line from a file that hasn't been opened.");
-        }
+        std::ifstream* mazeFile;
+        std::vector<Cube*> mazeCubes;
 };

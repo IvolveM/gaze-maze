@@ -1,20 +1,46 @@
 
 #include "MazeLoader.h"
 
-MazeLoader::MazeLoader(std::string fileName) {
-    this->mazeFile = ifstream(fileName);
+MazeLoader::MazeLoader() {
+
 }
 
-std::string MazeLoader::loadLine() {
-    if (!this->mazeFile.is_open()) {
-        std::cout << "File is closed" << std::endl;
-        throw ReadingClosedFileException;
+MazeLoader::~MazeLoader() {
+    delete this->mazeFile;
+}
+
+std::vector<Cube*> MazeLoader::loadMazeFromFile(std::string fileName) {
+    this->mazeFile = new std::ifstream(fileName);
+    loadMaze();
+    this->mazeFile->close();
+    return this->mazeCubes;
+}
+
+void MazeLoader::loadMaze() {
+    if (this->mazeFile->is_open()) {
+        std::string line;
+        while (this->mazeFile->good()) {
+            std::getline(*(this->mazeFile), line);
+            loadLine(line);
+        }
     }
-    if (!this->mazeFile.good()) {
-        std::cout << "All line are read" << std::endl;
-        return nullptr;
+    else {
+        std::cout << "Couldn't open file" << std::endl;
     }
-    std::string ret;
-    std::getline(this->mazeFile, ret);
-    return ret;
+}
+
+void MazeLoader::loadLine(const std::string& line) {
+    std::cout << "Loading line: " << line << std::endl;
+    for (auto el : line) {
+        if (strcmp(WALLCHAR, &el)) {
+            addCube(new Cube());
+        }
+        else if (strcmp(EMPTYCHAR, &el)) {
+
+        }
+    }
+}
+
+void MazeLoader::addCube(Cube* cube) {
+    this->mazeCubes.push_back(cube);
 }

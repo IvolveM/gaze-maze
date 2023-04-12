@@ -17,6 +17,7 @@
 #include "resources/ResourceManager.h"
 #include "objects/based/Cube.h"
 #include "core/Player.h"
+#include "utils/MazeLoader.h"
 
 class Game{
     private:
@@ -25,8 +26,8 @@ class Game{
         glm::mat4 proj;
         glm::mat4 view;
 
-        Cube* cube;
         Player player;
+        std::vector<Cube*> mazeCubes;
 
         void initGlfw();
         void initShaders();

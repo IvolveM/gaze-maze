@@ -9,8 +9,6 @@ class Camera{
         float sensitivity = 0.05f;
 
         glm::vec3 position; // position of camera
-        glm::vec3 direction; // normalized direction the camera is pointing to
-        glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);//  normalized up-direction
 
         float yaw; // degrees around the y-axis
         float pitch; // degrees around the x-axis
@@ -23,6 +21,9 @@ class Camera{
     protected:
         void setPosition(glm::vec3 position);
         void incrementPosition(glm::vec3 position);
+
+        glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);//  normalized up-direction
+        glm::vec3 direction; // normalized direction the camera is pointing to
     public:
         Camera(
             glm::vec3 position = glm::vec3{},
