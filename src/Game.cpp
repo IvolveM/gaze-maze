@@ -149,7 +149,7 @@ void Game::render() {
     // for (Cube* cube : this->mazeCubes) {
     //     cube->draw();
     // }
-    // ground->draw();
+    ground->draw();
 
     // check and call events and swap the buffers
     glfwPollEvents();
