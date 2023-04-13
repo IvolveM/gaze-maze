@@ -24,8 +24,6 @@ Cube::Cube(std::vector<glm::vec3> instancePositions) :
 	}
 	std::cout << this->instanceModelMatrices.size() << std::endl;
 
-	initDefaultVaoBvo();
-    glBindVertexArray(VAO);
 
 	unsigned int instancingVBO;
     glGenBuffers(1, &instancingVBO);
@@ -33,6 +31,9 @@ Cube::Cube(std::vector<glm::vec3> instancePositions) :
     glBindBuffer(GL_ARRAY_BUFFER, instancingVBO);
     glBufferData(GL_ARRAY_BUFFER, this->instanceModelMatrices.size() * sizeof(glm::mat4), &this->instanceModelMatrices[0], GL_STATIC_DRAW);
 
+	initDefaultVaoBvo();
+	
+    glBindVertexArray(VAO);
 	size_t vec4Size = sizeof(glm::vec4);
 
 	glEnableVertexAttribArray(2);
