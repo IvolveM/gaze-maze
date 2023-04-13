@@ -54,7 +54,7 @@ Cube::Cube(glm::vec3 position) :
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * 3 * sizeof(vertices), &vertices[0], GL_STATIC_DRAW); // OR GL_DYNAMIC_DRAW
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * 3 * sizeof(float), &vertices[0], GL_STATIC_DRAW); // OR GL_DYNAMIC_DRAW
 
     // pointer for vertices
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
