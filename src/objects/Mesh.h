@@ -14,6 +14,7 @@ class Mesh {
 
     public:
         virtual ~Mesh();
+        Mesh(glm::vec3 position);
         // void rotate(float angleInDegrees) { this->rotation += angleInDegrees; };
         void move(glm::vec3 pos) { this->position += pos; };
         // void setSize (glm::vec3 size) { this->size = size; };

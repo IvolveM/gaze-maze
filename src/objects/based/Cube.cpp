@@ -1,7 +1,8 @@
 
 #include "Cube.h"
 
-Cube::Cube() : 
+Cube::Cube(glm::vec3 position) : 
+	Mesh{position},
     shader{ResourceManager::getShader("defaultShader")},
     texture{ResourceManager::getTexture("defaultTexture")}
 {

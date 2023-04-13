@@ -12,7 +12,7 @@ class Cube : public Mesh {
         Shader shader;
         Texture texture;
     public:
-        Cube();
+        Cube(glm::vec3 position);
 
         void draw() override;
 };
