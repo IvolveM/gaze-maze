@@ -34,7 +34,6 @@ void MazeLoader::loadMaze() {
 void MazeLoader::loadLine(const std::string& line) {
     for (const char& el : line) {
         if (WALLCHAR == el) {
-            // for (int i = 0; i < 1000; i++) {Cube* c = new Cube(glm::vec3(rand() % 1000, 0.0f, rand() % 1000)); addCube(c);}
             addCubePosition(glm::vec3(this->colOffset, 0.0f, this->rowOffset));
         }
         else if (EMPTYCHAR == el) {}
