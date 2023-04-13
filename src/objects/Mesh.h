@@ -9,7 +9,7 @@
 
 class Mesh {
     protected:
-        glm::vec3   position, size;
+        glm::vec3 position, size;
         // glm::vec3   color;
         // float       rotation;
 

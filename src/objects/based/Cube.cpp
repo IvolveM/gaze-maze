@@ -11,7 +11,7 @@ Cube::Cube(glm::vec3 position) :
 }
 
 Cube::Cube(std::vector<glm::vec3> instancePositions) :
-	Mesh{instancePositions},
+	Mesh{},
     shader{ResourceManager::getShader("instanceShader")},
     texture{ResourceManager::getTexture("defaultTexture")} 
 {
