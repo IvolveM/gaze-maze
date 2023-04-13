@@ -25,27 +25,29 @@ Cube::Cube(std::vector<glm::vec3> instancePositions) :
 	std::cout << this->instanceModelMatrices.size() << std::endl;
 
 	initDefaultVaoBvo();
+    glBindVertexArray(VAO);
 
 	unsigned int instancingVBO;
     glGenBuffers(1, &instancingVBO);
 
     glBindBuffer(GL_ARRAY_BUFFER, instancingVBO);
-    glBufferData(GL_ARRAY_BUFFER, this->instanceModelMatrices.size() * sizeof(glm::mat4), &this->instanceModelMatrices[0],
-				GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, this->instanceModelMatrices.size() * sizeof(glm::mat4), &this->instanceModelMatrices[0], GL_STATIC_DRAW);
 
+	size_t vec4Size = sizeof(glm::vec4);
+
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 4*vec4Size, (void*)0);
 	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
+	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 4*vec4Size, (void*)(vec4Size));
 	glEnableVertexAttribArray(4);
-	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
+	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 4*vec4Size, (void*)(2 * vec4Size));
 	glEnableVertexAttribArray(5);
-	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
-	glEnableVertexAttribArray(6);
-	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
+	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 4*vec4Size, (void*)(3 * vec4Size));
 
+	glVertexAttribDivisor(2, 1);
 	glVertexAttribDivisor(3, 1);
 	glVertexAttribDivisor(4, 1);
 	glVertexAttribDivisor(5, 1);
-	glVertexAttribDivisor(6, 1);
 }
 
 void Cube::initVertices() {
@@ -125,7 +127,7 @@ void Cube::draw()
 	else {
 		glBindVertexArray(VAO);
 		texture.bindTexture();
-		glDrawArraysInstanced(GL_TRIANGLES, 0, 36, 1000);
+		glDrawArraysInstanced(GL_TRIANGLES, 0, 36, instanceModelMatrices.size());
 		glBindVertexArray(0);
 	}
 }
