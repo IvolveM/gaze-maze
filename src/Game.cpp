@@ -111,7 +111,7 @@ void Game::initShaders(){
 
         void main()
         {
-            TexCoords = aTexCoords;
+            TexCoord = aTexCoords;
             gl_Position = projection * view * aInstanceMatrix * vec4(aPos, 1.0f); 
         }
     )";
