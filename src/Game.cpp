@@ -14,6 +14,7 @@ Game::Game(int width, int height){
     stbi_set_flip_vertically_on_load(true); // before loading any image
 
 	glEnable(GL_DEPTH_TEST); // enable depth testing
+    glEnable(GL_MULTISAMPLE); // enable multisampling
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     initShaders();
@@ -50,6 +51,7 @@ void Game::initGlfw() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_SAMPLES, 4); // sampling hints
     //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
     this->window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
@@ -142,7 +144,7 @@ void Game::mainloop() {
         glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
         glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
         glBindBuffer(GL_UNIFORM_BUFFER, 0);
-          
+
         render();
     }
 }
