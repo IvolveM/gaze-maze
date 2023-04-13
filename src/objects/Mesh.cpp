@@ -14,7 +14,7 @@ Mesh::Mesh(glm::vec3 position, glm::vec3 size)
 
 Mesh::Mesh(std::vector<glm::vec3> instancePositions)
 :   instancing{true} {
-    
+
 }
 
 void Mesh::draw(){
