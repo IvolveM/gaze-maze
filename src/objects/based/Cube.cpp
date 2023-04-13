@@ -67,6 +67,7 @@ void Cube::draw()
 {
     shader.use();
     glm::mat4 model = glm::mat4(1.0f);
+	model = glm::translate(model, this->position);
     // model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
     shader.setMatrixFloat4("model", model);
 

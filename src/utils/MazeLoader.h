@@ -6,8 +6,8 @@
 #include "../objects/based/Cube.h"
 
 class MazeLoader {
-    static constexpr char* WALLCHAR = "#";
-    static constexpr char* EMPTYCHAR = " ";
+    static constexpr char WALLCHAR = '#';
+    static constexpr char EMPTYCHAR = ' ';
 
     public:
         MazeLoader();
@@ -22,4 +22,7 @@ class MazeLoader {
 
         std::ifstream* mazeFile;
         std::vector<Cube*> mazeCubes;
+
+        float colOffset = 0.0f;
+        float rowOffset = 0.0f;
 };

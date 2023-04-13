@@ -22,6 +22,7 @@ void MazeLoader::loadMaze() {
         while (this->mazeFile->good()) {
             std::getline(*(this->mazeFile), line);
             loadLine(line);
+            break;
         }
     }
     else {
@@ -31,14 +32,17 @@ void MazeLoader::loadMaze() {
 
 void MazeLoader::loadLine(const std::string& line) {
     std::cout << "Loading line: " << line << std::endl;
-    for (auto el : line) {
-        if (strcmp(WALLCHAR, &el)) {
-            addCube(new Cube());
+    for (const char& el : line) {
+        if (WALLCHAR == el) {
+            Cube* c = new Cube();
+            c->move(glm::vec3(this->colOffset, 0.0f, this->rowOffset));
+            addCube(c);
         }
-        else if (strcmp(EMPTYCHAR, &el)) {
-
-        }
+        else if (EMPTYCHAR == el) {}
+        this->colOffset++;
     }
+    this->colOffset = 0.0f;
+    this->rowOffset++;
 }
 
 void MazeLoader::addCube(Cube* cube) {

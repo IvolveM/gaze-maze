@@ -45,4 +45,5 @@ void Player::update()
     this->acceleration /= (2.0f*decelerationSpeed);
     this->velocity /= (2.0f*decelerationSpeed);
     this->incrementPosition(this->velocity);
+    std::cout << "PLAYERPOS x: " << this->getPosition().x << " y: " << this->getPosition().y << " z: " << this->getPosition().z  << std::endl;
 }

@@ -8,14 +8,14 @@
 
 class Mesh {
     protected:
-        // glm::vec3   position, size;
+        glm::vec3   position, size;
         // glm::vec3   color;
         // float       rotation;
 
     public:
         virtual ~Mesh();
         // void rotate(float angleInDegrees) { this->rotation += angleInDegrees; };
-        // void move(glm::vec3 pos) { this->position += pos; };
+        void move(glm::vec3 pos) { this->position += pos; };
         // void setSize (glm::vec3 size) { this->size = size; };
         // void setColor (glm::vec3 col) { this->color = col; };
         // void setVertices(float vertices[]) { this->vertices.insert(this->vertices.end(), vertices, vertices + sizeof(vertices)/sizeof(float)); };

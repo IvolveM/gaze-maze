@@ -4,6 +4,6 @@ Mesh::~Mesh(){
 
 }
 
-void Mesh::draw()
-{
+void Mesh::draw(){
+    
 }
