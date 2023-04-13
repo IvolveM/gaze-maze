@@ -13,15 +13,16 @@ class MazeLoader {
         MazeLoader();
         ~MazeLoader();
 
-        std::vector<Cube*> loadMazeFromFile(std::string fileName);
+        Cube* loadMazeFromFile(std::string fileName);
 
     private:
         void loadMaze();
         void loadLine(const std::string& line);
-        void addCube(Cube* cube);
+        void addCubePosition(const glm::vec3& cubePos);
 
+        Cube* mazeInstance;
+        std::vector<glm::vec3> cubePositions;
         std::ifstream* mazeFile;
-        std::vector<Cube*> mazeCubes;
 
         float colOffset = 0.0f;
         float rowOffset = 0.0f;

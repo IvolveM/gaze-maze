@@ -12,9 +12,15 @@ class Mesh {
         // glm::vec3   color;
         // float       rotation;
 
+        bool instancing;
+        std::vector<glm::mat4> instanceModelMatrices;
+
     public:
         virtual ~Mesh();
         Mesh(glm::vec3 position);
+        // instancing constructor
+        Mesh(std::vector<glm::vec3> instancePositions);
+
         // void rotate(float angleInDegrees) { this->rotation += angleInDegrees; };
         void move(glm::vec3 pos) { this->position += pos; };
         // void setSize (glm::vec3 size) { this->size = size; };

@@ -30,7 +30,7 @@ Game::Game(int width, int height){
 	shader.setMatrixFloat4("view", view);
     this->player = Player();
 
-    this->mazeCubes = MazeLoader().loadMazeFromFile("../assets/maze.txt");
+    this->maze = MazeLoader().loadMazeFromFile("../assets/maze.txt");
 }
 
 Game::~Game() {
@@ -86,7 +86,26 @@ void Game::initShaders(){
         }
     )";
 
-    ResourceManager::setShader("defaultShader", vertShader, fragShader);
+    const char* instanceShader = R"(
+        #version 330 core
+        layout (location = 0) in vec3 aPos;
+        layout (location = 2) in vec2 aTexCoords;
+        layout (location = 3) in mat4 aInstanceMatrix;
+
+        out vec2 TexCoords;
+
+        uniform mat4 projection;
+        uniform mat4 view;
+
+        void main()
+        {
+            TexCoords = aTexCoords;
+            gl_Position = projection * view * aInstanceMatrix * vec4(aPos, 1.0f); 
+        }
+    )";
+
+    ResourceManager::addShader("defaultShader", vertShader, fragShader);
+    ResourceManager::addShader("instanceShader", instanceShader, fragShader);
 }
 
 void Game::initTextures(){
@@ -112,9 +131,7 @@ void Game::render() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // fills the screen with the color configured by glClearColor, and clears the depth buffer bit
 
     // handle render calls here
-    for (Cube* cube : this->mazeCubes) {
-        cube->draw();
-    }
+    maze->draw();
 
     // check and call events and swap the buffers
     glfwPollEvents();

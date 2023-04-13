@@ -27,7 +27,7 @@ class Game{
         glm::mat4 view;
 
         Player player;
-        std::vector<Cube*> mazeCubes;
+        Cube* maze;
 
         void initGlfw();
         void initShaders();

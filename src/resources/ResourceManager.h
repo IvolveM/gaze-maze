@@ -17,7 +17,7 @@ class ResourceManager{
         void operator=(const ResourceManager &) = delete;
         
         static void setTexture(std::string textureName, const char* texturePath);
-        static void setShader(std::string shaderName, const char* vertexCode, const char* fragmentCode);
+        static void addShader(std::string shaderName, const char* vertexCode, const char* fragmentCode);
 
         static Texture getTexture(std::string);
         static Shader getShader(std::string);

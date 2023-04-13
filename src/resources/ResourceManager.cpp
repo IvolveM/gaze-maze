@@ -14,7 +14,7 @@ void ResourceManager::setTexture(std::string textureName, const char *texturePat
     textures.emplace(textureName, texture);
 }
 
-void ResourceManager::setShader(std::string shaderName, const char *vertexCode, const char *fragmentCode)
+void ResourceManager::addShader(std::string shaderName, const char *vertexCode, const char *fragmentCode)
 {
     if (shaders.count(shaderName) != 0){
         throw DuplicateResourceException("Shader -> " + shaderName);

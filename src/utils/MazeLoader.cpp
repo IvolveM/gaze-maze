@@ -1,5 +1,6 @@
 
 #include "MazeLoader.h"
+#include <random>
 
 MazeLoader::MazeLoader() {
 
@@ -9,11 +10,11 @@ MazeLoader::~MazeLoader() {
     delete this->mazeFile;
 }
 
-std::vector<Cube*> MazeLoader::loadMazeFromFile(std::string fileName) {
+Cube* MazeLoader::loadMazeFromFile(std::string fileName) {
     this->mazeFile = new std::ifstream(fileName);
     loadMaze();
     this->mazeFile->close();
-    return this->mazeCubes;
+    return this->mazeInstance;
 }
 
 void MazeLoader::loadMaze() {
@@ -23,6 +24,7 @@ void MazeLoader::loadMaze() {
             std::getline(*(this->mazeFile), line);
             loadLine(line);
         }
+        this->mazeInstance = new Cube(this->cubePositions);
     }
     else {
         std::cout << "Couldn't open file" << std::endl;
@@ -32,8 +34,8 @@ void MazeLoader::loadMaze() {
 void MazeLoader::loadLine(const std::string& line) {
     for (const char& el : line) {
         if (WALLCHAR == el) {
-            Cube* c = new Cube(glm::vec3(this->colOffset, 0.0f, this->rowOffset));
-            addCube(c);
+            // for (int i = 0; i < 1000; i++) {Cube* c = new Cube(glm::vec3(rand() % 1000, 0.0f, rand() % 1000)); addCube(c);}
+            addCubePosition(glm::vec3(this->colOffset, 0.0f, this->rowOffset));
         }
         else if (EMPTYCHAR == el) {}
         this->colOffset++;
@@ -42,6 +44,6 @@ void MazeLoader::loadLine(const std::string& line) {
     this->rowOffset++;
 }
 
-void MazeLoader::addCube(Cube* cube) {
-    this->mazeCubes.push_back(cube);
+void MazeLoader::addCubePosition(const glm::vec3& cubePos) {
+    this->cubePositions.push_back(cubePos);
 }
