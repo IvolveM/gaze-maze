@@ -22,10 +22,10 @@ void Player::handleKeyInput(InputEvent event)
             accelerate(this->direction * -speed);
             break;
         case InputEvent::LEFT:
-            accelerate(glm::cross(this->up, this->direction) *  speed);
+            accelerate(glm::cross(this->up, this->direction) * speed);
             break;
         case InputEvent::RIGHT:
-            accelerate(glm::cross(this->direction, this->up) *  speed);
+            accelerate(glm::cross(this->direction, this->up) * speed);
             break;
         case InputEvent::JUMP:
             accelerate(glm::vec3{0, speed, 0});
@@ -45,5 +45,4 @@ void Player::update()
     this->acceleration /= (2.0f*decelerationSpeed);
     this->velocity /= (2.0f*decelerationSpeed);
     this->incrementPosition(this->velocity);
-    std::cout << "PLAYERPOS x: " << this->getPosition().x << " y: " << this->getPosition().y << " z: " << this->getPosition().z  << std::endl;
 }

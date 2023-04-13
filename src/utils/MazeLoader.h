@@ -6,8 +6,8 @@
 #include "../objects/based/Cube.h"
 
 class MazeLoader {
-    static constexpr char WALLCHAR = '#';
-    static constexpr char EMPTYCHAR = ' ';
+    static const char WALLCHAR = '#';
+    static const char EMPTYCHAR = ' ';
 
     public:
         MazeLoader();

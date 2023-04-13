@@ -30,7 +30,6 @@ void MazeLoader::loadMaze() {
 }
 
 void MazeLoader::loadLine(const std::string& line) {
-    std::cout << "Loading line: " << line << std::endl;
     for (const char& el : line) {
         if (WALLCHAR == el) {
             Cube* c = new Cube(glm::vec3(this->colOffset, 0.0f, this->rowOffset));
