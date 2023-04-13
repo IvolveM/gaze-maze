@@ -87,3 +87,9 @@ void Shader::setMatrixFloat4(const std::string &name, glm::mat4 matrix) const
 {
     glUniformMatrix4fv(glGetUniformLocation(id, name.c_str()), 1, GL_FALSE, glm::value_ptr(matrix));
 }
+
+void Shader::setBlockBinding(const std::string &blockName, int bindingPoint)
+{
+    unsigned int uniformBlockIndex = glGetUniformBlockIndex(this->id, blockName.c_str());
+    glUniformBlockBinding(this->id, uniformBlockIndex, bindingPoint);
+}

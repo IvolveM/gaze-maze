@@ -19,24 +19,20 @@ Game::Game(int width, int height){
     initShaders();
     initTextures();
 
-    // init view matrices
-    Shader shader = ResourceManager::getShader("defaultShader");
-    Shader instanceShader = ResourceManager::getShader("instanceShader");
-    shader.use();
-	this->proj = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
-	shader.setMatrixFloat4("projection", proj);
+    // init shader matrices buffer
+    glGenBuffers(1, &uboMatrices);
+  
+    glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
+    glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_STATIC_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-	this->view = glm::mat4(1.0f);
-    this->view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-	shader.setMatrixFloat4("view", view);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrices, 0, 2 * sizeof(glm::mat4));
 
-    instanceShader.use();
-	this->proj = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
-	instanceShader.setMatrixFloat4("projection", proj);
+	glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
 
-	this->view = glm::mat4(1.0f);
-    this->view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-	instanceShader.setMatrixFloat4("view", view);
+    glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(proj));
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);  
 
     this->player = Player();
 
@@ -70,11 +66,16 @@ void Game::initShaders(){
         layout (location = 0) in vec3 pos;
         layout (location = 1) in vec2 texCoord;
 
+        layout (std140) uniform Matrices
+        {
+            mat4 projection;
+            mat4 view;
+        };
+
+
         out vec2 TexCoord;
 
         uniform mat4 model;
-        uniform mat4 view;
-        uniform mat4 projection;
 
         void main()
         {
@@ -104,10 +105,13 @@ void Game::initShaders(){
         layout (location = 1) in vec2 aTexCoord;
         layout (location = 2) in mat4 aInstanceMatrix;
 
-        out vec2 TexCoord;
+        layout (std140) uniform Matrices
+        {
+            mat4 projection;
+            mat4 view;
+        };
 
-        uniform mat4 projection;
-        uniform mat4 view;
+        out vec2 TexCoord;
 
         void main()
         {
@@ -116,8 +120,8 @@ void Game::initShaders(){
         }
     )";
 
-    ResourceManager::addShader("defaultShader", vertShader, fragShader);
-    ResourceManager::addShader("instanceShader", instanceShader, fragShader);
+    ResourceManager::addShader("defaultShader", vertShader, fragShader).use().setBlockBinding("Matrices", 0);
+    ResourceManager::addShader("instanceShader", instanceShader, fragShader).use().setBlockBinding("Matrices", 0);
 }
 
 void Game::initTextures(){
@@ -133,9 +137,12 @@ void Game::mainloop() {
     while(!glfwWindowShouldClose(window)) {
         processInput();
         processEvents();
-        this->view = player.getView();
-        ResourceManager::getShader("defaultShader").use().setMatrixFloat4("view", view);
-        ResourceManager::getShader("instanceShader").use().setMatrixFloat4("view", view);
+
+        glm::mat4 view = player.getView();
+        glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
+        glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
+        glBindBuffer(GL_UNIFORM_BUFFER, 0);
+          
         render();
     }
 }

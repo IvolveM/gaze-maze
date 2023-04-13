@@ -24,8 +24,7 @@ class Game{
     private:
         GLFWwindow* window;
 
-        glm::mat4 proj;
-        glm::mat4 view;
+        unsigned int uboMatrices;
 
         Player player;
         Cube* maze;
