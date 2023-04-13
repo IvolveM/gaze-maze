@@ -21,6 +21,7 @@ Game::Game(int width, int height){
 
     // init view matrices
     Shader shader = ResourceManager::getShader("defaultShader");
+    Shader instanceShader = ResourceManager::getShader("instanceShader");
     shader.use();
 	this->proj = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
 	shader.setMatrixFloat4("projection", proj);
@@ -28,6 +29,15 @@ Game::Game(int width, int height){
 	this->view = glm::mat4(1.0f);
     this->view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 	shader.setMatrixFloat4("view", view);
+
+    instanceShader.use();
+	this->proj = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
+	instanceShader.setMatrixFloat4("projection", proj);
+
+	this->view = glm::mat4(1.0f);
+    this->view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+	instanceShader.setMatrixFloat4("view", view);
+
     this->player = Player();
 
     this->maze = MazeLoader().loadMazeFromFile("../assets/maze.txt");
@@ -83,7 +93,7 @@ void Game::initShaders(){
 
         void main()
         {
-            FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+            // FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
             FragColor = texture(texture0, TexCoord);
         }
     )";
@@ -125,6 +135,7 @@ void Game::mainloop() {
         processEvents();
         this->view = player.getView();
         ResourceManager::getShader("defaultShader").use().setMatrixFloat4("view", view);
+        ResourceManager::getShader("instanceShader").use().setMatrixFloat4("view", view);
         render();
     }
 }
