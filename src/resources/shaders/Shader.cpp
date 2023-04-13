@@ -47,6 +47,11 @@ Shader::Shader(const char* vertexCode, const char* fragmentCode)
     glDeleteShader(fragment);
 }
 
+Shader::~Shader()
+{
+    // glDeleteProgram(id);
+}
+
 Shader Shader::use()
 {
     glUseProgram(id);

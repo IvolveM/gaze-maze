@@ -1,4 +1,5 @@
 
+#pragma once
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -17,10 +18,9 @@ class Mesh {
 
     public:
         virtual ~Mesh();
-        Mesh(glm::vec3 position);
+        Mesh(glm::vec3 position, glm::vec3 size = glm::vec3{1.0f});
         // instancing constructor
         Mesh(std::vector<glm::vec3> instancePositions);
-
         // void rotate(float angleInDegrees) { this->rotation += angleInDegrees; };
         void move(glm::vec3 pos) { this->position += pos; };
         // void setSize (glm::vec3 size) { this->size = size; };
