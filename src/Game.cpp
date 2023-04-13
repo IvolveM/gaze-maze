@@ -37,7 +37,7 @@ Game::Game(int width, int height){
     this->player = Player();
 
     this->maze = MazeLoader().loadMazeFromFile("../assets/maze.txt");
-    // this->mazeCubes = MazeLoader().loadMazeFromFile("../assets/maze.txt");
+    
     this->ground = new Plane(glm::vec3{0.0f, -0.5f, 0.0f}, 100.0f, 1.0f);
 }
 
