@@ -14,13 +14,14 @@ void ResourceManager::setTexture(std::string textureName, const char *texturePat
     textures.emplace(textureName, texture);
 }
 
-void ResourceManager::addShader(std::string shaderName, const char *vertexCode, const char *fragmentCode)
+Shader ResourceManager::addShader(std::string shaderName, const char *vertexCode, const char *fragmentCode)
 {
     if (shaders.count(shaderName) != 0){
         throw DuplicateResourceException("Shader -> " + shaderName);
     }
     Shader shader = Shader(vertexCode, fragmentCode);
     shaders.emplace(shaderName, shader);
+    return shader;
 }
 
 Texture ResourceManager::getTexture(std::string textureName) {
