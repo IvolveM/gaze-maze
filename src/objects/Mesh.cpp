@@ -4,8 +4,9 @@ Mesh::~Mesh(){
 
 }
 
-Mesh::Mesh(glm::vec3 position)
-: position{position}
+Mesh::Mesh(glm::vec3 position, glm::vec3 size)
+: position{position},
+  size{size}
 {
 }
 

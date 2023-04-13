@@ -16,6 +16,7 @@
 #include "resources/shaders/Shader.h"
 #include "resources/ResourceManager.h"
 #include "objects/based/Cube.h"
+#include "objects/based/Plane.h"
 #include "core/Player.h"
 #include "utils/MazeLoader.h"
 
@@ -28,6 +29,7 @@ class Game{
 
         Player player;
         std::vector<Cube*> mazeCubes;
+        Plane* ground;
 
         void initGlfw();
         void initShaders();

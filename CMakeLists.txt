@@ -35,6 +35,8 @@ add_executable(gaze-maze
     src/objects/Mesh.cpp
     src/objects/based/Cube.h
     src/objects/based/Cube.cpp
+    src/objects/based/Plane.h
+    src/objects/based/Plane.cpp
     src/resources/ResourceManager.h 
     src/resources/ResourceManager.cpp
     src/resources/shaders/Shader.h 

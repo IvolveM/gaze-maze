@@ -13,6 +13,7 @@ class Shader
         unsigned int id;
     public:
         Shader(const char* vertexPath, const char* fragmentPath);
+        ~Shader();
         Shader(const Shader& shader){
             this->id = shader.id;
         }

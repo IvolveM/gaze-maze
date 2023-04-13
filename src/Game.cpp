@@ -31,6 +31,7 @@ Game::Game(int width, int height){
     this->player = Player();
 
     this->mazeCubes = MazeLoader().loadMazeFromFile("../assets/maze.txt");
+    this->ground = new Plane(glm::vec3{0.0f, -0.5f, 0.0f}, 100.0f, 1.0f);
 }
 
 Game::~Game() {
@@ -90,7 +91,8 @@ void Game::initShaders(){
 }
 
 void Game::initTextures(){
-    ResourceManager::setTexture("defaultTexture", "../assets/textures/wall1.jpg");
+    ResourceManager::setTexture("defaultTexture", "../assets/textures/wall2.jpg");
+    ResourceManager::setTexture("groundTexture", "../assets/textures/ground2.jpg");
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
@@ -115,6 +117,7 @@ void Game::render() {
     for (Cube* cube : this->mazeCubes) {
         cube->draw();
     }
+    ground->draw();
 
     // check and call events and swap the buffers
     glfwPollEvents();
