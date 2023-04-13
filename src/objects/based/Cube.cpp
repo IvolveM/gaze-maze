@@ -27,7 +27,6 @@ Cube::Cube(std::vector<glm::vec3> instancePositions) :
 
 	initDefaultVaoBvo();
 
-    glBindVertexArray(VAO);
 
 	unsigned int instancingVBO;
     glGenBuffers(1, &instancingVBO);
