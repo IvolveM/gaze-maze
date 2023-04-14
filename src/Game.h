@@ -26,6 +26,8 @@ class Game{
 
         unsigned int uboMatrices;
 
+        float dt = 0.0f;
+
         Player player;
         Cube* maze;
         std::vector<Cube*> mazeCubes;

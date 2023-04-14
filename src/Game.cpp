@@ -136,7 +136,12 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 }
 
 void Game::mainloop() {
+	float oldTime = 0.0f;
     while(!glfwWindowShouldClose(window)) {
+        float newTime = glfwGetTime();
+        this->dt = newTime - oldTime;
+        oldTime = newTime;
+
         processInput();
         processEvents();
 
@@ -192,7 +197,7 @@ void Game::processInput() {
 
 void Game::processEvents()
 {
-    player.update();
+    player.update(this->dt);
 }
 
 void Game::handleMouse()
