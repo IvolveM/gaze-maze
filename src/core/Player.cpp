@@ -12,7 +12,7 @@ Player::Player():
 
 void Player::handleKeyInput(InputEvent event)
 {
-    std::cout << "player pos: " << getPosition().x << ", " << getPosition().y << ", " << getPosition().z << std::endl;
+    // std::cout << "player pos: " << getPosition().x << ", " << getPosition().y << ", " << getPosition().z << std::endl;
     float x = this->direction.x;
     float z = this->direction.z;
     glm::vec3 left = glm::cross(this->up, this->direction);
