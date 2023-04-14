@@ -9,13 +9,19 @@
 
 class Player: public Camera{
     private:
-        glm::vec3 acceleration;
-        glm::vec3 velocity;
-        bool isMoving;
-        void accelerate(glm::vec3 direction);
-
         Collisioner collisioner;
 
+        float gravityAcceleration = 20.0f;
+        float speed = 3.0f;
+        float jumpSpeed = 2.0f;
+
+        glm::vec2 movingDirection;
+        float verticalSpeed = 0.0f;
+        float verticalAcceleration = 0.0f;
+        
+        bool isMoving = false;
+        bool isOnGround = false;
+        void handleVerticalMovement(float dt);
     public:
         enum class InputEvent
         {
@@ -24,6 +30,6 @@ class Player: public Camera{
         Player();
         void handleKeyInput(InputEvent event);
 
-        void update();
+        void update(float dt);
         void doCollisions(Mesh m);
 };

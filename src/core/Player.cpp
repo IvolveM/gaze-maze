@@ -6,8 +6,7 @@
 
 Player::Player(): 
     Camera{glm::vec3{0.0f, 0.0f, 0.0f}},
-    velocity{glm::vec3{0.0f, 0.0f, 0.0f}},
-    acceleration{glm::vec3{0.0f, 0.0f, 0.0f}},
+    movingDirection{glm::vec2{0.0f, 0.0f}},
     isMoving{false},
     collisioner{glm::vec3(0.1f, 0.1f, 0.1f), glm::vec3(0.0f, 0.0f, 0.0f)}
 {
@@ -16,40 +15,60 @@ Player::Player():
 
 void Player::handleKeyInput(InputEvent event)
 {
-    float speed = 0.5f;
+    std::cout << "player pos: " << getPosition().x << ", " << getPosition().y << ", " << getPosition().z << std::endl;
+    float x = this->direction.x;
+    float z = this->direction.z;
+    glm::vec3 left = glm::cross(this->up, this->direction);
     switch (event){
         case InputEvent::FORWARDS:
-            accelerate(this->direction * speed);
+            movingDirection += glm::vec2{x, z};
             break;
         case InputEvent::BACKWARDS:
-            accelerate(this->direction * -speed);
+            movingDirection -= glm::vec2{x, z};
             break;
         case InputEvent::LEFT:
-            accelerate(glm::cross(this->up, this->direction) * speed);
+            movingDirection += glm::vec2{left.x, left.z};
             break;
         case InputEvent::RIGHT:
-            accelerate(glm::cross(this->direction, this->up) * speed);
+            movingDirection -= glm::vec2{left.x, left.z};
             break;
         case InputEvent::JUMP:
-            accelerate(glm::vec3{0, speed, 0});
+            if (isOnGround){
+                isOnGround = false;
+                this->verticalSpeed += jumpSpeed;
+            }
             break;
     }
 }
 
-void Player::accelerate(glm::vec3 direction)
+void Player::update(float dt)
 {
-    this->acceleration += glm::normalize(direction);
+    if (movingDirection.x != 0.0f && movingDirection.y != 0.0f){
+        glm::vec2 directionNormalized = glm::normalize(movingDirection);
+        incrementPosition(glm::vec3{directionNormalized.x, 0.0f, directionNormalized.y}*speed*dt);
+        movingDirection = glm::vec2{0.0f, 0.0f};
+    }
+    handleVerticalMovement(dt);
+    this->collisioner.setCenter(this->getPosition());
 }
 
-void Player::update()
-{
-    float decelerationSpeed = 20.0f;
-    this->velocity += acceleration;
-    this->acceleration /= (2.0f*decelerationSpeed);
-    this->velocity /= (2.0f*decelerationSpeed);
-    this->incrementPosition(this->velocity);
+void Player::handleVerticalMovement(float dt){
+    if (!isOnGround){
+        this->verticalAcceleration -= gravityAcceleration*dt;
+        this->verticalSpeed += verticalAcceleration*dt;
+    }
 
-    this->collisioner.setCenter(this->getPosition());
+    glm::vec3 pos = getPosition();
+    pos.y += verticalSpeed*dt;
+    setPosition(pos);
+    if (pos.y < 0){
+        pos.y = 0;
+        setPosition(pos);
+        
+        verticalAcceleration = 0.0f;
+        verticalSpeed = 0.0f;
+        isOnGround = true;
+    }
 }
 
 void Player::doCollisions(Mesh m) {
