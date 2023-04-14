@@ -16,6 +16,7 @@
 #include "Game.h"
 
 int main() {
+    srand(unsigned(time(NULL)));
     Game game = Game(800,800);
     game.mainloop();
 }

@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include "../objects/based/Cube.h"
+#include "MazeGenerator.h"
 
 class MazeLoader {
     static const char WALLCHAR = '#';

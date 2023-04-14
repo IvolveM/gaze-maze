@@ -45,5 +45,7 @@ add_executable(gaze-maze
     src/resources/textures/Texture.cpp
     src/utils/MazeLoader.h
     src/utils/MazeLoader.cpp
+    src/utils/MazeGenerator.h
+    src/utils/MazeGenerator.cpp
 )
 target_link_libraries(gaze-maze ${LIBS}) # -lglfw3 -lGL -lGLU -lX11 -lXxf86vm -lXrandr -lpthread -lXi

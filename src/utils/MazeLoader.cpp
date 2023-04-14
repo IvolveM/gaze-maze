@@ -11,6 +11,7 @@ MazeLoader::~MazeLoader() {
 }
 
 Cube* MazeLoader::loadMazeFromFile(std::string fileName) {
+    MazeGenerator();
     this->mazeFile = new std::ifstream(fileName);
     loadMaze();
     this->mazeFile->close();
@@ -34,7 +35,7 @@ void MazeLoader::loadMaze() {
 void MazeLoader::loadLine(const std::string& line) {
     for (const char& el : line) {
         if (WALLCHAR == el) {
-            for (int i = 0; i < 10; i++){
+            for (int i = 0; i < 2; i++){
                 addCubePosition(glm::vec3(this->colOffset, (float)i, this->rowOffset));
             }
         }
