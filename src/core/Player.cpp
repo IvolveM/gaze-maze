@@ -75,7 +75,4 @@ void Player::doCollisions(Mesh m) {
     if (m.isColliding(this->collisioner)) {
         std::cout << "COLLISION BABY WHOOOHOOO" << std::endl;
     }
-    else {
-        std::cout << "NO FUCKING COLLISION" << std::endl;
-    }
 }
