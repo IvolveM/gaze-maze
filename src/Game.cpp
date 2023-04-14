@@ -15,6 +15,7 @@ Game::Game(int width, int height){
 
 	glEnable(GL_DEPTH_TEST); // enable depth testing
     glEnable(GL_MULTISAMPLE); // enable multisampling
+    glfwSwapInterval( 0 ); // disable vsync
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     initShaders();
