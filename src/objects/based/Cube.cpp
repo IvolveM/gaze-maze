@@ -7,13 +7,13 @@ Cube::Cube(glm::vec3 position) :
     texture{ResourceManager::getTexture("defaultTexture")}
 {
 	initVertices();
-	initDefaultVaoBvo();
+	initDefaultVaoVbo();
 }
 
-Cube::Cube(std::vector<glm::vec3> instancePositions) :
-	Mesh{instancePositions},
+Cube::Cube(std::vector<glm::vec3> instancePositions, glm::vec3 size) :
+	Mesh{instancePositions, size},
     shader{ResourceManager::getShader("instanceShader")},
-    texture{ResourceManager::getTexture("defaultTexture")} 
+    texture{ResourceManager::getTexture("defaultTexture")}
 {
 	initVertices();
 
@@ -22,10 +22,8 @@ Cube::Cube(std::vector<glm::vec3> instancePositions) :
 		model = glm::translate(model, pos);
 		this->instanceModelMatrices.push_back(model);
 	}
-	std::cout << this->instanceModelMatrices.size() << std::endl;
 
-
-	initDefaultVaoBvo();
+	initDefaultVaoVbo();
 
 	unsigned int instancingVBO;
     glGenBuffers(1, &instancingVBO);
@@ -90,7 +88,7 @@ void Cube::initVertices() {
     };
 }
 
-void Cube::initDefaultVaoBvo() {
+void Cube::initDefaultVaoVbo() {
 	glGenVertexArrays(1, &VAO);
 
     unsigned int VBO;
@@ -113,7 +111,7 @@ void Cube::draw()
 {
     shader.use();
 
-	if (!instancing) {
+	if (!this->instancing) {
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, this->position);
 		// model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));

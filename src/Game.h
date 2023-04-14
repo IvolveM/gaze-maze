@@ -28,7 +28,7 @@ class Game{
 
         Player player;
         Cube* maze;
-        std::vector<Cube*> mazeCubes;
+        // std::vector<Cube*> mazeCubes;
         Plane* ground;
 
         void initGlfw();

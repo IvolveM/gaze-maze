@@ -193,6 +193,7 @@ void Game::processInput() {
 void Game::processEvents()
 {
     player.update();
+    player.doCollisions(*(this->maze));
 }
 
 void Game::handleMouse()

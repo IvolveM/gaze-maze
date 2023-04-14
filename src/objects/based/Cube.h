@@ -13,11 +13,11 @@ class Cube : public Mesh {
         Texture texture;
 
         void initVertices();
-        void initDefaultVaoBvo();
+        void initDefaultVaoVbo();
 
     public:
         Cube(glm::vec3 position);
-        Cube(std::vector<glm::vec3> instancePositions);
+        Cube(std::vector<glm::vec3> instancePositions, glm::vec3 size = glm::vec3(1.0f));
 
         void draw() override;
 };
