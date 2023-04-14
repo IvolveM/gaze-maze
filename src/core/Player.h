@@ -4,9 +4,13 @@
 #include <GLFW/glfw3.h>
 
 #include "Camera.h"
+#include "../objects/Collisioner.h"
+#include "../objects/Mesh.h"
 
 class Player: public Camera{
     private:
+        Collisioner collisioner;
+
         float gravityAcceleration = 20.0f;
         float speed = 3.0f;
         float jumpSpeed = 2.0f;
@@ -27,4 +31,5 @@ class Player: public Camera{
         void handleKeyInput(InputEvent event);
 
         void update(float dt);
+        void doCollisions(Mesh m);
 };

@@ -199,6 +199,7 @@ void Game::processInput() {
 
 void Game::processEvents()
 {
+    player.doCollisions(*(this->maze));
     player.update(this->dt);
 }
 

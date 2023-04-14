@@ -2,10 +2,13 @@
 
 #include <iostream>
 
+// TODO: PLAYER SIZE VARIABLE
+
 Player::Player(): 
     Camera{glm::vec3{0.0f, 0.0f, 0.0f}},
     movingDirection{glm::vec2{0.0f, 0.0f}},
-    isMoving{false}
+    isMoving{false},
+    collisioner{glm::vec3(0.1f, 0.1f, 0.1f), glm::vec3(0.0f, 0.0f, 0.0f)}
 {
     
 }
@@ -46,6 +49,7 @@ void Player::update(float dt)
         movingDirection = glm::vec2{0.0f, 0.0f};
     }
     handleVerticalMovement(dt);
+    this->collisioner.setCenter(this->getPosition());
 }
 
 void Player::handleVerticalMovement(float dt){
@@ -64,5 +68,14 @@ void Player::handleVerticalMovement(float dt){
         verticalAcceleration = 0.0f;
         verticalSpeed = 0.0f;
         isOnGround = true;
+    }
+}
+
+void Player::doCollisions(Mesh m) {
+    if (m.isColliding(this->collisioner)) {
+        std::cout << "COLLISION BABY WHOOOHOOO" << std::endl;
+    }
+    else {
+        std::cout << "NO FUCKING COLLISION" << std::endl;
     }
 }
