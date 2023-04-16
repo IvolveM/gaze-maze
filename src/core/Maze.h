@@ -20,6 +20,8 @@ class Maze {
         // builder class
         class MazeBuilder{
             private:
+                int width = 0;
+                int height = 0;
                 std::vector<std::vector<Maze::Object>> objects{};
             public: 
                 MazeBuilder(int width, int height);

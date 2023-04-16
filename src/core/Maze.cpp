@@ -24,7 +24,9 @@ Maze::MazeBuilder::MazeBuilder(int width, int height)
     : objects {
         height,
         std::vector{width, Maze::Object::EMPTY}
-    }
+    },
+    width{width},
+    height{height}
 {
 
 }
@@ -36,5 +38,11 @@ void Maze::MazeBuilder::addWall(int x, int y)
 
 Maze* Maze::MazeBuilder::build()
 {
+    objects[0][0] = Maze::Object::EMPTY;
+    objects[0][1] = Maze::Object::EMPTY;
+    objects[1][0] = Maze::Object::EMPTY;
+    objects[height - 1]     [width - 1] = Maze::Object::EMPTY;
+    objects[height - 1]     [width - 2] = Maze::Object::EMPTY;
+    objects[height - 2] [width - 1] = Maze::Object::EMPTY;
     return new Maze(objects);
 }
