@@ -1,5 +1,6 @@
 #include "MazeGenerator.h"
 
+// maze generation with 
 MazeGenerator::MazeGenerator(int width, int height)
     :   maze{std::vector(width, std::vector(height, 0))},
         width{width},
@@ -9,7 +10,7 @@ MazeGenerator::MazeGenerator(int width, int height)
     generateMaze(0, 0);
 
     for (int i = 0; i < width; i++) {
-        for (int j = 0; j < height; j++) { // north 
+        for (int j = 0; j < height; j++) { // not north
             std::cout << (((maze[j][i] & 1) == 0) ? "##" : "# ");
             if ((maze[j][i] & 1) == 0){
                 mazeBuilder.addWall(i*2, j*2);
@@ -19,7 +20,7 @@ MazeGenerator::MazeGenerator(int width, int height)
             }
         }
         std::cout << "#" << std::endl;
-        mazeBuilder.addWall(i, height*2-1);
+        mazeBuilder.addWall(i*2, height*2);
         for (int j = 0; j < height; j++) { // west
             std::cout << (((maze[j][i] & 8) == 0) ? "# " : "  ");
             if ((maze[j][i] & 8) == 0){
@@ -29,14 +30,15 @@ MazeGenerator::MazeGenerator(int width, int height)
             }
         }
         std::cout << "#" << std::endl;
-        mazeBuilder.addWall(i*2+1, height*2-1);
+        mazeBuilder.addWall(i*2+1, height*2);
     }
     for (int j = 0; j < width; j++) {
         std::cout << "##";
-        mazeBuilder.addWall(height*2-1, j*2);
-        mazeBuilder.addWall(height*2-1, j*2+1);
+        mazeBuilder.addWall(height*2, j*2);
+        mazeBuilder.addWall(height*2, j*2+1);
     }
     std::cout << "#" << std::endl;
+    mazeBuilder.addWall(height*2, width*2);
 }    
 
 void MazeGenerator::generateMaze(int cx, int cy)

@@ -20,8 +20,8 @@ Cube::Cube(std::vector<glm::vec3> instancePositions, glm::vec3 size) :
 	for (auto pos : instancePositions) {
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, pos);
-		model = glm::translate(model, glm::vec3{0.0f, -0.5f, 0.0f});
-		model = glm::scale(model, glm::vec3{1.0f, 0.2f, 1.0f});
+		// model = glm::translate(model, glm::vec3{0.0f, -0.5f, 0.0f});
+		// model = glm::scale(model, glm::vec3{1.0f, 0.2f, 1.0f});
 		this->instanceModelMatrices.push_back(model);
 	}
 

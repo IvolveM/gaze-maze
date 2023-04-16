@@ -36,7 +36,6 @@ void MazeLoader::loadLine(const std::string& line) {
     for (const char& el : line) {
         if (WALLCHAR == el) {
             mazeBuilder.addWall(this->rowOffset, this->colOffset);
-            // addCubePosition(glm::vec3(this->colOffset, (float)i, this->rowOffset));
         }
         else if (EMPTYCHAR == el) {}
         this->colOffset++;
