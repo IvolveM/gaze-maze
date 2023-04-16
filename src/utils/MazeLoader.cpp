@@ -1,20 +1,21 @@
 
 #include "MazeLoader.h"
 
-MazeLoader::MazeLoader() {
+MazeLoader::MazeLoader() 
+    : mazeBuilder{Maze::MazeBuilder(100, 100)}
+{
 
 }
 
 MazeLoader::~MazeLoader() {
     delete this->mazeFile;
 }
-
-Cube* MazeLoader::loadMazeFromFile(std::string fileName) {
-    MazeGenerator();
+Maze* MazeLoader::loadMazeFromFile(std::string fileName) {
     this->mazeFile = new std::ifstream(fileName);
     loadMaze();
     this->mazeFile->close();
-    return this->mazeInstance;
+
+    return mazeBuilder.build();
 }
 
 void MazeLoader::loadMaze() {
@@ -34,14 +35,12 @@ void MazeLoader::loadMaze() {
 void MazeLoader::loadLine(const std::string& line) {
     for (const char& el : line) {
         if (WALLCHAR == el) {
-            for (int i = 0; i < 2; i++){
-                addCubePosition(glm::vec3(this->colOffset, (float)i, this->rowOffset));
-            }
+            mazeBuilder.addWall(this->rowOffset, this->colOffset);
         }
         else if (EMPTYCHAR == el) {}
         this->colOffset++;
     }
-    this->colOffset = 0.0f;
+    this->colOffset = 0;
     this->rowOffset++;
 }
 
