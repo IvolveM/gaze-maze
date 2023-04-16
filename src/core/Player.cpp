@@ -8,7 +8,7 @@ Player::Player():
     Camera{glm::vec3{0.0f, 0.0f, 0.0f}},
     movingDirection{glm::vec2{0.0f, 0.0f}},
     isMoving{false},
-    collisioner{glm::vec3(0.1f, 0.1f, 0.1f), glm::vec3(0.0f, 0.0f, 0.0f)}
+    collisioner{glm::vec3(0.1f, 0.1f, 0.1f), this->getPosition()}
 {
     
 }

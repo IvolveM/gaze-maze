@@ -14,7 +14,7 @@ Game::Game(int width, int height){
     stbi_set_flip_vertically_on_load(true); // before loading any image
 
 	glEnable(GL_DEPTH_TEST); // enable depth testing
-    glEnable(GL_MULTISAMPLE); // enable multisampling
+    // glEnable(GL_MULTISAMPLE); // enable multisampling
     glfwSwapInterval( 0 ); // disable vsync
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -52,7 +52,7 @@ void Game::initGlfw() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_SAMPLES, 4); // sampling hints
+    // glfwWindowHint(GLFW_SAMPLES, 4); // sampling hints
     //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
     this->window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
