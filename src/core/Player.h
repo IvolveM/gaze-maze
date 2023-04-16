@@ -22,6 +22,8 @@ class Player: public Camera{
         bool isMoving = false;
         bool isOnGround = false;
         void handleVerticalMovement(float dt);
+
+        void resolveCollision(Collisioner c);
     public:
         enum class InputEvent
         {

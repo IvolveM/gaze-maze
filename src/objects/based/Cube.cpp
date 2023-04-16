@@ -2,7 +2,7 @@
 #include "Cube.h"
 
 Cube::Cube(glm::vec3 position) : 
-	Mesh{position},
+	Mesh{position, glm::vec3(1.0f), Collisioner::BoundingBoxType::CUBE},
     shader{ResourceManager::getShader("defaultShader")},
     texture{ResourceManager::getTexture("defaultTexture")}
 {
@@ -11,7 +11,7 @@ Cube::Cube(glm::vec3 position) :
 }
 
 Cube::Cube(std::vector<glm::vec3> instancePositions, glm::vec3 size) :
-	Mesh{instancePositions, size},
+	Mesh{instancePositions, size, Collisioner::BoundingBoxType::CUBE},
     shader{ResourceManager::getShader("instanceShader")},
     texture{ResourceManager::getTexture("defaultTexture")}
 {

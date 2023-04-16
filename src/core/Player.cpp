@@ -8,14 +8,13 @@ Player::Player():
     Camera{glm::vec3{0.0f, 0.0f, 0.0f}},
     movingDirection{glm::vec2{0.0f, 0.0f}},
     isMoving{false},
-    collisioner{glm::vec3(0.1f, 0.1f, 0.1f), glm::vec3(0.0f, 0.0f, 0.0f)}
+    collisioner{glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f), Collisioner::BoundingBoxType::SPHERE}
 {
     
 }
 
 void Player::handleKeyInput(InputEvent event)
 {
-    // std::cout << "player pos: " << getPosition().x << ", " << getPosition().y << ", " << getPosition().z << std::endl;
     float x = this->direction.x;
     float z = this->direction.z;
     glm::vec3 left = glm::cross(this->up, this->direction);
@@ -43,7 +42,7 @@ void Player::handleKeyInput(InputEvent event)
 
 void Player::update(float dt)
 {
-    if (movingDirection.x != 0.0f && movingDirection.y != 0.0f){
+    if (movingDirection.y != 0.0f){
         glm::vec2 directionNormalized = glm::normalize(movingDirection);
         incrementPosition(glm::vec3{directionNormalized.x, 0.0f, directionNormalized.y}*speed*dt);
         movingDirection = glm::vec2{0.0f, 0.0f};
@@ -72,7 +71,14 @@ void Player::handleVerticalMovement(float dt){
 }
 
 void Player::doCollisions(Mesh m) {
-    if (m.isColliding(this->collisioner)) {
-        std::cout << "COLLISION BABY WHOOOHOOO" << std::endl;
+    Collisioner colliding = m.isColliding(this->collisioner);
+    if (colliding.getType() != Collisioner::BoundingBoxType::NONE) {
+        resolveCollision(colliding);
     }
+}
+
+void Player::resolveCollision(Collisioner c) {
+    glm::vec3 collisionNormal = this->collisioner.getCollisionNormal(c);
+    std::cout << glm::to_string(collisionNormal) << std::endl;
+    this->movingDirection += glm::vec2(collisionNormal.x, collisionNormal.z);
 }

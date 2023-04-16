@@ -23,9 +23,17 @@ class Mesh {
 
     public:
         virtual ~Mesh();
-        Mesh(glm::vec3 position, glm::vec3 size = glm::vec3{1.0f});
+        Mesh(
+            glm::vec3 position, 
+            glm::vec3 size = glm::vec3{1.0f}, 
+            Collisioner::BoundingBoxType boundingBoxType = Collisioner::BoundingBoxType::NONE
+        );
         // instancing constructor
-        Mesh(std::vector<glm::vec3> instancePositions, glm::vec3 size);
+        Mesh(
+            std::vector<glm::vec3> instancePositions,
+            glm::vec3 size,
+            Collisioner::BoundingBoxType boundingBoxType = Collisioner::BoundingBoxType::NONE
+        );
         // void rotate(float angleInDegrees) { this->rotation += angleInDegrees; };
         void move(glm::vec3 pos) { this->position += pos; };
         // void setSize (glm::vec3 size) { this->size = size; };
@@ -33,5 +41,5 @@ class Mesh {
         // void setVertices(float vertices[]) { this->vertices.insert(this->vertices.end(), vertices, vertices + sizeof(vertices)/sizeof(float)); };
         // void addVertex(float vertex) { this->vertices.push_back(vertex); }
         virtual void draw();
-        bool isColliding(Collisioner c);
+        Collisioner isColliding(Collisioner c);
 };
