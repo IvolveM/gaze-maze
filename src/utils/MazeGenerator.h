@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <random>
 #include <iostream>
+#include "../core/Maze.h"
 
 struct Direction{
     int bit;
@@ -14,6 +15,7 @@ struct Direction{
 
 class MazeGenerator{
     private:
+        Maze::MazeBuilder mazeBuilder;
         std::vector<std::vector<int>> maze;
         int width = 0;
         int height = 0;
@@ -23,4 +25,5 @@ class MazeGenerator{
         bool between(int v, int upper);
     public:
         MazeGenerator(int width = 10, int height = 10);
+        Maze* getMaze();
 };

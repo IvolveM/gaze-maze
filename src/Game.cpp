@@ -38,7 +38,8 @@ Game::Game(int width, int height){
 
     this->player = Player();
 
-    this->maze = MazeLoader().loadMazeFromFile("../assets/maze.txt");
+    // this->maze = MazeLoader().loadMazeFromFile("../assets/maze.txt");
+    this->maze = MazeGenerator().getMaze();
     
     this->ground = new Plane(glm::vec3{0.0f, -0.5f, 0.0f}, 100.0f, 1.0f);
 }
@@ -143,7 +144,7 @@ void Game::mainloop() {
         this->dt = newTime - oldTime;
         oldTime = newTime;
         float fps = 1/dt;
-        std::cout<< "FPS: " << fps << std::endl;
+        // std::cout<< "FPS: " << fps << std::endl;
 
         processInput();
         processEvents();
@@ -163,9 +164,6 @@ void Game::render() {
 
     // handle render calls here
     maze->draw();
-    // for (Cube* cube : this->mazeCubes) {
-    //     cube->draw();
-    // }
     ground->draw();
 
     // check and call events and swap the buffers
@@ -200,7 +198,7 @@ void Game::processInput() {
 
 void Game::processEvents()
 {
-    player.doCollisions(*(this->maze));
+    // player.doCollisions(*(this->maze));
     player.update(this->dt);
 }
 

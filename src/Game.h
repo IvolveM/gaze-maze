@@ -18,7 +18,9 @@
 #include "objects/based/Cube.h"
 #include "objects/based/Plane.h"
 #include "core/Player.h"
+#include "core/Maze.h"
 #include "utils/MazeLoader.h"
+#include "utils/MazeGenerator.h"
 
 class Game{
     private:
@@ -29,7 +31,7 @@ class Game{
         float dt = 0.0f;
 
         Player player;
-        Cube* maze;
+        Maze* maze;
         // std::vector<Cube*> mazeCubes;
         Plane* ground;
 
