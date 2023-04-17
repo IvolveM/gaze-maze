@@ -8,7 +8,7 @@ Player::Player():
     Camera{glm::vec3{0.0f, 0.0f, 0.0f}},
     movingDirection{glm::vec2{0.0f, 0.0f}},
     isMoving{false},
-    collisioner{glm::vec3(0.2f, 0.2f, 0.2f), this->getPosition(), Collisioner::BoundingBoxType::SPHERE}
+    collisioner{glm::vec3(0.3f, 0.3f, 0.3f), this->getPosition(), Collisioner::BoundingBoxType::SPHERE}
 {
     
 }
@@ -78,6 +78,6 @@ void Player::doCollisions(Mesh m) {
 }
 
 void Player::resolveCollision(Collisioner c) {
-    glm::vec3 collisionNormal = this->collisioner.getCollisionNormal(c);
-    this->movingDirection += glm::vec2(collisionNormal.x, collisionNormal.z) * speed;
+    glm::vec3 distanceNormal = this->collisioner.getDistanceNormal(c);
+    this->movingDirection += glm::vec2(distanceNormal.x, distanceNormal.z) * speed;
 }

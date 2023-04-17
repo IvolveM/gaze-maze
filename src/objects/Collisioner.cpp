@@ -66,17 +66,17 @@ bool Collisioner::isColliding(Collisioner col) {
             sphere = col;
             cube = *this;
         }
+        float sphereR = sphere.size.x * 0.5f;
         float xClampedDistance = std::max(cube.getMinVec().x, std::min(sphere.center.x, cube.getMaxVec().x));
         float yClampedDistance = std::max(cube.getMinVec().y, std::min(sphere.center.y, cube.getMaxVec().y));
         float zClampedDistance = std::max(cube.getMinVec().z, std::min(sphere.center.z, cube.getMaxVec().z));
 
-        float distance = std::sqrt(
+        float dstSqrd = 
             (xClampedDistance - sphere.center.x) * (xClampedDistance - sphere.center.x) +
             (yClampedDistance - sphere.center.y) * (yClampedDistance - sphere.center.y) +
-            (zClampedDistance - sphere.center.z) * (zClampedDistance - sphere.center.z)
-        );
-            // todo optimize sqrt
-        return distance < (sphere.size.x * 0.5f);
+            (zClampedDistance - sphere.center.z) * (zClampedDistance - sphere.center.z);
+
+        return dstSqrd < sphereR * sphereR;
     }
 }
 
@@ -90,29 +90,21 @@ glm::vec3 Collisioner::getCenterToCenterDistance(Collisioner col) {
 }
 
 
-glm::vec3 Collisioner::getCollisionNormal(Collisioner col) {
+glm::vec3 Collisioner::getDistanceNormal(Collisioner col) {
     if (!this->isColliding(col)) 
         return glm::vec3();
 
-    else if (this->boxType == BoundingBoxType::CUBE && col.boxType == BoundingBoxType::CUBE) {
-        // TODO
-    }
-    else if (this->boxType == BoundingBoxType::SPHERE && col.boxType == BoundingBoxType::SPHERE) {
-        //TODO
+    Collisioner cube, sphere;
+    if (this->boxType == BoundingBoxType::SPHERE) {
+        sphere = *this;
+        cube = col;
     }
     else {
-        Collisioner cube, sphere;
-        if (this->boxType == BoundingBoxType::SPHERE) {
-            sphere = *this;
-            cube = col;
-        }
-        else {
-            sphere = col;
-            cube = *this;
-        }
-        glm::vec3 deltaD = this->getCenterToCenterDistance(col);
-        return deltaD;
+        sphere = col;
+        cube = *this;
     }
+    glm::vec3 deltaD = this->getCenterToCenterDistance(col);
+    return deltaD;
 }
 
 Collisioner::BoundingBoxType Collisioner::getType() {
