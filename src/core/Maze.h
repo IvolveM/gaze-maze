@@ -16,6 +16,7 @@ class Maze {
 
     public:
         void draw();
+        Mesh getMesh();
 
         // builder class
         class MazeBuilder{

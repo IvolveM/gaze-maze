@@ -42,8 +42,9 @@ void Player::handleKeyInput(InputEvent event)
 
 void Player::update(float dt)
 {
-    if (movingDirection.y != 0.0f){
+    if (movingDirection.x != 0.0f && movingDirection.y != 0.0f){
         glm::vec2 directionNormalized = glm::normalize(movingDirection);
+        std::cout << "dir: " << glm::to_string(directionNormalized) << std::endl;
         incrementPosition(glm::vec3{directionNormalized.x, 0.0f, directionNormalized.y}*speed*dt);
         movingDirection = glm::vec2{0.0f, 0.0f};
     }
@@ -79,6 +80,5 @@ void Player::doCollisions(Mesh m) {
 
 void Player::resolveCollision(Collisioner c) {
     glm::vec3 collisionNormal = this->collisioner.getCollisionNormal(c);
-    std::cout << glm::to_string(collisionNormal) << std::endl;
-    this->movingDirection += glm::vec2(collisionNormal.x, collisionNormal.z);
+    this->movingDirection += glm::vec2(collisionNormal.x, collisionNormal.z) * speed;
 }

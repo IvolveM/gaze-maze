@@ -46,3 +46,7 @@ Maze* Maze::MazeBuilder::build()
     objects[height - 2] [width - 1] = Maze::Object::EMPTY;
     return new Maze(objects);
 }
+
+Mesh Maze::getMesh(){
+    return *(this->cubes);
+}
