@@ -44,7 +44,6 @@ void Player::update(float dt)
 {
     if (movingDirection.x != 0.0f && movingDirection.y != 0.0f){
         glm::vec2 directionNormalized = glm::normalize(movingDirection);
-        std::cout << "dir: " << glm::to_string(directionNormalized) << std::endl;
         incrementPosition(glm::vec3{directionNormalized.x, 0.0f, directionNormalized.y}*speed*dt);
         movingDirection = glm::vec2{0.0f, 0.0f};
     }

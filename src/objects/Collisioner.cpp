@@ -110,13 +110,8 @@ glm::vec3 Collisioner::getCollisionNormal(Collisioner col) {
             sphere = col;
             cube = *this;
         }
-
         glm::vec3 deltaD = this->getCenterToCenterDistance(col);
-        glm::vec3 inset = glm::abs(deltaD) - (sphere.size * 0.5f);
-        if (deltaD.x < 0) inset.x *= -1;
-        if (deltaD.y < 0) inset.y *= 0; 
-        if (deltaD.z < 0) inset.z *= -1; 
-        return inset;
+        return deltaD;
     }
 }
 
