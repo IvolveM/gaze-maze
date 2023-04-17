@@ -91,18 +91,6 @@ glm::vec3 Collisioner::getCenterToCenterDistance(Collisioner col) {
 
 
 glm::vec3 Collisioner::getDistanceNormal(Collisioner col) {
-    if (!this->isColliding(col)) 
-        return glm::vec3();
-
-    Collisioner cube, sphere;
-    if (this->boxType == BoundingBoxType::SPHERE) {
-        sphere = *this;
-        cube = col;
-    }
-    else {
-        sphere = col;
-        cube = *this;
-    }
     glm::vec3 deltaD = this->getCenterToCenterDistance(col);
     return deltaD;
 }

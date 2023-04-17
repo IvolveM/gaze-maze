@@ -33,9 +33,9 @@ Collisioner Mesh::isColliding(Collisioner c) {
                 return box;
             }
         }
-        return Collisioner(glm::vec3(0.0f), glm::vec3(0.0f), Collisioner::BoundingBoxType::NONE);
     }
-    if (this->collisioner.isColliding(c));
+    else if (this->collisioner.isColliding(c));
         return this->collisioner;
+        
     return Collisioner(glm::vec3(0.0f), glm::vec3(0.0f), Collisioner::BoundingBoxType::NONE);
 }
