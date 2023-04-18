@@ -76,12 +76,18 @@ void Player::handleVerticalMovement(float dt)
 
 void Player::doCollisions(Mesh m, float dt)
 {
-    Collisioner colliding = m.isColliding(this->collisioner);
+    std::vector<Collisioner> collisions = m.isColliding(this->collisioner);
     this->movingDirection = glm::vec3(0.0f, 0.0f, 0.0f);
-    if (colliding.getType() != Collisioner::BoundingBoxType::NONE)
+    if (collisions.size() == 1)
     {
-        resolveCollision(colliding, dt);
+        resolveCollision(collisions[0], dt);
     }
+    else if (collisions.size() > 1)
+    {
+        resolveCollision(collisions[0], dt);
+        resolveCollision(collisions[1], dt);
+    }
+    incrementPosition(glm::vec3{movingDirection.x, 0.0f, movingDirection.y});
 }
 
 void Player::resolveCollision(Collisioner c, float dt)

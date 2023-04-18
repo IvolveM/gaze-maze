@@ -37,7 +37,7 @@ std::vector<Collisioner> Mesh::isColliding(Collisioner c) {
         return boxes;
     }
     else if (this->collisioner.isColliding(c));
-        return this->collisioner;
+        return std::vector{this->collisioner};
         
-    return Collisioner(glm::vec3(0.0f), glm::vec3(0.0f), Collisioner::BoundingBoxType::NONE);
+    return std::vector<Collisioner>();
 }

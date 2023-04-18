@@ -41,5 +41,5 @@ class Mesh {
         // void setVertices(float vertices[]) { this->vertices.insert(this->vertices.end(), vertices, vertices + sizeof(vertices)/sizeof(float)); };
         // void addVertex(float vertex) { this->vertices.push_back(vertex); }
         virtual void draw();
-        Collisioner isColliding(Collisioner c);
+        std::vector<Collisioner> isColliding(Collisioner c);
 };
