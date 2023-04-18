@@ -23,7 +23,7 @@ class Player: public Camera{
         bool isOnGround = false;
         void handleVerticalMovement(float dt);
 
-        void resolveCollision(Collisioner c);
+        void resolveCollision(Collisioner c, float dt);
     public:
         enum class InputEvent
         {
@@ -33,5 +33,5 @@ class Player: public Camera{
         void handleKeyInput(InputEvent event);
 
         void update(float dt);
-        void doCollisions(Mesh m);
+        void doCollisions(Mesh m, float dt);
 };

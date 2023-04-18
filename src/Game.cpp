@@ -38,8 +38,8 @@ Game::Game(int width, int height){
 
     this->player = Player();
 
-    this->maze = MazeLoader().loadMazeFromFile("../assets/maze.txt");
-    // this->maze = MazeGenerator().getMaze();
+    // this->maze = MazeLoader().loadMazeFromFile("../assets/maze.txt");
+    this->maze = MazeGenerator().getMaze();
     
     this->ground = new Plane(glm::vec3{0.0f, -0.5f, 0.0f}, 100.0f, 1.0f);
 }
@@ -198,8 +198,8 @@ void Game::processInput() {
 
 void Game::processEvents()
 {
-    player.doCollisions(this->maze->getMesh());
     player.update(this->dt);
+    player.doCollisions(this->maze->getMesh(), dt);
 }
 
 void Game::handleMouse()

@@ -26,13 +26,15 @@ void Mesh::draw(){
     
 }
 
-Collisioner Mesh::isColliding(Collisioner c) {
+std::vector<Collisioner> Mesh::isColliding(Collisioner c) {
     if (this->instancing) {
+        std::vector<Collisioner> boxes = {};
         for (auto box : this->instanceCollisioners) {
             if (box.isColliding(c)) {
-                return box;
+                boxes.push_back(box);
             }
         }
+        return boxes;
     }
     else if (this->collisioner.isColliding(c));
         return this->collisioner;

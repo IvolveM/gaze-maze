@@ -91,8 +91,24 @@ glm::vec3 Collisioner::getCenterToCenterDistance(Collisioner col) {
 
 
 glm::vec3 Collisioner::getDistanceNormal(Collisioner col) {
+    // glm::vec3 deltaD = this->getCenterToCenterDistance(col);
+    // glm::vec3 closestPoint = glm::clamp(this->getCenter(), col.getMinVec(), col.getMaxVec());
+    
+    // glm::vec3 x = closestPoint + glm::normalize(glm::vec3(deltaD.x, 0.0f, 0.0f))*(this->size*0.5f);
+    // glm::vec3 z = closestPoint + glm::normalize(glm::vec3(0.0f, 0.0f, deltaD.z))*(this->size*0.5f);
+    // if (std::abs(deltaD.x) > std::abs(deltaD.z)){
+    //     return x;
+    // }else{
+    //     return z;
+    // }
+
     glm::vec3 deltaD = this->getCenterToCenterDistance(col);
-    return deltaD;
+    
+    if (std::abs(deltaD.x) > std::abs(deltaD.z)){
+        return glm::vec3(deltaD.x, 0.0f, 0.0f);
+    }else{
+        return glm::vec3(0.0f, 0.0f, deltaD.z);
+    }
 }
 
 Collisioner::BoundingBoxType Collisioner::getType() {
