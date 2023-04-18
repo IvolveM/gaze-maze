@@ -144,7 +144,7 @@ void Game::mainloop() {
         this->dt = newTime - oldTime;
         oldTime = newTime;
         float fps = 1/dt;
-        // std::cout<< "FPS: " << fps << std::endl;
+        std::cout<< "FPS: " << fps << std::endl;
 
         processInput();
         processEvents();
