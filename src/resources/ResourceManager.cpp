@@ -5,13 +5,14 @@
 std::map<std::string, Shader> ResourceManager::shaders{};
 std::map<std::string, Texture> ResourceManager::textures{};
 
-void ResourceManager::setTexture(std::string textureName, const char *texturePath)
+Texture ResourceManager::setTexture(std::string textureName, const char *texturePath)
 {
     if (shaders.count(textureName) != 0){
         throw DuplicateResourceException("Texture -> " + textureName);
     }
     Texture texture = Texture(texturePath);
     textures.emplace(textureName, texture);
+    return texture;
 }
 
 Shader ResourceManager::addShader(std::string shaderName, const char *vertexCode, const char *fragmentCode)

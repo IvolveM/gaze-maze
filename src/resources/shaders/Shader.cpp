@@ -93,3 +93,8 @@ void Shader::setBlockBinding(const std::string &blockName, int bindingPoint)
     unsigned int uniformBlockIndex = glGetUniformBlockIndex(this->id, blockName.c_str());
     glUniformBlockBinding(this->id, uniformBlockIndex, bindingPoint);
 }
+
+unsigned int Shader::getId()
+{
+    return id;
+}

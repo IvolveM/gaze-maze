@@ -26,4 +26,6 @@ class Shader
         void setFloat4(const std::string &name, float value1, float value2, float value3, float value4) const;
         void setMatrixFloat4(const std::string &name, glm::mat4 matrix) const;
         void setBlockBinding(const std::string &blockName, int bindingPoint);
+
+        unsigned int getId();
 };

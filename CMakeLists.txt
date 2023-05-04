@@ -15,7 +15,7 @@ message(STATUS "GLM included at ${GLM_INCLUDE_DIR}")
 find_package(GLFW3 REQUIRED)
 message(STATUS "Found GLFW3 in ${GLFW3_INCLUDE_DIR}")
 
-set(LIBS glfw GL X11 pthread Xrandr Xi dl)
+set(LIBS glfw GL X11 pthread Xrandr Xi dl assimp)
 
 add_library(GLAD "src/glad.c")
 set(LIBS ${LIBS} GLAD)
@@ -41,6 +41,10 @@ add_executable(gaze-maze
     src/objects/based/Plane.cpp
     src/objects/Collisioner.h
     src/objects/Collisioner.cpp
+    src/objects/model/Model.h
+    src/objects/model/Model.cpp
+    src/objects/model/ModelMesh.h
+    src/objects/model/ModelMesh.cpp
     src/resources/ResourceManager.h 
     src/resources/ResourceManager.cpp
     src/resources/shaders/Shader.h 

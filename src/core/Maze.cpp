@@ -7,7 +7,7 @@ Maze::Maze(std::vector<std::vector<Maze::Object>> objects)
     for (int row = 0; row < objects.size(); row++){
         for (int col = 0; col < objects[row].size(); col++){
             if (objects[row][col] == Maze::Object::WALL){
-                for (int i = 0; i < 1000; i++){
+                for (int i = 0; i < 1; i++){
                     auto cubePos = glm::vec3(col, i, row);
                     cubePositions.push_back(cubePos);
                 }

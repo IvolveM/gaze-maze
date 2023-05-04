@@ -15,4 +15,5 @@ class Texture{
             this->textureId = texture.textureId;
         }
         void bindTexture() const;
+        unsigned int getId();
 };
