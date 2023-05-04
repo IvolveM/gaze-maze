@@ -52,3 +52,7 @@ Maze* Maze::MazeBuilder::build()
 Mesh Maze::getMesh(){
     return *(this->cubes);
 }
+
+std::vector<std::vector<Maze::Object>> Maze::getGrid() {
+    return this->objects;
+}

@@ -27,7 +27,7 @@ class Collisioner {
         glm::vec3 maxVec;
 
         bool isColliding(Collisioner col);
-        glm::vec3 getDistanceNormal(Collisioner col);
+        glm::vec3 getVectorToTranslate(Collisioner col);
 
         BoundingBoxType getType();
         
@@ -35,6 +35,4 @@ class Collisioner {
     private:
         glm::vec3 center;
         BoundingBoxType boxType = BoundingBoxType::NONE;
-        
-        glm::vec3 getCenterToCenterDistance(Collisioner col);
 };

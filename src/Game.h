@@ -22,6 +22,7 @@
 #include "core/Maze.h"
 #include "utils/MazeLoader.h"
 #include "utils/MazeGenerator.h"
+#include "entities/Enemy.h"
 
 class Game{
     private:
@@ -35,7 +36,7 @@ class Game{
         Maze* maze;
         // std::vector<Cube*> mazeCubes;
         Plane* ground;
-
+        Enemy* enemy;
         // Model* model;
 
         void initGlfw();

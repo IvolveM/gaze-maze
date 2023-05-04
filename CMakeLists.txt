@@ -55,5 +55,9 @@ add_executable(gaze-maze
     src/utils/MazeLoader.cpp
     src/utils/MazeGenerator.h
     src/utils/MazeGenerator.cpp
+    src/entities/Entity.h
+    src/entities/Entity.cpp
+    src/entities/Enemy.h
+    src/entities/Enemy.cpp
 )
 target_link_libraries(gaze-maze ${LIBS}) # -lglfw3 -lGL -lGLU -lX11 -lXxf86vm -lXrandr -lpthread -lXi

@@ -43,6 +43,8 @@ Game::Game(int width, int height){
     
     this->ground = new Plane(glm::vec3{0.0f, -0.5f, 0.0f}, 100.0f, 1.0f);
 
+    this->enemy = new Enemy(100.0f, {0,0}, this->maze->getGrid(), glm::vec3(1.0f,1.0f,1.0f));
+
     // this->model = new Model("../assets/meshes/backpack/backpack.obj");
 }
 
@@ -259,6 +261,7 @@ void Game::render() {
     // handle render calls here
     maze->draw();
     ground->draw();
+    enemy->draw();
     // model->draw();
 
     // check and call events and swap the buffers
@@ -294,7 +297,8 @@ void Game::processInput() {
 void Game::processEvents()
 {
     player.update(this->dt);
-    player.doCollisions(this->maze->getMesh(), dt);
+    player.doCollisions(this->maze->getMesh());
+    enemy->update(this->dt);
 }
 
 void Game::handleMouse()

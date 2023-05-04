@@ -74,27 +74,28 @@ void Player::handleVerticalMovement(float dt)
     }
 }
 
-void Player::doCollisions(Mesh m, float dt)
+void Player::doCollisions(Mesh m)
 {
     std::vector<Collisioner> collisions = m.isColliding(this->collisioner);
-    this->movingDirection = glm::vec3(0.0f, 0.0f, 0.0f);
-    if (collisions.size() == 1)
-    {
-        resolveCollision(collisions[0], dt);
+    glm::vec3 totalTranslationVector = glm::vec3(0.0f);
+    int c = 1;
+    for (auto col: collisions) {
+        totalTranslationVector += resolveCollision(col);
+        std::cout << "counter: " <<c++<<std::endl;
     }
-    else if (collisions.size() > 1)
-    {
-        resolveCollision(collisions[0], dt);
-        resolveCollision(collisions[1], dt);
-    }
-    incrementPosition(glm::vec3{movingDirection.x, 0.0f, movingDirection.y});
+    if (collisions.size() > 0)
+        incrementPosition(totalTranslationVector);
 }
 
-void Player::resolveCollision(Collisioner c, float dt)
-{
-    glm::vec3 distanceNormal = this->collisioner.getDistanceNormal(c);
-    // this->setPosition(distanceNormal);
-    this->movingDirection += glm::normalize(glm::vec2(distanceNormal.x, distanceNormal.z)) * speed * dt;
+glm::vec3 Player::resolveCollision(Collisioner c) {
+    // glm::vec2 directionNormalized = glm::normalize(movingDirection);
+    // std::cout << glm::to_string(this->collisioner.getVectorToTranslate(c, glm::vec3{directionNormalized.x, 0.0f, directionNormalized.y} * speed * dt, dt).second) << std::endl;
+    // std::pair<glm::vec3, glm::vec3> ret = this->collisioner.getVectorToTranslate(c, glm::vec3{directionNormalized.x, 0.0f, directionNormalized.y} * speed * dt, dt);
+    //     this->movingDirection = ret.second;
 
-    std::cout << "normal: " << glm::to_string(distanceNormal) << std::endl;
+    //     this->setPosition(ret.first);
+    auto vec = this->collisioner.getVectorToTranslate(c);
+    std::cout << glm::to_string(vec)<<std::endl;
+    this->movingDirection = glm::vec2{0.0f, 0.0f};
+    return vec;
 }

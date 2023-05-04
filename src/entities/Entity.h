@@ -1,0 +1,26 @@
+#pragma once
+
+#include <glad/glad.h> 
+#include <GLFW/glfw3.h>
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+#include <vector>
+
+class Entity {
+    public:
+        Entity() = default;
+        Entity(glm::vec3 position);
+        ~Entity() = default;
+
+        virtual void update(float dt) = 0;
+        virtual void draw() = 0;
+
+    protected:
+        glm::vec3 position;
+    
+    private:
+
+};
