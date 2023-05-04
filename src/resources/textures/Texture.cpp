@@ -1,6 +1,6 @@
 #include "Texture.h"
 
-Texture::Texture(const char* texturePath)
+Texture::Texture(std::string texturePath)
 {
     int width, height, nrChannels;
     unsigned char *data;
@@ -16,7 +16,7 @@ Texture::Texture(const char* texturePath)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    data = stbi_load(texturePath, &width, &height, &nrChannels, 0);
+    data = stbi_load(texturePath.c_str(), &width, &height, &nrChannels, 0);
 
     if (data)
     {
@@ -31,9 +31,9 @@ Texture::Texture(const char* texturePath)
     stbi_image_free(data); // free image
 }
 
-void Texture::bindTexture() const
+void Texture::bindTexture(int textureUnit) const
 {
-    glActiveTexture(GL_TEXTURE0);
+    glActiveTexture(textureUnit);
     glBindTexture(GL_TEXTURE_2D, textureId);
 }
 

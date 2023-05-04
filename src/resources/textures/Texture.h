@@ -10,10 +10,10 @@ class Texture{
     private:
         unsigned int textureId;
     public:
-        Texture(const char* texturePath);
+        Texture(std::string texturePath);
         Texture(const Texture& texture){
             this->textureId = texture.textureId;
         }
-        void bindTexture() const;
+        void bindTexture(int textureUnit = GL_TEXTURE0) const;
         unsigned int getId();
 };

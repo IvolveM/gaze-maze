@@ -25,8 +25,6 @@ uniform Light light;
 
 uniform Material material;
 
-uniform sampler2D texture0;
-
 void main()
 {
     // ambient
@@ -44,7 +42,6 @@ void main()
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess * 128.0);
     vec3 specular = light.specular * spec * vec3(texture(material.texture_specular1, TexCoord));
 
-    vec4 textureColor = texture(texture0, TexCoord);
     vec3 result = (ambient + diffuse + specular);
     FragColor = vec4(result, 1.0f);
 }

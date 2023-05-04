@@ -4,7 +4,8 @@
 Cube::Cube(glm::vec3 position) : 
 	Mesh{position, glm::vec3(1.0f), Collisioner::BoundingBoxType::CUBE},
     shader{ResourceManager::getShader("default")},
-    texture{ResourceManager::getTexture("defaultTexture")}
+    diffuse{ResourceManager::getTexture("wallDiffuse")},
+	specular{ResourceManager::getTexture("wallDiffuse")}
 {
 	initVertices();
 	initDefaultVaoVbo();
@@ -13,7 +14,8 @@ Cube::Cube(glm::vec3 position) :
 Cube::Cube(std::vector<glm::vec3> instancePositions, glm::vec3 size) :
 	Mesh{instancePositions, size, Collisioner::BoundingBoxType::CUBE},
     shader{ResourceManager::getShader("defaultInstancing")},
-    texture{ResourceManager::getTexture("defaultTexture")}
+    diffuse{ResourceManager::getTexture("wallDiffuse")},
+	specular{ResourceManager::getTexture("wallDiffuse")}
 {
 	initVertices();
 
@@ -121,6 +123,11 @@ void Cube::initDefaultVaoVbo() {
 void Cube::draw()
 {
     shader.use();
+	glBindVertexArray(VAO);
+	shader.setInt("material.diffuse", 0);
+	shader.setInt("material.specular", 1);
+	diffuse.bindTexture(GL_TEXTURE0);
+	specular.bindTexture(GL_TEXTURE1);
 
 	if (!this->instancing) {
 		glm::mat4 model = glm::mat4(1.0f);
@@ -128,13 +135,9 @@ void Cube::draw()
 		// model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
 		shader.setMatrixFloat4("model", model);
 
-		glBindVertexArray(VAO);
-		texture.bindTexture();
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}
 	else {
-		glBindVertexArray(VAO);
-		texture.bindTexture();
 		glDrawArraysInstanced(GL_TRIANGLES, 0, 36, instanceModelMatrices.size());
 		glBindVertexArray(0);
 	}
