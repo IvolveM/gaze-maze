@@ -201,10 +201,10 @@ void Game::initShaders(){
             vec3 diffuse = diff * lightColor;
 
             // specular
-            float specularStrength = 0.1;
+            float specularStrength = 0.5;
             vec3 viewDir = normalize(CameraPos - FragPos);
             vec3 reflectDir = reflect(-lightDir, norm);
-            float spec = pow(max(dot(viewDir, reflectDir), 0.0), 2); // 2 = shininess
+            float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32); // 32 = shininess
             vec3 specular = specularStrength * spec * lightColor;
 
             vec4 textureColor = texture(texture0, TexCoord);

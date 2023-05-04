@@ -2,14 +2,14 @@
 
 Plane::Plane(glm::vec3 position, float sizeScalar, float textureSize) : 
     Mesh{glm::vec3{position}, glm::vec3{sizeScalar}},
-    shader{ResourceManager::getShader("defaultShader")},
+    shader{ResourceManager::getShader("cubeShader")},
     texture{ResourceManager::getTexture("groundTexture")}
 {
     vertices = {
-        0.5f, 0.0f, 0.5f, 1.0f*sizeScalar/textureSize, 1.0f*sizeScalar/textureSize, // top right
-        0.5f, 0.0f, -0.5f, 1.0f*sizeScalar/textureSize, 0.0f*sizeScalar/textureSize, // bottom right
-        -0.5f, 0.0f, -0.5f, 0.0f*sizeScalar/textureSize, 0.0f*sizeScalar/textureSize, // bottom left
-        -0.5f, 0.0f, 0.5f, 0.0f*sizeScalar/textureSize, 1.0f*sizeScalar/textureSize // top left
+		0.5f,  0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f*sizeScalar/textureSize, 1.0f*sizeScalar/textureSize, // 1
+		0.5f,  0.0f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f*sizeScalar/textureSize, 0.0f*sizeScalar/textureSize,
+		-0.5f, 0.0f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f*sizeScalar/textureSize, 0.0f*sizeScalar/textureSize, // 2
+		-0.5f, 0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f*sizeScalar/textureSize, 1.0f*sizeScalar/textureSize,
     };
 
     indices = { 
@@ -31,10 +31,12 @@ Plane::Plane(glm::vec3 position, float sizeScalar, float textureSize) :
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), &indices[0], GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 }
 
 void Plane::draw()
