@@ -14,8 +14,8 @@ void ModelMesh::draw(Shader &shader)
     // bind appropriate textures
     unsigned int diffuseNr  = 1;
     unsigned int specularNr = 1;
-    unsigned int normalNr   = 1;
-    unsigned int heightNr   = 1;
+    // unsigned int normalNr   = 1;
+    // unsigned int heightNr   = 1;
     for(unsigned int i = 0; i < textures.size(); i++)
     {
         glActiveTexture(GL_TEXTURE0 + i); 
@@ -27,14 +27,14 @@ void ModelMesh::draw(Shader &shader)
         else if(name == "texture_specular"){
             number = std::to_string(specularNr++);
         }
-        else if(name == "texture_normal"){
-            number = std::to_string(normalNr++);
-        }
-        else if(name == "texture_height"){
-            number = std::to_string(heightNr++);
-        }
+        // else if(name == "texture_normal"){
+        //     number = std::to_string(normalNr++);
+        // }
+        // else if(name == "texture_height"){
+        //     number = std::to_string(heightNr++);
+        // }
 
-        glUniform1i(glGetUniformLocation(shader.getId(), (name + number).c_str()), i);
+        shader.setFloat(("material." + name + number).c_str(), i);
         glBindTexture(GL_TEXTURE_2D, textures[i].id);
     }
     

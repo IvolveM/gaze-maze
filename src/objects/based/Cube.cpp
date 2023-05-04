@@ -3,7 +3,7 @@
 
 Cube::Cube(glm::vec3 position) : 
 	Mesh{position, glm::vec3(1.0f), Collisioner::BoundingBoxType::CUBE},
-    shader{ResourceManager::getShader("cubeShader")},
+    shader{ResourceManager::getShader("default")},
     texture{ResourceManager::getTexture("defaultTexture")}
 {
 	initVertices();
@@ -12,7 +12,7 @@ Cube::Cube(glm::vec3 position) :
 
 Cube::Cube(std::vector<glm::vec3> instancePositions, glm::vec3 size) :
 	Mesh{instancePositions, size, Collisioner::BoundingBoxType::CUBE},
-    shader{ResourceManager::getShader("instanceShader")},
+    shader{ResourceManager::getShader("defaultInstancing")},
     texture{ResourceManager::getTexture("defaultTexture")}
 {
 	initVertices();

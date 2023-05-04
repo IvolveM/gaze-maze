@@ -2,7 +2,7 @@
 
 Plane::Plane(glm::vec3 position, float sizeScalar, float textureSize) : 
     Mesh{glm::vec3{position}, glm::vec3{sizeScalar}},
-    shader{ResourceManager::getShader("cubeShader")},
+    shader{ResourceManager::getShader("default")},
     texture{ResourceManager::getTexture("groundTexture")}
 {
     vertices = {
