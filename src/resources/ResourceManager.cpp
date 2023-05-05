@@ -65,8 +65,8 @@ void ResourceManager::initShaders(glm::vec3 pointLightPositions[])
     instanceShader.setFloat("material.shininess", 0.25f);
 
     Shader meshShader = getShader("mesh");
-    setLightSources(meshShader, pointLightPositions);
     meshShader.use();
+    setLightSources(meshShader, pointLightPositions);
     meshShader.setFloat3("material.ambient", 1.0f, 1.0f, 1.0f);
     meshShader.setFloat3("material.diffuse", 0.55f, 0.55f, 0.55f);
     meshShader.setFloat3("material.specular", 0.7f, 0.7f, 0.7f);
