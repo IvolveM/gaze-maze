@@ -14,11 +14,17 @@ Game::Game(int width, int height){
     stbi_set_flip_vertically_on_load(true); // before loading any image
 
 	glEnable(GL_DEPTH_TEST); // enable depth testing
+    glEnable(GL_CULL_FACE); // can't see inside of faces
     // glEnable(GL_MULTISAMPLE); // enable multisampling
     glfwSwapInterval( 0 ); // disable vsync
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-    ResourceManager::initShaders();
+    glm::vec3 pointLightPositions[] = {
+        glm::vec3( 0.0f,  0.0f, 0.0f),
+        glm::vec3( 0.0f, 0.0f, 30.0f)
+    };
+
+    ResourceManager::initShaders(pointLightPositions);
     ResourceManager::initTextures();
 
     // init shader matrices buffer

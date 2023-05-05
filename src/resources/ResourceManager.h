@@ -14,6 +14,7 @@ class ResourceManager{
 
         static std::string appendVert(const std::string& path, bool instancing = false);
         static std::string appendFrag(const std::string& path, bool instancing = false);
+        static void setLightSources(Shader shader, glm::vec3 pointLightPositions[]); 
     public:
         ResourceManager(ResourceManager &other) = delete;
         void operator=(const ResourceManager &) = delete;
@@ -23,7 +24,7 @@ class ResourceManager{
 
         static Texture getTexture(std::string);
         static Shader getShader(std::string);
-        static void initShaders();
+        static void initShaders(glm::vec3 pointLightPositions[]);
         static void initTextures();
 };
 
