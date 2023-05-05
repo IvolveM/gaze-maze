@@ -1,7 +1,39 @@
 #include "Shader.h"
 
-Shader::Shader(const char* vertexCode, const char* fragmentCode)
+Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {
+    // 1. retrieve the vertex/fragment source code from filePath
+    std::string vertexCodeStr;
+    std::string fragmentCodeStr;
+    std::ifstream vShaderFile;
+    std::ifstream fShaderFile;
+    // ensure ifstream objects can throw exceptions:
+    vShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
+    fShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
+    try 
+    {
+        // open files
+        vShaderFile.open(vertexPath);
+        fShaderFile.open(fragmentPath);
+        std::stringstream vShaderStream, fShaderStream;
+        // read file's buffer contents into streams
+        vShaderStream << vShaderFile.rdbuf();
+        fShaderStream << fShaderFile.rdbuf();
+        // close file handlers
+        vShaderFile.close();
+        fShaderFile.close();
+        // convert stream into string
+        vertexCodeStr   = vShaderStream.str();
+        fragmentCodeStr = fShaderStream.str();
+    }
+    catch (std::ifstream::failure& e)
+    {
+        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ: " << e.what() << std::endl;
+    }
+
+    const char* vertexCode = vertexCodeStr.c_str();
+    const char * fragmentCode = fragmentCodeStr.c_str();
+
     unsigned int vertex, fragment;
     int success;
     char infoLog[512];
@@ -76,6 +108,11 @@ void Shader::setFloat(const std::string &name, float value) const
 void Shader::setFloat3(const std::string &name, float value1, float value2, float value3) const
 {
     glUniform3f(glGetUniformLocation(id, name.c_str()), value1, value2, value3);
+}
+
+void Shader::setFloat3(const std::string &name, glm::vec3 vector) const
+{
+    glUniform3f(glGetUniformLocation(id, name.c_str()), vector.x, vector.y, vector.z);
 }
 
 void Shader::setFloat4(const std::string &name, float value1, float value2, float value3, float value4) const

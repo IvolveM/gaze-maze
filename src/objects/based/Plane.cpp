@@ -2,8 +2,9 @@
 
 Plane::Plane(glm::vec3 position, float sizeScalar, float textureSize) : 
     Mesh{glm::vec3{position}, glm::vec3{sizeScalar}},
-    shader{ResourceManager::getShader("cubeShader")},
-    texture{ResourceManager::getTexture("groundTexture")}
+    shader{ResourceManager::getShader("default")},
+    diffuse{ResourceManager::getTexture("groundDiffuse")},
+    specular{ResourceManager::getTexture("groundDiffuse")}
 {
     vertices = {
 		0.5f,  0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f*sizeScalar/textureSize, 1.0f*sizeScalar/textureSize, // 1
@@ -33,7 +34,7 @@ Plane::Plane(glm::vec3 position, float sizeScalar, float textureSize) :
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
@@ -49,6 +50,9 @@ void Plane::draw()
 
     glBindVertexArray(VAO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    texture.bindTexture();
+	shader.setInt("material.diffuse", 0);
+	shader.setInt("material.specular", 1);
+	diffuse.bindTexture(GL_TEXTURE0);
+	specular.bindTexture(GL_TEXTURE1);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }

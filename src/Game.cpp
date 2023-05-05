@@ -14,12 +14,18 @@ Game::Game(int width, int height){
     stbi_set_flip_vertically_on_load(true); // before loading any image
 
 	glEnable(GL_DEPTH_TEST); // enable depth testing
+    glEnable(GL_CULL_FACE); // can't see inside of faces
     // glEnable(GL_MULTISAMPLE); // enable multisampling
     glfwSwapInterval( 0 ); // disable vsync
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-    initShaders();
-    initTextures();
+    glm::vec3 pointLightPositions[] = {
+        glm::vec3( 0.0f,  0.0f, 0.0f),
+        glm::vec3( 0.0f, 0.0f, 30.0f)
+    };
+
+    ResourceManager::initShaders(pointLightPositions);
+    ResourceManager::initTextures();
 
     // init shader matrices buffer
     glGenBuffers(1, &uboMatrices);
@@ -43,6 +49,7 @@ Game::Game(int width, int height){
     
     this->ground = new Plane(glm::vec3{0.0f, -0.5f, 0.0f}, 100.0f, 1.0f);
 
+    this->model = new Model("../assets/meshes/backpack/backpack.obj");
     this->skybox = new Skybox();
 
     // this->model = new Model("../assets/meshes/backpack/backpack.obj");
@@ -68,200 +75,6 @@ void Game::initGlfw() {
     glfwMakeContextCurrent(window);
 }
 
-void Game::initShaders(){
-    const char* vertShader = R"(
-        #version 330 core
-        layout (location = 0) in vec3 pos;
-        layout (location = 1) in vec2 texCoord;
-
-        layout (std140) uniform Matrices
-        {
-            mat4 projection;
-            mat4 view;
-            vec3 cameraPos;
-        };
-
-        out vec2 TexCoord;
-        out vec3 CameraPos;
-
-        uniform mat4 model;
-
-        void main()
-        {
-            CameraPos = cameraPos;
-            gl_Position = projection * view * model * vec4(pos, 1.0);
-            TexCoord = texCoord;
-        }
-    )";
-
-
-    const char* fragShader = R"(
-        #version 330 core
-        out vec4 FragColor;
-
-        in vec2 TexCoord;
-        uniform sampler2D texture0;
-
-        void main()
-        {
-            // FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
-            FragColor = texture(texture0, TexCoord);
-        }
-    )";
-        // uniform sampler2D texture_diffuse1;
-        // uniform sampler2D texture_diffuse2;
-        // uniform sampler2D texture_diffuse3;
-        // uniform sampler2D texture_specular1;
-        // uniform sampler2D texture_specular2;
-
-    
-    const char* cubeVertShader = R"(
-        #version 330 core
-        layout (location = 0) in vec3 pos;
-        layout (location = 1) in vec3 aNormal;
-        layout (location = 2) in vec2 texCoord;
-
-        layout (std140) uniform Matrices
-        {
-            mat4 projection;
-            mat4 view;
-            vec3 cameraPos;
-        };
-
-        out vec2 TexCoord;
-        out vec3 Normal;
-        out vec3 FragPos;
-        out vec3 CameraPos;
-
-        uniform mat4 model;
-
-        void main()
-        {
-            CameraPos = cameraPos;
-            TexCoord = texCoord;
-            Normal = mat3(transpose(inverse(model))) * aNormal;
-            FragPos = vec3(model * vec4(pos, 1.0));
-
-            gl_Position = projection * view * model * vec4(pos, 1.0);
-        }
-    )";
-
-    const char* instanceShader = R"(
-        #version 330 core
-        layout (location = 0) in vec3 aPos;
-        layout (location = 1) in vec3 aNormalCoord;
-        layout (location = 2) in vec2 aTexCoord;
-        layout (location = 3) in mat4 aInstanceMatrix;
-
-        layout (std140) uniform Matrices
-        {
-            mat4 projection;
-            mat4 view;
-            vec3 cameraPos;
-        };
-
-        out vec3 CameraPos;
-        out vec2 TexCoord;
-        out vec3 Normal;
-        out vec3 FragPos;
-
-        void main()
-        {
-            CameraPos = cameraPos;
-            TexCoord = aTexCoord;
-            Normal = mat3(transpose(inverse(aInstanceMatrix))) * aNormalCoord;
-            FragPos = vec3(aInstanceMatrix * vec4(aPos, 1.0));
-
-            gl_Position = projection * view * vec4(FragPos, 1.0f); 
-        }
-    )";
-
-    const char* cubeFragShader = R"(
-        #version 330 core
-        out vec4 FragColor;
-
-        in vec2 TexCoord;
-        in vec3 Normal;
-        in vec3 FragPos;
-        in vec3 CameraPos;
-
-        uniform sampler2D texture0;
-
-        void main()
-        {
-            vec3 lightColor = vec3(1.0f, 1.0f, 1.0f);
-            vec3 lightPos = vec3(1.2f, 2.0f, 2.0f);
-
-            // ambient
-            float ambientStrength = 0.9;
-            vec3 ambient = ambientStrength * lightColor;
-
-            // diffuse
-            vec3 norm = normalize(Normal);
-            vec3 lightDir = normalize(lightPos - FragPos);
-            float diff = max(dot(norm, lightDir), 0.0);
-            vec3 diffuse = diff * lightColor;
-
-            // specular
-            float specularStrength = 0.5;
-            vec3 viewDir = normalize(CameraPos - FragPos);
-            vec3 reflectDir = reflect(-lightDir, norm);
-            float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32); // 32 = shininess
-            vec3 specular = specularStrength * spec * lightColor;
-
-            vec4 textureColor = texture(texture0, TexCoord);
-            vec3 result = (ambient + diffuse + specular) * textureColor.xyz;
-            FragColor = vec4(result, 1.0f);
-        }
-    )";
-
-    const char* skyboxVertShader = R"(
-        #version 330 core
-        layout (location = 0) in vec3 aPos;
-
-        layout (std140) uniform Matrices
-        {
-            mat4 projection;
-            mat4 view;
-            vec3 cameraPos;
-        };
-
-        out vec3 texCoords;
-
-        void main()
-        {
-            texCoords = aPos;
-            vec4 pos = projection * mat4(mat3(view)) * vec4(aPos, 1.0);
-            gl_Position = pos.xyww;
-        }   
-    )";
-
-    const char* skyboxFragShader = R"(
-        #version 330 core
-        out vec4 FragColor;
-
-        in vec3 texCoords;
-
-        uniform samplerCube skybox;
-
-        void main()
-        {    
-            FragColor = texture(skybox, texCoords);
-        } 
-    )";
-
-    ResourceManager::addShader("defaultShader", vertShader, fragShader).use().setBlockBinding("Matrices", 0);
-    ResourceManager::addShader("cubeShader", cubeVertShader, cubeFragShader).use().setBlockBinding("Matrices", 0);
-    ResourceManager::addShader("instanceShader", instanceShader, cubeFragShader).use().setBlockBinding("Matrices", 0);
-    ResourceManager::addShader("skyboxShader", skyboxVertShader, skyboxFragShader).use().setBlockBinding("Matrices", 0);
-
-}
-
-void Game::initTextures(){
-    ResourceManager::setTexture("defaultTexture", "../assets/textures/wall2.jpg");
-    ResourceManager::setTexture("groundTexture", "../assets/textures/ground2.jpg");
-}
-
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
@@ -273,7 +86,7 @@ void Game::mainloop() {
         this->dt = newTime - oldTime;
         oldTime = newTime;
         float fps = 1/dt;
-        // std::cout<< "FPS: " << fps << std::endl;
+        std::cout<< "FPS: " << fps << std::endl;
 
         processInput();
         processEvents();
@@ -298,7 +111,7 @@ void Game::render() {
     // handle render calls here
     maze->draw();
     ground->draw();
-    // model->draw();
+    model->draw();
     skybox->draw();
 
     // check and call events and swap the buffers

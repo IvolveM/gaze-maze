@@ -3,8 +3,9 @@
 
 Cube::Cube(glm::vec3 position) : 
 	Mesh{position, glm::vec3(1.0f), Collisioner::BoundingBoxType::CUBE},
-    shader{ResourceManager::getShader("cubeShader")},
-    texture{ResourceManager::getTexture("defaultTexture")}
+    shader{ResourceManager::getShader("default")},
+    diffuse{ResourceManager::getTexture("wallDiffuse")},
+	specular{ResourceManager::getTexture("wallDiffuse")}
 {
 	initVertices();
 	initDefaultVaoVbo();
@@ -12,8 +13,9 @@ Cube::Cube(glm::vec3 position) :
 
 Cube::Cube(std::vector<glm::vec3> instancePositions, glm::vec3 size) :
 	Mesh{instancePositions, size, Collisioner::BoundingBoxType::CUBE},
-    shader{ResourceManager::getShader("instanceShader")},
-    texture{ResourceManager::getTexture("defaultTexture")}
+    shader{ResourceManager::getShader("defaultInstancing")},
+    diffuse{ResourceManager::getTexture("wallDiffuse")},
+	specular{ResourceManager::getTexture("wallDiffuse")}
 {
 	initVertices();
 
@@ -51,48 +53,50 @@ Cube::Cube(std::vector<glm::vec3> instancePositions, glm::vec3 size) :
 
 void Cube::initVertices() {
     this->vertices = {
-		// positions  		 // normals         // texture coords
-		-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
-		0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f,
-		0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
-		0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
-		-0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
-
-		-0.5f, -0.5f,0.5f, 0.0f, 0.0f, 1.0f,0.0f, 0.0f,
-		0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-		0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-		-0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-		-0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-
-		-0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		-0.5f, 0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-		-0.5f, -0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-		-0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-
-		0.5f, 0.5f, 0.5f, 1.0f,0.0f, 0.0f, 1.0f, 0.0f,
-		0.5f, 0.5f, -0.5f, 1.0f,0.0f, 0.0f, 1.0f, 1.0f,
-		0.5f, -0.5f, -0.5f, 1.0f,0.0f, 0.0f, 0.0f, 1.0f,
-		0.5f, -0.5f, -0.5f, 1.0f,0.0f, 0.0f, 0.0f, 1.0f,
-		0.5f, -0.5f, 0.5f, 1.0f,0.0f, 0.0f, 0.0f, 0.0f,
-		0.5f, 0.5f, 0.5f, 1.0f,0.0f, 0.0f, 1.0f, 0.0f,
-
-		-0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
-		0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 1.0f,
-		0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-		0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-		-0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
-
-		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-		0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-		0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-		0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-		-0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
-		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f
+		// faces specified in COUNTER-CLOCKWISE order (for face-culling)
+		// positions  		 // normals           // texture coords
+		// back face
+		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f, // bottom-left
+		 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f, // top-right
+		 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f, // bottom-right
+		 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f, // top-right
+		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f, // bottom-left
+		-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  1.0f, // top-left
+		// front face
+		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f, // bottom-left
+		 0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f, // bottom-right
+		 0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f, // top-right
+		 0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f, // top-right
+		-0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f, // top-left
+		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f, // bottom-left
+		// left face
+		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f, // top-right
+		-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f, // top-left
+		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f, // bottom-left
+		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f, // bottom-left
+		-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f, // bottom-right
+		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f, // top-right
+		// right face
+		 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f, // top-left
+		 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f, // bottom-right
+		 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f, // top-right         
+		 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f, // bottom-right
+		 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f, // top-left
+		 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f, // bottom-left     
+		// bottom face
+		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f, // top-right
+		 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f, // top-left
+		 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f, // bottom-left
+		 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f, // bottom-left
+		-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f, // bottom-right
+		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f, // top-right
+		// top face
+		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f, // top-left
+		 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f, // bottom-right
+		 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f, // top-right     
+		 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f, // bottom-right
+		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f, // top-left
+		-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f  // bottom-left
     };
 }
 
@@ -121,6 +125,11 @@ void Cube::initDefaultVaoVbo() {
 void Cube::draw()
 {
     shader.use();
+	glBindVertexArray(VAO);
+	shader.setInt("material.diffuse", 0);
+	shader.setInt("material.specular", 1);
+	diffuse.bindTexture(GL_TEXTURE0);
+	specular.bindTexture(GL_TEXTURE1);
 
 	if (!this->instancing) {
 		glm::mat4 model = glm::mat4(1.0f);
@@ -128,13 +137,9 @@ void Cube::draw()
 		// model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
 		shader.setMatrixFloat4("model", model);
 
-		glBindVertexArray(VAO);
-		texture.bindTexture();
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}
 	else {
-		glBindVertexArray(VAO);
-		texture.bindTexture();
 		glDrawArraysInstanced(GL_TRIANGLES, 0, 36, instanceModelMatrices.size());
 		glBindVertexArray(0);
 	}

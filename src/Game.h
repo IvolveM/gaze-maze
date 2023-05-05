@@ -37,14 +37,12 @@ class Game{
         // std::vector<Cube*> mazeCubes;
         Plane* ground;
 
-        // Model* model;
+        Model* model;
 
         Skybox* skybox;
         glm::mat4 projection;
 
         void initGlfw();
-        void initShaders();
-        void initTextures();
 
         void render();
         void processInput();

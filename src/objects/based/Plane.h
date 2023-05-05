@@ -16,7 +16,8 @@ class Plane: public Mesh {
         float textureRatio;
         
         Shader shader;
-        Texture texture;
+        Texture diffuse;
+        Texture specular;
     public:
         Plane(
             glm::vec3 position = glm::vec3{0.0f},
