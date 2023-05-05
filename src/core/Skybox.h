@@ -25,7 +25,7 @@ class Skybox {
         Shader shader;
         std::string parentDir = "../assets/skybox/";
         std::string cubemap[6] = {
-            parentDir + "right.jpg",
+            parentDir + "right.png",
             parentDir + "left.png",
             parentDir + "top.png",
             parentDir + "bottom.png",

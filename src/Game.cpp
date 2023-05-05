@@ -111,7 +111,7 @@ void Game::render() {
     // handle render calls here
     maze->draw();
     ground->draw();
-    model->draw();
+    // model->draw();
     skybox->draw();
 
     // check and call events and swap the buffers
