@@ -50,6 +50,9 @@ Game::Game(int width, int height){
     this->ground = new Plane(glm::vec3{0.0f, -0.5f, 0.0f}, 100.0f, 1.0f);
 
     this->model = new Model("../assets/meshes/backpack/backpack.obj");
+    this->skybox = new Skybox();
+
+    // this->model = new Model("../assets/meshes/backpack/backpack.obj");
 }
 
 Game::~Game() {
@@ -83,7 +86,7 @@ void Game::mainloop() {
         this->dt = newTime - oldTime;
         oldTime = newTime;
         float fps = 1/dt;
-        std::cout<< "FPS: " << fps << std::endl;
+        // std::cout<< "FPS: " << fps << std::endl;
 
         processInput();
         processEvents();
@@ -108,14 +111,13 @@ void Game::render() {
     // handle render calls here
     maze->draw();
     ground->draw();
-    model->draw();
+    // model->draw();
+    skybox->draw();
 
     // check and call events and swap the buffers
     glfwPollEvents();
     glfwSwapBuffers(window);
 }
-
-
 
 void Game::processInput() {
     handleMouse();
