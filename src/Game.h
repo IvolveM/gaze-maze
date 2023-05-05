@@ -22,6 +22,7 @@
 #include "core/Maze.h"
 #include "utils/MazeLoader.h"
 #include "utils/MazeGenerator.h"
+#include "core/Skybox.h"
 
 class Game{
     private:
@@ -37,6 +38,9 @@ class Game{
         Plane* ground;
 
         // Model* model;
+
+        Skybox* skybox;
+        glm::mat4 projection;
 
         void initGlfw();
         void initShaders();

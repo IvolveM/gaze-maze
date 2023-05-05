@@ -30,10 +30,10 @@ Game::Game(int width, int height){
 
     glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrices, 0, 2 * sizeof(glm::mat4) + sizeof(glm::vec3));
 
-	glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
+	this->projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
 
     glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
-    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(proj));
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(this->projection));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);  
 
     this->player = Player();
@@ -42,6 +42,8 @@ Game::Game(int width, int height){
     this->maze = MazeGenerator().getMaze();
     
     this->ground = new Plane(glm::vec3{0.0f, -0.5f, 0.0f}, 100.0f, 1.0f);
+
+    this->skybox = new Skybox();
 
     // this->model = new Model("../assets/meshes/backpack/backpack.obj");
 }
@@ -213,9 +215,42 @@ void Game::initShaders(){
         }
     )";
 
+    const char* skyboxVertShader = R"(
+        #version 330 core
+        layout (location = 0) in vec3 aPos;
+
+        out vec3 texCoords;
+
+        uniform mat4 projection;
+        uniform mat4 view;
+
+        void main()
+        {
+            texCoords = aPos;
+            vec4 pos = projection * view * vec4(aPos, 1.0);
+            gl_Position = pos.xyww;
+        }   
+    )";
+
+    const char* skyboxFragShader = R"(
+        #version 330 core
+        out vec4 FragColor;
+
+        in vec3 texCoords;
+
+        uniform samplerCube skybox;
+
+        void main()
+        {    
+            FragColor = texture(skybox, texCoords);
+        } 
+    )";
+
     ResourceManager::addShader("defaultShader", vertShader, fragShader).use().setBlockBinding("Matrices", 0);
     ResourceManager::addShader("cubeShader", cubeVertShader, cubeFragShader).use().setBlockBinding("Matrices", 0);
     ResourceManager::addShader("instanceShader", instanceShader, cubeFragShader).use().setBlockBinding("Matrices", 0);
+    ResourceManager::addShader("skyboxShader", skyboxVertShader, skyboxFragShader).use();
+
 }
 
 void Game::initTextures(){
@@ -260,6 +295,7 @@ void Game::render() {
     maze->draw();
     ground->draw();
     // model->draw();
+    skybox->draw(glm::mat4(glm::mat3(player.getView())), this->projection);
 
     // check and call events and swap the buffers
     glfwPollEvents();

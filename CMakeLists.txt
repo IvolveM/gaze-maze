@@ -33,6 +33,8 @@ add_executable(gaze-maze
     src/core/Player.cpp
     src/core/Maze.cpp
     src/core/Maze.h
+    src/core/Skybox.h
+    src/core/Skybox.cpp
     src/objects/Mesh.h
     src/objects/Mesh.cpp
     src/objects/based/Cube.h
