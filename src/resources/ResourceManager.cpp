@@ -46,7 +46,7 @@ void ResourceManager::initShaders(glm::vec3 pointLightPositions[])
     std::string meshPath    = shaderDirectory + "meshShader/mesh";
     addShader("default", appendVert(defaultPath), appendFrag(defaultPath)).use().setBlockBinding("Matrices", 0);
     addShader("defaultInstancing", appendVert(defaultPath, true), appendFrag(defaultPath)).use().setBlockBinding("Matrices", 0);
-    addShader("mesh", appendVert(defaultPath), appendFrag(meshPath)).use().setBlockBinding("Matrices", 0);
+    addShader("mesh", appendVert(defaultPath), appendFrag(defaultPath)).use().setBlockBinding("Matrices", 0);
     // some materials: http://devernay.free.fr/cours/opengl/materials.html
     Shader defaultShader = getShader("default");
     defaultShader.use();

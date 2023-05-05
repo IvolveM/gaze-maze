@@ -126,8 +126,8 @@ void Cube::draw()
 {
     shader.use();
 	glBindVertexArray(VAO);
-	shader.setInt("material.diffuse", 0);
-	shader.setInt("material.specular", 1);
+	shader.setInt("material.texture_diffuse1", 0);
+	shader.setInt("material.texture_specular1", 1);
 	diffuse.bindTexture(GL_TEXTURE0);
 	specular.bindTexture(GL_TEXTURE1);
 

@@ -50,8 +50,8 @@ void Plane::draw()
 
     glBindVertexArray(VAO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	shader.setInt("material.diffuse", 0);
-	shader.setInt("material.specular", 1);
+	shader.setInt("material.texture_diffuse1", 0);
+	shader.setInt("material.texture_specular1", 1);
 	diffuse.bindTexture(GL_TEXTURE0);
 	specular.bindTexture(GL_TEXTURE1);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
