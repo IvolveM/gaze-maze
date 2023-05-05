@@ -41,9 +41,9 @@ Skybox::Skybox() :
 
 	glBindVertexArray(skyboxVAO);
 	glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, skyboxVertices.size() * sizeof(float), &(skyboxVertices.front()), GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, skyboxEBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(skyboxIndices), &skyboxIndices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, skyboxIndices.size() * sizeof(unsigned int), &(skyboxIndices.front()), GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -84,15 +84,11 @@ Skybox::~Skybox() {
     
 }
 
-void Skybox::draw(glm::mat4 view, glm::mat4 proj) {
+void Skybox::draw() {
     // Since the cubemap will always have a depth of 1.0, we need that equal sign so it doesn't get discarded
     glDepthFunc(GL_LEQUAL);
 
     shader.use();
-    // We make the mat4 into a mat3 and then a mat4 again in order to get rid of the last row and column
-    // The last row and column affect the translation of the skybox (which we don't want to affect)
-    glUniformMatrix4fv(glGetUniformLocation(shader.getId(), "view"), 1, GL_FALSE, glm::value_ptr(view));
-    glUniformMatrix4fv(glGetUniformLocation(shader.getId(), "projection"), 1, GL_FALSE, glm::value_ptr(proj));
 
     // Draws the cubemap as the last object so we can save a bit of performance by discarding all fragments
     // where an object is present (a depth of 1.0f will always fail against any object's depth value)

@@ -14,7 +14,7 @@ class Skybox {
         Skybox();
         ~Skybox();
 
-        void draw(glm::mat4 view, glm::mat4 proj);
+        void draw();
   
     private:
         std::vector<float> skyboxVertices;
@@ -23,7 +23,7 @@ class Skybox {
         unsigned int cubemapTexture;
 
         Shader shader;
-        std::string parentDir = "/home/ivan/Documents/School/bach2/Computer\ Graphics/gaze-maze/assets/skybox/";
+        std::string parentDir = "../assets/skybox/";
         std::string cubemap[6] = {
             parentDir + "right.jpg",
             parentDir + "left.png",

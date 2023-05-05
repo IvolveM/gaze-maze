@@ -219,15 +219,19 @@ void Game::initShaders(){
         #version 330 core
         layout (location = 0) in vec3 aPos;
 
-        out vec3 texCoords;
+        layout (std140) uniform Matrices
+        {
+            mat4 projection;
+            mat4 view;
+            vec3 cameraPos;
+        };
 
-        uniform mat4 projection;
-        uniform mat4 view;
+        out vec3 texCoords;
 
         void main()
         {
             texCoords = aPos;
-            vec4 pos = projection * view * vec4(aPos, 1.0);
+            vec4 pos = projection * mat4(mat3(view)) * vec4(aPos, 1.0);
             gl_Position = pos.xyww;
         }   
     )";
@@ -249,7 +253,7 @@ void Game::initShaders(){
     ResourceManager::addShader("defaultShader", vertShader, fragShader).use().setBlockBinding("Matrices", 0);
     ResourceManager::addShader("cubeShader", cubeVertShader, cubeFragShader).use().setBlockBinding("Matrices", 0);
     ResourceManager::addShader("instanceShader", instanceShader, cubeFragShader).use().setBlockBinding("Matrices", 0);
-    ResourceManager::addShader("skyboxShader", skyboxVertShader, skyboxFragShader).use();
+    ResourceManager::addShader("skyboxShader", skyboxVertShader, skyboxFragShader).use().setBlockBinding("Matrices", 0);
 
 }
 
@@ -295,7 +299,7 @@ void Game::render() {
     maze->draw();
     ground->draw();
     // model->draw();
-    skybox->draw(glm::mat4(glm::mat3(player.getView())), this->projection);
+    skybox->draw();
 
     // check and call events and swap the buffers
     glfwPollEvents();
