@@ -8,10 +8,15 @@
 
 class Model{
     public:
-        Model(char *path);
+        Model(
+            char *path,  
+            glm::vec3 position = glm::vec3{0.0f}, 
+            glm::vec3 size = glm::vec3{1.0f}
+        );
         void draw();
     private:
         Shader shader;
+        glm::vec3 position, size;
 
         std::vector<ModelMesh> meshes;
         std::string directory;

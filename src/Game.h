@@ -15,8 +15,6 @@
 
 #include "resources/shaders/Shader.h"
 #include "resources/ResourceManager.h"
-#include "objects/based/Cube.h"
-#include "objects/model/Model.h"
 #include "objects/based/Plane.h"
 #include "core/Player.h"
 #include "core/Maze.h"
@@ -36,8 +34,6 @@ class Game{
         Maze* maze;
         // std::vector<Cube*> mazeCubes;
         Plane* ground;
-
-        Model* model;
 
         Skybox* skybox;
 

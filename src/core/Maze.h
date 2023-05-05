@@ -1,7 +1,9 @@
 #pragma once
 
 #include "../objects/based/Cube.h"
+#include "../objects/model/Model.h"
 #include <vector>
+#include <random>
 
 class Maze {
     private:
@@ -10,6 +12,7 @@ class Maze {
             EMPTY
         };
         std::vector<std::vector<Maze::Object>> objects;
+        std::vector<Model> models{};
         Cube* cubes;
 
         Maze(std::vector<std::vector<Maze::Object>> objects);
