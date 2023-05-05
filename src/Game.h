@@ -40,7 +40,6 @@ class Game{
         Model* model;
 
         Skybox* skybox;
-        glm::mat4 projection;
 
         void initGlfw();
 

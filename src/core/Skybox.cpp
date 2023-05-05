@@ -1,7 +1,7 @@
 #include "Skybox.h"
 
 Skybox::Skybox() :
- shader{ResourceManager::getShader("skyboxShader")} 
+ shader{ResourceManager::getShader("skybox")} 
 {
     skyboxVertices = {
         -1.0f, -1.0f,  1.0f,
@@ -14,25 +14,26 @@ Skybox::Skybox() :
         -1.0f,  1.0f, -1.0f
     };
 
+    // reverse order
     skyboxIndices = {
-        // Right
-        1, 2, 6,
-        6, 5, 1,
-        // Left
-        0, 4, 7,
-        7, 3, 0,
-        // Top
-        4, 5, 6,
-        6, 7, 4,
-        // Bottom
-        0, 3, 2,
-        2, 1, 0,
-        // Back
-        0, 1, 5,
-        5, 4, 0,
         // Front
-        3, 7, 6,
-        6, 2, 3
+        3, 2, 6,
+        6, 7, 3,
+        // Back
+        0, 4, 5,
+        5, 1, 0,
+        // Bottom
+        0, 1, 2,
+        2, 3, 0,
+        // Top
+        4, 7, 6,
+        6, 5, 4,
+        // Left
+        0, 3, 7,
+        7, 4, 0,
+        // Right
+        1, 5, 6,
+        6, 2, 1
     };
 
 	glGenVertexArrays(1, &skyboxVAO);
@@ -54,11 +55,8 @@ Skybox::Skybox() :
     glGenTextures(1, &cubemapTexture);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
 
-	// This might help with seams on some systems
-	//glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
-
+    int width, height, nrChannels;
 	for (unsigned int i = 0; i < 6; i++) {
-		int width, height, nrChannels;
 		unsigned char* data = stbi_load(cubemap[i].c_str(), &width, &height, &nrChannels, 0);
 		if (data) {
 			stbi_set_flip_vertically_on_load(false);
@@ -89,7 +87,6 @@ void Skybox::draw() {
     glDepthFunc(GL_LEQUAL);
 
     shader.use();
-
     // Draws the cubemap as the last object so we can save a bit of performance by discarding all fragments
     // where an object is present (a depth of 1.0f will always fail against any object's depth value)
     glBindVertexArray(skyboxVAO);

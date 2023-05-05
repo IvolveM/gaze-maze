@@ -36,10 +36,10 @@ Game::Game(int width, int height){
 
     glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrices, 0, 2 * sizeof(glm::mat4) + sizeof(glm::vec3));
 
-	this->projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
+	glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
 
     glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
-    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(this->projection));
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(proj));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);  
 
     this->player = Player();
@@ -86,7 +86,7 @@ void Game::mainloop() {
         this->dt = newTime - oldTime;
         oldTime = newTime;
         float fps = 1/dt;
-        std::cout<< "FPS: " << fps << std::endl;
+        // std::cout<< "FPS: " << fps << std::endl;
 
         processInput();
         processEvents();
@@ -118,8 +118,6 @@ void Game::render() {
     glfwPollEvents();
     glfwSwapBuffers(window);
 }
-
-
 
 void Game::processInput() {
     handleMouse();
