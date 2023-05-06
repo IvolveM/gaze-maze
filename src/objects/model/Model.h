@@ -14,8 +14,10 @@ class Model{
             glm::vec3 size = glm::vec3{1.0f}
         );
         void draw();
+        void drawPicker();
     private:
         Shader shader;
+        Shader pickerShader;
         glm::vec3 position, size;
 
         std::vector<ModelMesh> meshes;
