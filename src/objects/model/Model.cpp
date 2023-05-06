@@ -125,15 +125,15 @@ std::vector<MeshTexture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureT
     return textures;
 }
 
-void Model::drawPicker() {
+void Model::drawPicker(int id) {
     this->pickerShader.use();
-    this->pickerShader.setVec3("idCol", glm::vec3(255.0f, 0.0f, 0.0f));
+    this->pickerShader.setVec3Float("idCol", glm::vec3(id, 0.0f, 0.0f));
 
     glm::mat4 model = glm::mat4(1.0f);
 	model = glm::translate(model, this->position);
     model = glm::scale(model, this->size);
     pickerShader.setMatrixFloat4("model", model);
     for(unsigned int i = 0; i < meshes.size(); i++){
-        meshes[i].draw(pickerShader);
+        meshes[i].drawPicker(pickerShader);
     }
 }

@@ -14,7 +14,7 @@ class Model{
             glm::vec3 size = glm::vec3{1.0f}
         );
         void draw();
-        void drawPicker();
+        void drawPicker(int id);
     private:
         Shader shader;
         Shader pickerShader;
