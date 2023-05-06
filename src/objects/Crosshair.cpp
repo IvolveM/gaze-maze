@@ -29,6 +29,7 @@ Crosshair::~Crosshair() {
 void Crosshair::draw() {
     glDisable(GL_DEPTH_TEST);
     shader.use();
+    glLineWidth(2.0f);
     glBindVertexArray(VAO);
     glDrawArrays(GL_LINES, 0, 4);
     glBindVertexArray(0);

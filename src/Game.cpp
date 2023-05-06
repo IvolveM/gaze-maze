@@ -23,6 +23,10 @@ Game::Game(int width, int height)
 	glEnable(GL_DEPTH_TEST); // enable depth testing
     glEnable(GL_CULL_FACE); // can't see inside of faces
     // glEnable(GL_MULTISAMPLE); // enable multisampling
+
+    glEnable(GL_BLEND); // enable so we can use alpha values in fragment shaders
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     glfwSwapInterval( 0 ); // disable vsync
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
