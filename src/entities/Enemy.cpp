@@ -17,6 +17,7 @@ Enemy::Enemy(
 }
 
 void Enemy::update(float dt) {
+    std::cout << "target: " << glm::to_string(targetPos) << std::endl;
     // target reached
     if (std::abs(glm::distance(this->targetPos, this->position)) <= gridBlockSize.x * 0.01) {
         // lock to target        
@@ -54,18 +55,19 @@ glm::vec3 Enemy::calculateNewTargetPos() {
     return glm::vec3(newGridPos.second, 0.0f, newGridPos.first);
 }
 
+void Enemy::updateNewDirection() {
+    this->movingDir = this->targetPos - this->position;
+}
+
 void Enemy::updateNewPosition(float dt) {
     glm::vec3 toIncrement = glm::vec3{movingDir.x, 0.0f, movingDir.z} * speed * dt;
     // make sure the max step size per move is one block length
-    if (glm::length(toIncrement) > this->gridBlockSize.x) {
-        toIncrement = glm::normalize(toIncrement);
+    for (int i = 0; i < 3; i++) {
+        if (toIncrement[i] > gridBlockSize[i])
+            toIncrement[i] = gridBlockSize[i];
     }
     this->cube->move(toIncrement);
     this->position += toIncrement;
-}
-
-void Enemy::updateNewDirection() {
-    this->movingDir = this->targetPos - this->position;
 }
 
 bool Enemy::inBounds(std::pair<int,int> pos) {

@@ -12,7 +12,6 @@ class Maze {
             EMPTY
         };
 
-    public:
         ~Maze();
         void draw();
         Mesh getMesh();
@@ -34,5 +33,4 @@ class Maze {
         Cube* cubes;
         std::vector<Model> models{};
         Maze(std::vector<std::vector<Maze::Object>> objects);
-
 };

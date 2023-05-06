@@ -95,21 +95,13 @@ void Player::doCollisions(Mesh m)
     int c = 1;
     for (auto col: collisions) {
         totalTranslationVector += resolveCollision(col);
-        std::cout << "counter: " <<c++<<std::endl;
     }
     if (collisions.size() > 0)
         incrementPosition(totalTranslationVector);
 }
 
 glm::vec3 Player::resolveCollision(Collisioner c) {
-    // glm::vec2 directionNormalized = glm::normalize(movingDirection);
-    // std::cout << glm::to_string(this->collisioner.getVectorToTranslate(c, glm::vec3{directionNormalized.x, 0.0f, directionNormalized.y} * speed * dt, dt).second) << std::endl;
-    // std::pair<glm::vec3, glm::vec3> ret = this->collisioner.getVectorToTranslate(c, glm::vec3{directionNormalized.x, 0.0f, directionNormalized.y} * speed * dt, dt);
-    //     this->movingDirection = ret.second;
-
-    //     this->setPosition(ret.first);
     auto vec = this->collisioner.getVectorToTranslate(c);
-    std::cout << glm::to_string(vec)<<std::endl;
     this->movingDirection = glm::vec2{0.0f, 0.0f};
     return vec;
 }
