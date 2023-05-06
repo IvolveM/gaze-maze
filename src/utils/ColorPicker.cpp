@@ -30,11 +30,9 @@ void ColorPicker::removeModelByColor(unsigned char color[4]) {
     this->modelMap.erase(static_cast<int>(color[0]));
 }
 
-std::vector<std::pair<Model*, int>> ColorPicker::getAllModels() {
-    std::vector<std::pair<Model*, int>> ret;
-    for (const auto& kvp : this->modelMap) {
-        ret.push_back(std::pair(kvp.second, kvp.first));
+void ColorPicker::drawModels() {
+    for (const auto& modelPair : this->modelMap) {
+        modelPair.second->drawPicker(modelPair.first);
     }
-    return ret;
 }
 

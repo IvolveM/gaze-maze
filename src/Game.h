@@ -52,6 +52,7 @@ class Game{
 
         void render();
         void renderPickerBuffer();
+        void handleMouseClick();
         void processInput();
         void processEvents();
 

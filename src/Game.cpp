@@ -8,8 +8,6 @@ Game::Game(int width, int height)
 :   windowWidth{width},
     windowHeight{height}
 {
-    this->colorPicker = new ColorPicker();
-
     initGlfw();
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -52,6 +50,8 @@ Game::Game(int width, int height)
     glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(proj));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);  
+
+    this->colorPicker = new ColorPicker();
 
     this->player = new Player();
 
@@ -141,10 +141,10 @@ void Game::render() {
     for (auto light : lights){
         light->draw();
     }
-    player->draw(); // for smokes
-
-    for (auto shroom: mushrooms) 
+    player->draw(); // for particles
+    for (auto shroom: mushrooms) {
         shroom->draw();
+    }
     crosshair->draw();
 }
 
@@ -153,13 +153,8 @@ void Game::renderPickerBuffer() {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // fills the screen with the color configured by glClearColor, and clears the depth buffer bit
     
-    for (auto shroomPair : this->colorPicker->getAllModels()) {
-        shroomPair.first->drawPicker(shroomPair.second);
-    }
+    this->colorPicker->drawModels();
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-    // glfwPollEvents();
-    // glfwSwapBuffers(window);
 }
 
 void Game::processInput() {
@@ -198,29 +193,30 @@ void Game::handleMouse()
     player->setDirectionByMouse((float)xPos, (float)yPos);
 
     if (clicked) {
-        int width, height;
-        glfwGetFramebufferSize(window, &width, &height);
-
-        double midx = width / 2; 
-        double midy = height / 2;
-
-        // Read the pixel color at the cursor position
-        unsigned char pixel[4];
-        glReadPixels(midx, midy, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixel);
-        std::cout << "Clicked color: (" << static_cast<int>(pixel[0]) << ", " << static_cast<int>(pixel[1]) << ", " << static_cast<int>(pixel[2]) << ")" << std::endl;
-        
-        if (static_cast<int>(pixel[0]) != 0) {
-            Model* m = this->colorPicker->getModelByColor(pixel);
-
-            auto it{std::find_if(mushrooms.begin(), mushrooms.end(), [m](const Model* mushroom){return m == mushroom;})};
-            if (it != mushrooms.end()) {
-                auto idx{it - mushrooms.begin()};
-                this->mushrooms.erase(mushrooms.begin() + idx);
-                this->colorPicker->removeModelByColor(pixel);
-            }
-        }
-        clicked = false;
+        handleMouseClick();
     }
+}
+
+void Game::handleMouseClick() {
+    double midx = this->windowWidth / 2; 
+    double midy = this->windowHeight / 2;
+
+    // Read the pixel color at the cursor position
+    unsigned char pixel[4];
+    glReadPixels(midx, midy, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixel);
+    std::cout << "Clicked color: (" << static_cast<int>(pixel[0]) << ", " << static_cast<int>(pixel[1]) << ", " << static_cast<int>(pixel[2]) << ")" << std::endl;
+    
+    if (static_cast<int>(pixel[0]) != 0) {
+        Model* m = this->colorPicker->getModelByColor(pixel);
+
+        auto it{std::find_if(mushrooms.begin(), mushrooms.end(), [m](const Model* mushroom){return m == mushroom;})};
+        if (it != mushrooms.end()) {
+            auto idx{it - mushrooms.begin()};
+            this->mushrooms.erase(mushrooms.begin() + idx);
+            this->colorPicker->removeModelByColor(pixel);
+        }
+    }
+    clicked = false;
 }
 
 void Game::initPickerBuffer() {
