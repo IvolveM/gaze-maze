@@ -50,8 +50,11 @@ class Game{
         unsigned int pickerBuffer;
         void initPickerBuffer();
 
+        void initMushroomModels();
+
         void render();
         void renderPickerBuffer();
+        void handleMouseClick();
         void processInput();
         void processEvents();
 

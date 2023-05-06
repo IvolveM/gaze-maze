@@ -17,9 +17,9 @@ class ColorPicker {
         int addModel(Model* m);
         Model* getModelByColor(unsigned char color[4]);
         void removeModelByColor(unsigned char color[4]);
-        std::vector<std::pair<Model*, int>> getAllModels();
+        void drawModels();
 
     private:
-        int currId = 30;
+        int currId = 1;
         std::unordered_map<int, Model*> modelMap;
 };
