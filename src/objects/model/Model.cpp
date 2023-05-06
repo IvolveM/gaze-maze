@@ -1,13 +1,24 @@
 #include "Model.h"
 
-Model::Model(char *path)
-    : shader{ResourceManager::getShader("mesh")}
+Model::Model(
+    char *path,  
+    glm::vec3 position,
+    glm::vec3 size
+)
+    : shader{ResourceManager::getShader("mesh")},
+    position{position},
+    size{size}
 {
     loadModel(path);
 }
 
 void Model::draw()
 {
+    shader.use();
+    glm::mat4 model = glm::mat4(1.0f);
+	model = glm::translate(model, this->position);
+    model = glm::scale(model, this->size);
+    shader.setMatrixFloat4("model", model);
     for(unsigned int i = 0; i < meshes.size(); i++){
         meshes[i].draw(shader);
     }

@@ -6,11 +6,23 @@ Maze::Maze(std::vector<std::vector<Maze::Object>> objects)
     std::vector<glm::vec3> cubePositions{};
     for (int row = 0; row < objects.size(); row++){
         for (int col = 0; col < objects[row].size(); col++){
-            if (objects[row][col] == Maze::Object::WALL){
+            Object obj = objects[row][col];
+            if (obj == Maze::Object::WALL){
                 for (int i = 0; i < 1; i++){
                     auto cubePos = glm::vec3(col, i, row);
                     cubePositions.push_back(cubePos);
                 }
+            }
+            else if (obj == Maze::Object::EMPTY){
+                float x1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
+                float x2 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
+                float x3 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
+                float y1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
+                float y2 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
+                float y3 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
+                models.push_back(Model("../assets/meshes/grassSpot/grassSpot.obj", glm::vec3(col + x1, -0.5f, row + y1)));
+                models.push_back(Model("../assets/meshes/grassSpot/grassSpot.obj", glm::vec3(col + x2, -0.5f, row + y2)));
+                models.push_back(Model("../assets/meshes/grassSpot/grassSpot.obj", glm::vec3(col + x3, -0.5f, row + y3)));
             }
         }
     }
@@ -20,6 +32,9 @@ Maze::Maze(std::vector<std::vector<Maze::Object>> objects)
 void Maze::draw()
 {
     cubes->draw();
+    for (auto model: models){
+        model.draw();
+    }
 }
 
 Maze::MazeBuilder::MazeBuilder(int width, int height)

@@ -22,8 +22,8 @@ Game::Game(int width, int height){
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     glm::vec3 pointLightPositions[] = {
-        glm::vec3( 0.0f,  0.0f, 0.0f),
-        glm::vec3( 0.0f, 0.0f, 30.0f)
+        glm::vec3( 10.0f,  3.0f, 5.0f),
+        glm::vec3( 10.0f, 3.0f, 15.0f)
     };
 
     ResourceManager::initShaders(pointLightPositions);
@@ -51,10 +51,11 @@ Game::Game(int width, int height){
     
     this->ground = new Plane(glm::vec3{0.0f, -0.5f, 0.0f}, 100.0f, 1.0f);
 
-    this->model = new Model("../assets/meshes/backpack/backpack.obj");
     this->skybox = new Skybox();
 
-    // this->model = new Model("../assets/meshes/backpack/backpack.obj");
+    this->lights.push_back(new Model("../assets/meshes/Fantasy/LanternLit.obj", pointLightPositions[0]));
+    this->lights.push_back(new Model("../assets/meshes/Fantasy/LanternLit.obj", pointLightPositions[1]));
+    mushroom = new Model("../assets/meshes/Fantasy/Mushroom.obj", glm::vec3(0.0f, 0.0f, 0.0f));
 
     initPickerBuffer();
 }
@@ -118,8 +119,11 @@ void Game::render() {
     // handle render calls here
     maze->draw();
     ground->draw();
-    // model->draw();
     skybox->draw();
+    for (auto light : lights){
+        light->draw();
+    }
+    mushroom->draw();
 
     // check and call events and swap the buffers
     glfwPollEvents();

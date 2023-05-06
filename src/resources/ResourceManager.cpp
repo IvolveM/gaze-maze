@@ -49,7 +49,7 @@ void ResourceManager::initShaders(glm::vec3 pointLightPositions[])
 
     addShader("default", appendVert(defaultPath), appendFrag(defaultPath)).use().setBlockBinding("Matrices", 0);
     addShader("defaultInstancing", appendVert(defaultPath, true), appendFrag(defaultPath)).use().setBlockBinding("Matrices", 0);
-    addShader("mesh", appendVert(defaultPath), appendFrag(meshPath)).use().setBlockBinding("Matrices", 0);
+    addShader("mesh", appendVert(defaultPath), appendFrag(defaultPath)).use().setBlockBinding("Matrices", 0);
     addShader("skybox", appendVert(skyboxPath), appendFrag(skyboxPath)).use().setBlockBinding("Matrices", 0);
     addShader("picker", appendVert(defaultPath), appendFrag(pickerPath)).use();
 
@@ -60,7 +60,7 @@ void ResourceManager::initShaders(glm::vec3 pointLightPositions[])
     defaultShader.setFloat3("material.ambient", 1.0f, 1.0f, 1.0f);
     defaultShader.setFloat3("material.diffuse", 0.55f, 0.55f, 0.55f);
     defaultShader.setFloat3("material.specular", 0.7f, 0.7f, 0.7f);
-    defaultShader.setFloat("material.shininess", 0.25f);
+    defaultShader.setFloat("material.shininess", 0.05f);
 
     Shader instanceShader = getShader("defaultInstancing");
     instanceShader.use();
@@ -105,22 +105,22 @@ void ResourceManager::setLightSources(Shader shader, glm::vec3 pointLightPositio
     // directional light
     shader.setFloat3("dirLight.direction", -0.2f, -1.0f, -0.3f);
     shader.setFloat3("dirLight.ambient", 0.1f, 0.1f, 0.1f);
-    shader.setFloat3("dirLight.diffuse", 0.5f, 0.5f, 0.5f); // darkened
+    shader.setFloat3("dirLight.diffuse", 0.0f, 0.0f, 0.0f); // darkened
     shader.setFloat3("dirLight.specular", 0.1f, 0.1f, 0.1f);
-    // point light 1
-    shader.setFloat3("pointLights[0].position", pointLightPositions[0]);
-    shader.setFloat3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
-    shader.setFloat3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
-    shader.setFloat3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
-    shader.setFloat("pointLights[0].constant", 1.0f);
-    shader.setFloat("pointLights[0].linear", 0.09f);
-    shader.setFloat("pointLights[0].quadratic", 0.032f);
-    // point light 2
-    shader.setFloat3("pointLights[1].position", pointLightPositions[1]);
-    shader.setFloat3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
-    shader.setFloat3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
-    shader.setFloat3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
-    shader.setFloat("pointLights[1].constant", 1.0f);
-    shader.setFloat("pointLights[1].linear", 0.09f);
-    shader.setFloat("pointLights[1].quadratic", 0.032f);
+    for (int i = 0; i < pointLightPositions->length(); i++){
+        shader.setFloat3("pointLights[" + std::to_string(i) + "].position", pointLightPositions[i]);
+        shader.setFloat3("pointLights[" + std::to_string(i) + "].ambient", 255.0f/255.0f, 224.0f/255.0f, 166.0f/255.0f);
+        shader.setFloat3("pointLights[" + std::to_string(i) + "].diffuse", 0.5f, 0.5f, 0.5f);
+        shader.setFloat3("pointLights[" + std::to_string(i) + "].specular", 1.0f, 1.0f, 1.0f);
+        shader.setFloat( "pointLights[" + std::to_string(i) + "].constant", 1.0f);
+        shader.setFloat( "pointLights[" + std::to_string(i) + "].linear", 0.09f);
+        shader.setFloat( "pointLights[" + std::to_string(i) + "].quadratic", 0.032f);
+    }
 }
+// shader.setFloat3("pointLights[" + std::to_string(i) + "].position", pointLightPositions[i]);
+// shader.setFloat3("pointLights[" + std::to_string(i) + "].ambient", 0.05f, 0.05f, 0.05f);
+// shader.setFloat3("pointLights[" + std::to_string(i) + "].diffuse", 0.8f, 0.8f, 0.8f);
+// shader.setFloat3("pointLights[" + std::to_string(i) + "].specular", 1.0f, 1.0f, 1.0f);
+// shader.setFloat( "pointLights[" + std::to_string(i) + "].constant", 1.0f);
+// shader.setFloat( "pointLights[" + std::to_string(i) + "].linear", 0.09f);
+// shader.setFloat( "pointLights[" + std::to_string(i) + "].quadratic", 0.032f);
