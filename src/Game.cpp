@@ -42,7 +42,7 @@ Game::Game(int width, int height){
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(proj));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);  
 
-    this->player = Player();
+    this->player = new Player();
 
     // this->maze = MazeLoader().loadMazeFromFile("../assets/maze.txt");
     this->maze = MazeGenerator().getMaze();
@@ -87,16 +87,16 @@ void Game::mainloop() {
         this->dt = newTime - oldTime;
         oldTime = newTime;
         float fps = 1/dt;
-        std::cout<< "FPS: " << fps << std::endl;
+        // std::cout<< "FPS: " << fps << std::endl;
 
         processInput();
         processEvents();
 
-        glm::mat4 view = player.getView();
+        glm::mat4 view = player->getView();
         glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
         glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
         glBindBuffer(GL_UNIFORM_BUFFER, 0);
-        glm::vec3 viewPos = player.getPosition();
+        glm::vec3 viewPos = player->getPosition();
         glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
         glBufferSubData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), sizeof(glm::vec3), glm::value_ptr(viewPos));
         glBindBuffer(GL_UNIFORM_BUFFER, 0);
@@ -117,7 +117,7 @@ void Game::render() {
         light->draw();
     }
     mushroom->draw();
-
+    player->draw(); // for smokes
     // check and call events and swap the buffers
     glfwPollEvents();
     glfwSwapBuffers(window);
@@ -130,31 +130,31 @@ void Game::processInput() {
     }
 
     if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS){
-        player.handleKeyInput(Player::InputEvent::FORWARDS);
+        player->handleKeyInput(Player::InputEvent::FORWARDS);
     }
     if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS){
-        player.handleKeyInput(Player::InputEvent::BACKWARDS);
+        player->handleKeyInput(Player::InputEvent::BACKWARDS);
     }
     if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS){
-        player.handleKeyInput(Player::InputEvent::LEFT);
+        player->handleKeyInput(Player::InputEvent::LEFT);
     }
     if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS){
-        player.handleKeyInput(Player::InputEvent::RIGHT);
+        player->handleKeyInput(Player::InputEvent::RIGHT);
     }
     if(glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS){
-        player.handleKeyInput(Player::InputEvent::JUMP);
+        player->handleKeyInput(Player::InputEvent::JUMP);
     }
 }
 
 void Game::processEvents()
 {
-    player.update(this->dt);
-    player.doCollisions(this->maze->getMesh(), dt);
+    player->update(this->dt);
+    player->doCollisions(this->maze->getMesh(), dt);
 }
 
 void Game::handleMouse()
 {
     GLdouble xPos, yPos;
     glfwGetCursorPos(window, &xPos, &yPos);
-    player.setDirectionByMouse((float)xPos, (float)yPos);
+    player->setDirectionByMouse((float)xPos, (float)yPos);
 }

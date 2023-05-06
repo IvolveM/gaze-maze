@@ -6,10 +6,12 @@
 #include "Camera.h"
 #include "../objects/Collisioner.h"
 #include "../objects/Mesh.h"
+#include "../entities/ParticleGenerator.h"
 
 class Player: public Camera{
     private:
         Collisioner collisioner;
+        ParticleGenerator particleGenerator;
 
         float gravityAcceleration = 20.0f;
         float speed = 3.0f;
@@ -31,7 +33,8 @@ class Player: public Camera{
         };
         Player();
         void handleKeyInput(InputEvent event);
-
+        
         void update(float dt);
+        void draw();
         void doCollisions(Mesh m, float dt);
 };

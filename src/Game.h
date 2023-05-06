@@ -30,7 +30,7 @@ class Game{
 
         float dt = 0.0f;
 
-        Player player;
+        Player* player;
         Maze* maze;
         std::vector<Model*> lights{};
         Model* mushroom{};
