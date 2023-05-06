@@ -102,7 +102,7 @@ void Game::mainloop() {
         this->dt = newTime - oldTime;
         oldTime = newTime;
         float fps = 1/dt;
-        std::cout<< "FPS: " << fps << std::endl;
+        // std::cout<< "FPS: " << fps << std::endl;
 
         processInput();
         processEvents();
@@ -129,16 +129,15 @@ void Game::render() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // fills the screen with the color configured by glClearColor, and clears the depth buffer bit
 
     // handle render calls here
-    crosshair->draw();
     maze->draw();
     ground->draw();
     skybox->draw();
     for (auto light : lights){
         light->draw();
     }
-
     for (auto shroom: mushrooms) 
         shroom->draw();
+    crosshair->draw();
 }
 
 void Game::renderPickerBuffer() {
@@ -149,7 +148,6 @@ void Game::renderPickerBuffer() {
     for (auto shroomPair : this->colorPicker->getAllModels()) {
         shroomPair.first->drawPicker(shroomPair.second);
     }
-
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     // glfwPollEvents();

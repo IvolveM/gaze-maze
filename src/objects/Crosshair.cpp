@@ -19,6 +19,7 @@ Crosshair::Crosshair(float width, float height)
     
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &(vertices.front()), GL_STATIC_DRAW);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
 }
 
 Crosshair::~Crosshair() {
@@ -27,7 +28,6 @@ Crosshair::~Crosshair() {
 
 void Crosshair::draw() {
     shader.use();
-    glLineWidth(2.0f);
     glBindVertexArray(VAO);
     glDrawArrays(GL_LINES, 0, 4);
     glBindVertexArray(0);
