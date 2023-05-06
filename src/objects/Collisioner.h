@@ -2,6 +2,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtx/string_cast.hpp>
+#include <glm/gtc/epsilon.hpp>
 #include <iostream>
 #include <cmath>
 
