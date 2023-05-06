@@ -8,7 +8,7 @@ class Particle{
     private:
         glm::vec3 position = glm::vec3{0.0f}, 
             velocity = glm::vec3{0.0f, 0.0f, 0.0f},
-            size = glm::vec3{0.1f};
+            size = glm::vec3{0.10f};
         glm::vec4 color = glm::vec4{0.0f, 0.0f, 0.0f, 1.0f};
         float life = 0.0f;
 

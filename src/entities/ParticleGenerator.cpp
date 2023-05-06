@@ -9,10 +9,10 @@ ParticleGenerator::ParticleGenerator(int amount, Texture texture)
         particles.push_back(Particle());
     }
     std::vector<float> vertices = {
-		0.5f,   0.5f, 0.0f, 1.0f, 1.0f, // 1
-		0.5f,  -0.5f, 0.0f, 1.0f, 0.0f,
+		0.5f,   0.5f, 0.0f, 0.5f, 0.5f, // 1
+		0.5f,  -0.5f, 0.0f, 0.5f, 0.0f,
 		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // 2
-		-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
+		-0.5f,  0.5f, 0.0f, 0.0f, 0.5f,
     };
 
     std::vector<int> indices = { 
