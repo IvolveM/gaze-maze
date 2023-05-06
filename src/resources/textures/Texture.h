@@ -10,7 +10,7 @@ class Texture{
     private:
         unsigned int textureId;
     public:
-        Texture(std::string texturePath);
+        Texture(std::string texturePath, bool pixelated = false);
         Texture(const Texture& texture){
             this->textureId = texture.textureId;
         }

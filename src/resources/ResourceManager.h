@@ -19,7 +19,7 @@ class ResourceManager{
         ResourceManager(ResourceManager &other) = delete;
         void operator=(const ResourceManager &) = delete;
         
-        static Texture setTexture(std::string textureName, std::string texturePath);
+        static Texture setTexture(std::string textureName, std::string texturePath, bool pixelated = false);
         static Shader addShader(std::string shaderName, std::string vertexPath, std::string fragmentPath);
 
         static Texture getTexture(std::string);
@@ -37,7 +37,7 @@ class DuplicateResourceException : public std::exception {
             this->name = name;
         };
 
-        const char * what () const throw () {
+        virtual const char * what () const throw () {
             return strcat("There was already a resource with the name: ", name.c_str());
         }
 };
@@ -51,7 +51,7 @@ class NoResourceFoundException : public std::exception {
             this->name = name;
         };
 
-        const char * what () const throw () {
+        virtual const char * what () const throw () {
             return strcat("There was already a shader with this name", name.c_str());
         }
 };
