@@ -10,40 +10,51 @@
 #include <iostream>
 #include <exception>
 #include <functional> // for std::bind
+#include <algorithm>
 
 #include "stb_image.h"
 
 #include "resources/shaders/Shader.h"
 #include "resources/ResourceManager.h"
-#include "objects/based/Cube.h"
-#include "objects/model/Model.h"
 #include "objects/based/Plane.h"
 #include "core/Player.h"
 #include "core/Maze.h"
 #include "utils/MazeLoader.h"
 #include "utils/MazeGenerator.h"
 #include "entities/Enemy.h"
+#include "utils/ColorPicker.h"
+#include "core/Skybox.h"
+#include "objects/Crosshair.h"
 
 class Game{
     private:
         GLFWwindow* window;
+        int windowHeight = 0;
+        int windowWidth = 0;
 
         unsigned int uboMatrices;
 
         float dt = 0.0f;
 
-        Player player;
+        Crosshair* crosshair;
+        Player* player;
         Maze* maze;
-        // std::vector<Cube*> mazeCubes;
+        std::vector<Model*> lights{};
+        std::vector<Model*> mushrooms{};
         Plane* ground;
         Enemy* enemy;
         // Model* model;
 
+        Skybox* skybox;
+        ColorPicker* colorPicker;
+
         void initGlfw();
-        void initShaders();
-        void initTextures();
+
+        unsigned int pickerBuffer;
+        void initPickerBuffer();
 
         void render();
+        void renderPickerBuffer();
         void processInput();
         void processEvents();
 

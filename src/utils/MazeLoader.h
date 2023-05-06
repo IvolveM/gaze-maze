@@ -21,12 +21,9 @@ class MazeLoader {
     private:
         void loadMaze();
         void loadLine(const std::string& line);
-        void addCubePosition(const glm::vec3& cubePos);
 
         Maze::MazeBuilder mazeBuilder;
 
-        Cube* mazeInstance;
-        std::vector<glm::vec3> cubePositions;
         std::ifstream* mazeFile;
 
         int colOffset = 0;

@@ -33,8 +33,16 @@ add_executable(gaze-maze
     src/core/Player.cpp
     src/core/Maze.cpp
     src/core/Maze.h
+    src/core/Skybox.h
+    src/core/Skybox.cpp
+    src/entities/ParticleGenerator.h
+    src/entities/ParticleGenerator.cpp
+    src/entities/Particle.h
+    src/entities/Particle.cpp
     src/objects/Mesh.h
     src/objects/Mesh.cpp
+    src/objects/Crosshair.h
+    src/objects/Crosshair.cpp
     src/objects/based/Cube.h
     src/objects/based/Cube.cpp
     src/objects/based/Plane.h
@@ -59,5 +67,7 @@ add_executable(gaze-maze
     src/entities/Entity.cpp
     src/entities/Enemy.h
     src/entities/Enemy.cpp
+    src/utils/ColorPicker.h
+    src/utils/ColorPicker.cpp
 )
 target_link_libraries(gaze-maze ${LIBS}) # -lglfw3 -lGL -lGLU -lX11 -lXxf86vm -lXrandr -lpthread -lXi

@@ -10,7 +10,8 @@ class Cube : public Mesh {
         std::vector<float> vertices;
 
         Shader shader;
-        Texture texture;
+        Texture diffuse;
+        Texture specular;
 
         void initVertices();
         void initDefaultVaoVbo();

@@ -77,7 +77,6 @@ bool Collisioner::isColliding(Collisioner col) {
 }
 
 glm::vec3 Collisioner::getVectorToTranslate(Collisioner col) {
-    float centerToCenterDistance = glm::distance(this->center, col.getCenter());
     glm::vec3 closestPointClamped = glm::clamp(this->center, col.getMinVec(), col.getMaxVec());
     float closestDistance = glm::distance(this->center, closestPointClamped);
 
@@ -86,30 +85,6 @@ glm::vec3 Collisioner::getVectorToTranslate(Collisioner col) {
 
     glm::vec3 translationVector = direction * translationDistance;
     return translationVector;
-    // glm::vec3 out_translation_vector = glm::vec3(0.0f);
-    // glm::vec3 sphere_end_position = this->center + sphere_velocity * dt;
-    // glm::vec3 closestPointClamped = glm::clamp(this->center, col.getMinVec(), col.getMaxVec());
-    // glm::vec3 direction = glm::normalize(closestPointClamped - this->center);
-    // float distance = glm::length(direction);
-    // if (distance < (this->size.x*0.5f)) 
-    //     out_translation_vector = direction * ((this->size.x*0.5f) - distance) / distance;
-
-    // glm::vec3 new_sphere_position = this->center + out_translation_vector;
-    // glm::vec3 closest_point = glm::clamp(new_sphere_position, col.getCenter() - glm::vec3(col.size / 2.0f), col.getCenter() + glm::vec3(col.size / 2.0f));
-    // direction = new_sphere_position - closest_point;
-    // distance = glm::length(direction);
-    // if (distance < (this->size.x*0.5f)) {
-    //     out_translation_vector = direction * ((this->size.x*0.5f) - distance) / distance;
-    //     new_sphere_position += out_translation_vector;
-    //     glm::vec3 normal = glm::normalize(out_translation_vector);
-    //     glm::vec3 new_sphere_velocity = glm::reflect(sphere_velocity, normal);
-    //     std::cout << "new post: " << glm::to_string(new_sphere_position) << " out " << glm::to_string(new_sphere_velocity) << std::endl;
-    //     new_sphere_velocity -= glm::dot(sphere_velocity, normal) * normal;
-    //     if (glm::any(glm::isnan(new_sphere_velocity))) {
-    //         new_sphere_velocity = glm::vec3(0.0f);
-    //     }
-    //     return std::pair<glm::vec3, glm::vec3>(new_sphere_position, new_sphere_velocity);
-    // }
 }
 
 Collisioner::BoundingBoxType Collisioner::getType() {

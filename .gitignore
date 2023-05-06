@@ -50,3 +50,4 @@
 # ### CMake Patch ###
 # # External projects
 # *-prefix/
+/.vscode
