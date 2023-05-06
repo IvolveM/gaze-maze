@@ -49,6 +49,8 @@ Game::Game(int width, int height){
 
     this->player = Player();
 
+    this->crosshair = new Crosshair(1.0f, 1.0f);
+
     // this->maze = MazeLoader().loadMazeFromFile("../assets/maze.txt");
     this->maze = MazeGenerator().getMaze();
     
@@ -115,6 +117,9 @@ void Game::mainloop() {
         glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
         render();
+        // check and call events and swap the buffers
+        glfwPollEvents();
+        glfwSwapBuffers(window);
         renderPickerBuffer();
     }
 }
@@ -124,6 +129,7 @@ void Game::render() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // fills the screen with the color configured by glClearColor, and clears the depth buffer bit
 
     // handle render calls here
+    crosshair->draw();
     maze->draw();
     ground->draw();
     skybox->draw();
@@ -133,10 +139,6 @@ void Game::render() {
 
     for (auto shroom: mushrooms) 
         shroom->draw();
-
-    // check and call events and swap the buffers
-    glfwPollEvents();
-    glfwSwapBuffers(window);
 }
 
 void Game::renderPickerBuffer() {

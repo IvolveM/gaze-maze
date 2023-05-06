@@ -23,6 +23,7 @@
 #include "utils/MazeGenerator.h"
 #include "utils/ColorPicker.h"
 #include "core/Skybox.h"
+#include "objects/Crosshair.h"
 
 class Game{
     private:
@@ -32,6 +33,7 @@ class Game{
 
         float dt = 0.0f;
 
+        Crosshair* crosshair;
         Player player;
         Maze* maze;
         std::vector<Model*> lights{};

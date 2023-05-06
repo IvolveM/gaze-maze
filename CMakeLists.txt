@@ -37,6 +37,8 @@ add_executable(gaze-maze
     src/core/Skybox.cpp
     src/objects/Mesh.h
     src/objects/Mesh.cpp
+    src/objects/Crosshair.h
+    src/objects/Crosshair.cpp
     src/objects/based/Cube.h
     src/objects/based/Cube.cpp
     src/objects/based/Plane.h

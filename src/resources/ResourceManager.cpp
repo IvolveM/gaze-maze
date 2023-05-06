@@ -46,12 +46,14 @@ void ResourceManager::initShaders(glm::vec3 pointLightPositions[])
     std::string meshPath    = shaderDirectory + "meshShader/mesh";
     std::string skyboxPath  = shaderDirectory + "skyboxShader/skybox";
     std::string pickerPath  = shaderDirectory + "pickerShader/picker";
+    std::string default2DPath  = shaderDirectory + "default2DShader/default";
 
     addShader("default", appendVert(defaultPath), appendFrag(defaultPath)).use().setBlockBinding("Matrices", 0);
     addShader("defaultInstancing", appendVert(defaultPath, true), appendFrag(defaultPath)).use().setBlockBinding("Matrices", 0);
     addShader("mesh", appendVert(defaultPath), appendFrag(defaultPath)).use().setBlockBinding("Matrices", 0);
     addShader("skybox", appendVert(skyboxPath), appendFrag(skyboxPath)).use().setBlockBinding("Matrices", 0);
     addShader("picker", appendVert(defaultPath), appendFrag(pickerPath)).use().setBlockBinding("Matrices", 0);
+    addShader("default2D", appendVert(default2DPath), appendFrag(default2DPath)).use();
 
     // some materials: http://devernay.free.fr/cours/opengl/materials.html
     Shader defaultShader = getShader("default");
