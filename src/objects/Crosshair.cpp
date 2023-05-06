@@ -4,10 +4,10 @@ Crosshair::Crosshair(float width, float height)
 : shader{ResourceManager::getShader("default2D")}
 {
     vertices = {
-        -width/2, 0,
-        width/2, 0,
-        0, -height/2,
-        0, height/2
+        -width, 0,
+        width, 0,
+        0, -height,
+        0, height
     };
 
 
@@ -27,8 +27,10 @@ Crosshair::~Crosshair() {
 }
 
 void Crosshair::draw() {
+    glDisable(GL_DEPTH_TEST);
     shader.use();
     glBindVertexArray(VAO);
     glDrawArrays(GL_LINES, 0, 4);
     glBindVertexArray(0);
+    glEnable(GL_DEPTH_TEST);
 }
