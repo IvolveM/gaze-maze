@@ -10,6 +10,7 @@
 #include <iostream>
 #include <exception>
 #include <functional> // for std::bind
+#include <algorithm>
 
 #include "stb_image.h"
 
@@ -20,6 +21,7 @@
 #include "core/Maze.h"
 #include "utils/MazeLoader.h"
 #include "utils/MazeGenerator.h"
+#include "utils/ColorPicker.h"
 #include "core/Skybox.h"
 
 class Game{
@@ -33,14 +35,19 @@ class Game{
         Player* player;
         Maze* maze;
         std::vector<Model*> lights{};
-        Model* mushroom{};
+        std::vector<Model*> mushrooms{};
         Plane* ground;
 
         Skybox* skybox;
+        ColorPicker* colorPicker;
 
         void initGlfw();
 
+        unsigned int pickerBuffer;
+        void initPickerBuffer();
+
         void render();
+        void renderPickerBuffer();
         void processInput();
         void processEvents();
 

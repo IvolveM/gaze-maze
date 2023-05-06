@@ -33,4 +33,5 @@ class ModelMesh{
     public:
         ModelMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<MeshTexture> textures);
         void draw(Shader &shader);
+        void drawPicker(Shader &shader);
 };

@@ -45,6 +45,12 @@ void ModelMesh::draw(Shader &shader)
     glActiveTexture(GL_TEXTURE0);
 }
 
+void ModelMesh::drawPicker(Shader &shader) {
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+}
+
 void ModelMesh::setupMesh()
 {
     glGenVertexArrays(1, &VAO);
