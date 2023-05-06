@@ -3,7 +3,6 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 bool clicked = false;
-int clickedID = -1;
 
 Game::Game(int width, int height)
 :   windowWidth{width},
