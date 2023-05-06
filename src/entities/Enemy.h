@@ -5,6 +5,7 @@
 
 #include "Entity.h"
 #include "../core/Maze.h"
+#include "./ParticleGenerator.h"
 
 #include "../objects/based/Cube.h" //testing
 
@@ -38,4 +39,5 @@ class Enemy : public Entity {
         std::pair<int,int> gridPosition;
 
         Cube* cube;
+        ParticleGenerator particleGenerator;
 };

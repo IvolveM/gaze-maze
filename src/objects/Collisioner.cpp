@@ -79,11 +79,15 @@ bool Collisioner::isColliding(Collisioner col) {
 glm::vec3 Collisioner::getVectorToTranslate(Collisioner col) {
     glm::vec3 closestPointClamped = glm::clamp(this->center, col.getMinVec(), col.getMaxVec());
     float closestDistance = glm::distance(this->center, closestPointClamped);
-
-    glm::vec3 direction = glm::normalize(closestPointClamped - this->center);
+    glm::vec3 direction = closestPointClamped - this->center;
+    // can't normalize 0-vector
+    if (direction == glm::vec3(0.0f)){
+        return glm::vec3(1.0f);
+    }
+    glm::vec3 directionNormalized = glm::normalize(closestPointClamped - this->center);
     float translationDistance = closestDistance - (this->size.x * 0.5f);
 
-    glm::vec3 translationVector = direction * translationDistance;
+    glm::vec3 translationVector = directionNormalized * translationDistance;
     return translationVector;
 }
 

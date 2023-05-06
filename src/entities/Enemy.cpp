@@ -11,13 +11,18 @@ Enemy::Enemy(
     grid{grid},
     gridBlockSize{gridBlockSize},
     gridPosition{initialPos},
-    movingDir{0.0f, 0.0f, 0.0f}
+    movingDir{0.0f, 0.0f, 0.0f},
+    particleGenerator{100, ResourceManager::getTexture("smoke")}
 {
     this->cube = new Cube(this->position);
 }
 
 void Enemy::update(float dt) {
     std::cout << "target: " << glm::to_string(targetPos) << std::endl;
+    // update particles
+    glm::vec3 particlePosition = {this->position.x, this->position.y-0.45f, this->position.z};
+    particleGenerator.addParticles(particlePosition);
+    particleGenerator.update(dt);
     // target reached
     if (std::abs(glm::distance(this->targetPos, this->position)) <= gridBlockSize.x * 0.01) {
         // lock to target        
@@ -33,6 +38,7 @@ void Enemy::update(float dt) {
 }
 
 void Enemy::draw() {
+    this->particleGenerator.draw();
     this->cube->draw();
 }
 
