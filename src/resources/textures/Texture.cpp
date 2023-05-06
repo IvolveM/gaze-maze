@@ -8,6 +8,7 @@ Texture::Texture(std::string texturePath, bool pixelated)
     glGenTextures(1, &this->textureId);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, textureId);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
     // set the texture wrapping/filtering options
     // GL_REPEAT, GL_MIRRORED_REPEAT, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_BORDER 
@@ -23,17 +24,17 @@ Texture::Texture(std::string texturePath, bool pixelated)
 
     data = stbi_load(texturePath.c_str(), &width, &height, &nrChannels, 0);
 
-    std::string suffix = ".png";
-    int imageType; 
+    std::string suffix = ".jpg";
+    int colorChannels; 
     // check if path ends with .png, then we can use RGBA
     if (texturePath.size() >= suffix.size() && 0 == texturePath.compare(texturePath.size()-suffix.size(), suffix.size(), suffix)){
-        imageType = GL_RGBA;
+        colorChannels = GL_RGB;
     }else{
-        imageType = GL_RGB;
+        colorChannels = GL_RGBA;
     }
     if (data)
     {
-        glTexImage2D(GL_TEXTURE_2D, 0, imageType, width, height, 0, imageType ,GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, colorChannels, width, height, 0, colorChannels, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
     }
     else
