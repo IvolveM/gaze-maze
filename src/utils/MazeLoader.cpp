@@ -2,7 +2,7 @@
 #include "MazeLoader.h"
 
 MazeLoader::MazeLoader() 
-    : mazeBuilder{Maze::MazeBuilder(100, 100)}
+    : mazeBuilder{Maze::MazeBuilder(21, 31)}
 {
 
 }
@@ -25,7 +25,6 @@ void MazeLoader::loadMaze() {
             std::getline(*(this->mazeFile), line);
             loadLine(line);
         }
-        this->mazeInstance = new Cube(this->cubePositions);
     }
     else {
         std::cout << "Couldn't open file" << std::endl;
@@ -42,8 +41,4 @@ void MazeLoader::loadLine(const std::string& line) {
     }
     this->colOffset = 0;
     this->rowOffset++;
-}
-
-void MazeLoader::addCubePosition(const glm::vec3& cubePos) {
-    this->cubePositions.push_back(cubePos);
 }

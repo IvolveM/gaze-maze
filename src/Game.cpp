@@ -195,6 +195,14 @@ void Game::processInput() {
     if(glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS){
         player->handleKeyInput(Player::InputEvent::JUMP);
     }
+    if(glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS){
+        delete this->maze;
+        this->maze = MazeLoader().loadMazeFromFile("../assets/maze.txt");
+    }
+    if(glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS){
+        delete this->maze;
+        this->maze = MazeGenerator().getMaze();
+    }
 }
 
 void Game::processEvents()
