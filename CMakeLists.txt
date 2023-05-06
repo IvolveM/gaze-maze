@@ -57,7 +57,7 @@ add_executable(gaze-maze
     src/utils/MazeLoader.cpp
     src/utils/MazeGenerator.h
     src/utils/MazeGenerator.cpp
-    src/utils/MousePicker.h
-    src/utils/MousePicker.cpp
+    src/utils/ColorPicker.h
+    src/utils/ColorPicker.cpp
 )
 target_link_libraries(gaze-maze ${LIBS}) # -lglfw3 -lGL -lGLU -lX11 -lXxf86vm -lXrandr -lpthread -lXi
