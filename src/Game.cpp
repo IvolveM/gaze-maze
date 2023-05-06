@@ -16,7 +16,7 @@ Game::Game(int width, int height)
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         throw FailedGLADInit();
     }
-    glViewport(0, 0, 800, 600);
+    glViewport(0, 0, width, height);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     stbi_set_flip_vertically_on_load(true); // before loading any image
