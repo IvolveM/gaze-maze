@@ -78,6 +78,18 @@ Game::Game(int width, int height)
 }
 
 Game::~Game() {
+    delete crosshair;
+    delete player;
+    delete maze;
+    for (auto light: lights){
+        delete light;
+    }
+    for (auto mushroom: mushrooms){
+        delete mushroom;
+    }
+    delete skybox;
+    delete colorPicker;
+
     glfwTerminate();
 }
 
