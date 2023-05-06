@@ -15,14 +15,14 @@ Maze::Maze(std::vector<std::vector<Maze::Object>> objects)
             }
             else if (obj == Maze::Object::EMPTY){
                 float x1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
-                float x2 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
-                float x3 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
+                // float x2 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
+                // float x3 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
                 float y1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
-                float y2 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
-                float y3 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
+                // float y2 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
+                // float y3 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
                 models.push_back(Model("../assets/meshes/grassSpot/grassSpot.obj", glm::vec3(col + x1, -0.5f, row + y1)));
-                models.push_back(Model("../assets/meshes/grassSpot/grassSpot.obj", glm::vec3(col + x2, -0.5f, row + y2)));
-                models.push_back(Model("../assets/meshes/grassSpot/grassSpot.obj", glm::vec3(col + x3, -0.5f, row + y3)));
+                // models.push_back(Model("../assets/meshes/grassSpot/grassSpot.obj", glm::vec3(col + x2, -0.5f, row + y2)));
+                // models.push_back(Model("../assets/meshes/grassSpot/grassSpot.obj", glm::vec3(col + x3, -0.5f, row + y3)));
             }
         }
     }
