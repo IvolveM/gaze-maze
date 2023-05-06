@@ -20,6 +20,6 @@ class ColorPicker {
         void drawModels();
 
     private:
-        int currId = 30;
+        int currId = 1;
         std::unordered_map<int, Model*> modelMap;
 };

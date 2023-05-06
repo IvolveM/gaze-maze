@@ -67,11 +67,7 @@ Game::Game(int width, int height)
     this->lights.push_back(new Model("../assets/meshes/Fantasy/LanternLit.obj", pointLightPositions[0]));
     this->lights.push_back(new Model("../assets/meshes/Fantasy/LanternLit.obj", pointLightPositions[1]));
 
-    for (int i = 0; i < 10; i++) {
-        Model* mushroom = new Model("../assets/meshes/Fantasy/Mushroom.obj", glm::vec3(0.0f, i, 0.0f));
-        this->mushrooms.push_back(mushroom);
-        this->colorPicker->addModel(mushroom);
-    }
+    initMushroomModels();
 
     initPickerBuffer();
     glfwSetMouseButtonCallback(window, ColorPicker::mouseClickCallback);
@@ -136,8 +132,10 @@ void Game::mainloop() {
 
         render();
         // check and call events and swap the buffers
+        // everything after this swap that is rendered will not be seen
         glfwPollEvents();
         glfwSwapBuffers(window);
+        
         renderPickerBuffer();
     }
 }
@@ -210,17 +208,18 @@ void Game::handleMouse()
 }
 
 void Game::handleMouseClick() {
-    double midx = this->windowWidth / 2; 
-    double midy = this->windowHeight / 2;
+    int width, height;
+    glfwGetFramebufferSize(window, &width, &height);
 
-    // Read the pixel color at the cursor position
+    double midx = width / 2.0f; 
+    double midy = height / 2.0f;
+
     unsigned char pixel[4];
     glReadPixels(midx, midy, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixel);
-    std::cout << "Clicked color: (" << static_cast<int>(pixel[0]) << ", " << static_cast<int>(pixel[1]) << ", " << static_cast<int>(pixel[2]) << ")" << std::endl;
+    // std::cout << "Clicked color: (" << static_cast<int>(pixel[0]) << ", " << static_cast<int>(pixel[1]) << ", " << static_cast<int>(pixel[2]) << ")" << std::endl;
     
     if (static_cast<int>(pixel[0]) != 0) {
         Model* m = this->colorPicker->getModelByColor(pixel);
-
         auto it{std::find_if(mushrooms.begin(), mushrooms.end(), [m](const Model* mushroom){return m == mushroom;})};
         if (it != mushrooms.end()) {
             auto idx{it - mushrooms.begin()};
@@ -235,10 +234,20 @@ void Game::initPickerBuffer() {
     unsigned int textureId;
     glGenTextures(1, &textureId);
     glBindTexture(GL_TEXTURE_2D, textureId);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1280, 720, 0, GL_RGB, GL_FLOAT, nullptr); //TODO: width and height!!!
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, windowWidth, windowHeight, 0, GL_RGB, GL_FLOAT, nullptr);
 
     glBindFramebuffer(GL_FRAMEBUFFER, pickerBuffer);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureId, 0);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
 }   
+
+void Game::initMushroomModels() {
+    srand(unsigned(time(NULL)));
+    for (int i = 0; i < 10; i++) {
+        glm::vec3 randomPos = glm::vec3(rand() % 11, i, rand() % 11);
+        Model* mushroom = new Model("../assets/meshes/Fantasy/Mushroom.obj", randomPos);
+        this->mushrooms.push_back(mushroom);
+        this->colorPicker->addModel(mushroom);
+    }
+}

@@ -14,7 +14,6 @@ Crosshair::Crosshair(float width, float height)
         0, height/3
     };
 
-
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 

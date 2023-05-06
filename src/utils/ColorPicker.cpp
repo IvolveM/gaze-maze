@@ -18,8 +18,8 @@ void ColorPicker::mouseClickCallback(GLFWwindow* window, int button, int action,
 
 int ColorPicker::addModel(Model* m) {
     this->modelMap[currId] = m;
-    currId += 10;
-    return currId - 10;
+    currId++;
+    return currId - 1;
 }
 
 Model* ColorPicker::getModelByColor(unsigned char color[4]) {
