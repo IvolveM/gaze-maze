@@ -3,6 +3,8 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 Game::Game(int width, int height){
+    this->mousePicker = new MousePicker();
+
     initGlfw();
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -53,7 +55,9 @@ Game::Game(int width, int height){
 
     this->lights.push_back(new Model("../assets/meshes/Fantasy/LanternLit.obj", pointLightPositions[0]));
     this->lights.push_back(new Model("../assets/meshes/Fantasy/LanternLit.obj", pointLightPositions[1]));
-    mushroom = new Model("../assets/meshes/Fantasy/Mushroom.obj", glm::vec3(0.0f, 0.0f, 0.0f));
+    this->mushroom = new Model("../assets/meshes/Fantasy/Mushroom.obj", glm::vec3(0.0f, 0.0f, 0.0f));
+
+    initPickerBuffer();
 }
 
 Game::~Game() {
@@ -74,6 +78,8 @@ void Game::initGlfw() {
         throw FailedGLFWInit();
     }
     glfwMakeContextCurrent(window);
+
+    glfwSetMouseButtonCallback(window, MousePicker::mouseClickCallback);
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
@@ -102,6 +108,7 @@ void Game::mainloop() {
         glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
         render();
+        renderPickerBuffer();
     }
 }
 
@@ -121,6 +128,16 @@ void Game::render() {
     // check and call events and swap the buffers
     glfwPollEvents();
     glfwSwapBuffers(window);
+}
+
+void Game::renderPickerBuffer() {
+    glBindFramebuffer(GL_FRAMEBUFFER, this->pickerBuffer);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // fills the screen with the color configured by glClearColor, and clears the depth buffer bit
+    
+    this->mushroom->drawPicker();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void Game::processInput() {
@@ -158,3 +175,15 @@ void Game::handleMouse()
     glfwGetCursorPos(window, &xPos, &yPos);
     player.setDirectionByMouse((float)xPos, (float)yPos);
 }
+
+void Game::initPickerBuffer() {
+    unsigned int textureId;
+    glGenTextures(1, &textureId);
+    glBindTexture(GL_TEXTURE_2D, textureId);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1280, 720, 0, GL_RGB, GL_FLOAT, nullptr);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, pickerBuffer);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureId, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+}   

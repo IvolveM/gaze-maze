@@ -20,6 +20,7 @@
 #include "core/Maze.h"
 #include "utils/MazeLoader.h"
 #include "utils/MazeGenerator.h"
+#include "utils/MousePicker.h"
 #include "core/Skybox.h"
 
 class Game{
@@ -37,10 +38,15 @@ class Game{
         Plane* ground;
 
         Skybox* skybox;
+        MousePicker* mousePicker;
 
         void initGlfw();
 
+        unsigned int pickerBuffer;
+        void initPickerBuffer();
+
         void render();
+        void renderPickerBuffer();
         void processInput();
         void processEvents();
 
