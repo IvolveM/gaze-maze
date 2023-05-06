@@ -32,7 +32,8 @@ class Game{
 
         Player player;
         Maze* maze;
-        // std::vector<Cube*> mazeCubes;
+        std::vector<Model*> lights{};
+        Model* mushroom{};
         Plane* ground;
 
         Skybox* skybox;
