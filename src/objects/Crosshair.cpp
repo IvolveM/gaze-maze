@@ -5,9 +5,13 @@ Crosshair::Crosshair(float width, float height)
 {
     vertices = {
         -width, 0,
+        -width/3, 0,
         width, 0,
+        width/3, 0,
         0, -height,
-        0, height
+        0, -height/3,
+        0, height,
+        0, height/3
     };
 
 
@@ -31,7 +35,7 @@ void Crosshair::draw() {
     shader.use();
     glLineWidth(2.0f);
     glBindVertexArray(VAO);
-    glDrawArrays(GL_LINES, 0, 4);
+    glDrawArrays(GL_LINES, 0, 8);
     glBindVertexArray(0);
     glEnable(GL_DEPTH_TEST);
 }
