@@ -35,6 +35,10 @@ add_executable(gaze-maze
     src/core/Maze.h
     src/core/Skybox.h
     src/core/Skybox.cpp
+    src/entities/ParticleGenerator.h
+    src/entities/ParticleGenerator.cpp
+    src/entities/Particle.h
+    src/entities/Particle.cpp
     src/objects/Mesh.h
     src/objects/Mesh.cpp
     src/objects/Crosshair.h

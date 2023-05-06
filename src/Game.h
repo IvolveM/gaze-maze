@@ -28,13 +28,15 @@
 class Game{
     private:
         GLFWwindow* window;
+        int windowHeight = 0;
+        int windowWidth = 0;
 
         unsigned int uboMatrices;
 
         float dt = 0.0f;
 
         Crosshair* crosshair;
-        Player player;
+        Player* player;
         Maze* maze;
         std::vector<Model*> lights{};
         std::vector<Model*> mushrooms{};
