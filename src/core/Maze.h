@@ -16,8 +16,8 @@ class Maze {
         Cube* cubes;
 
         Maze(std::vector<std::vector<Maze::Object>> objects);
-
     public:
+        ~Maze();
         void draw();
         Mesh getMesh();
 

@@ -29,12 +29,21 @@ Maze::Maze(std::vector<std::vector<Maze::Object>> objects)
     cubes = new Cube{cubePositions};
 }
 
+Maze::~Maze()
+{
+    delete cubes;
+}
+
 void Maze::draw()
 {
     cubes->draw();
     for (auto model: models){
         model.draw();
     }
+}
+
+Mesh Maze::getMesh(){
+    return *(this->cubes);
 }
 
 Maze::MazeBuilder::MazeBuilder(int width, int height)
@@ -62,8 +71,4 @@ Maze* Maze::MazeBuilder::build()
     objects[height - 1]     [width - 2] = Maze::Object::EMPTY;
     objects[height - 2] [width - 1] = Maze::Object::EMPTY;
     return new Maze(objects);
-}
-
-Mesh Maze::getMesh(){
-    return *(this->cubes);
 }
