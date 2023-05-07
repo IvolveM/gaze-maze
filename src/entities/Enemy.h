@@ -25,14 +25,14 @@ class Enemy : public Entity {
         void move();
         glm::vec3 calculateNewTargetPos();
         void updateNewPosition(float dt);
-        void updateNewDirection();
         bool inBounds(std::pair<int,int> pos);
 
         float health;
-        
         float speed = 2.0f;
+
         glm::vec3 movingDir;
         glm::vec3 targetPos;
+        float distanceToTravel = 0.0f;
 
         std::vector<std::vector<Maze::Object>> grid;
         glm::vec3 gridBlockSize;

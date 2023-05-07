@@ -7,10 +7,7 @@ Maze::Maze(std::vector<std::vector<Maze::Object>> objects)
     for (int row = 0; row < objects.size(); row++){
         for (int col = 0; col < objects[row].size(); col++){
             Object obj = objects[row][col];
-            std::cout << col << " " << row;
-            std::cout << " ";
             if (obj == Maze::Object::WALL){
-                std::cout << "WALL";
                 auto cubePos = glm::vec3(col, 0, row);
                 cubePositions.push_back(cubePos);
             }
@@ -24,11 +21,8 @@ Maze::Maze(std::vector<std::vector<Maze::Object>> objects)
                 models.push_back(Model("../assets/meshes/grassSpot/grassSpot.obj", glm::vec3(col + x1, -0.5f, row + y1)));
                 // models.push_back(Model("../assets/meshes/grassSpot/grassSpot.obj", glm::vec3(col + x2, -0.5f, row + y2)));
                 // models.push_back(Model("../assets/meshes/grassSpot/grassSpot.obj", glm::vec3(col + x3, -0.5f, row + y3)));
-                std::cout << "EMPTY";
-
             }
         }
-        std::cout << std::endl;
     }
     cubes = new Cube{cubePositions};
 }
