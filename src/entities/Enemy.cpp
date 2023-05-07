@@ -37,7 +37,9 @@ void Enemy::update(float dt) {
         // find new target and set new moving direction
         this->targetPos = calculateNewTargetPos();
         this->distanceToTravel = glm::distance(this->targetPos, this->position);
+        auto oldMovingDir = this->movingDir;
         this->movingDir = glm::normalize(this->targetPos - this->position);
+        updateRotation();
     }
     updateNewPosition(dt);
 
@@ -94,4 +96,21 @@ void Enemy::updateNewPosition(float dt) {
 bool Enemy::inBounds(std::pair<int,int> pos) {
     return pos.first >= 0 && pos.first <= this->grid.size() 
         && pos.second >= 0 && pos.second <= this->grid[0].size();
+}
+
+void Enemy::updateRotation()
+{   
+    float angle;
+    float x = this->movingDir.x;
+    float z = this->movingDir.z;
+    if (x < 0.0f && z == 0.0f )
+        angle = -90.0f;
+    else if (x > 0.0f && z == 0.0f )
+        angle = 90.0f;
+    else if (x == 0.0f && z < 0.0f )
+        angle = -180.0f;
+    else
+        angle = 0.0f;
+
+    this->model->setRotation(angle);
 }

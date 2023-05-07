@@ -25,10 +25,13 @@ class Model{
 
         auto& getBoneInfoMap() { return boneInfoMap; }
         int& getBoneCount() { return boneCounter; }
+
+        void setRotation(float angle);
     private:
         Shader shader;
         Shader pickerShader;
         glm::vec3 position, size;
+        float rotationAngle = 0.0f;
 
         std::vector<ModelMesh> meshes;
         std::string directory;

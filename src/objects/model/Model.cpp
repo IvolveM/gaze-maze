@@ -20,6 +20,7 @@ void Model::draw()
     shader.use();
     glm::mat4 model = glm::mat4(1.0f);
 	model = glm::translate(model, this->position);
+    model = glm::rotate(model, glm::radians(this->rotationAngle), glm::vec3{0.0f, 1.0f, 0.0f});
     model = glm::scale(model, this->size);
     shader.setMatrixFloat4("model", model);
     for(unsigned int i = 0; i < meshes.size(); i++){
@@ -133,6 +134,7 @@ void Model::drawPicker(int id) {
 
     glm::mat4 model = glm::mat4(1.0f);
 	model = glm::translate(model, this->position);
+    model = glm::rotate(model, glm::radians(this->rotationAngle), glm::vec3{0.0f, 1.0f, 0.0f});
     model = glm::scale(model, this->size);
     pickerShader.setMatrixFloat4("model", model);
     for(unsigned int i = 0; i < meshes.size(); i++){
@@ -145,6 +147,10 @@ void Model::move(glm::vec3 direction)
     this->position += direction;
 }
 
+void Model::setRotation(float angle)
+{
+    this->rotationAngle = angle;
+}
 
 void Model::setVertexBoneDataToDefault(Vertex &vertex){
     for (int i = 0; i < MAX_BONE_WEIGHTS; i++)
@@ -199,5 +205,4 @@ void Model::extractBoneWeightForVertices(std::vector<Vertex> &vertices, aiMesh *
             setVertexBoneData(vertices[vertexId], boneID, weight);
         }
     }
-    //...
 }
