@@ -10,7 +10,6 @@
 #include <iostream>
 #include <exception>
 #include <functional> // for std::bind
-#include <algorithm>
 
 #include "stb_image.h"
 #include "resources/shaders/Shader.h"
@@ -40,27 +39,26 @@ class Game{
         Player* player;
         Maze* maze;
         std::vector<Model*> lights{};
-        std::vector<Model*> mushrooms{};
         Plane* ground;
         Enemy* enemy;
 
         Skybox* skybox;
-        ColorPicker* colorPicker;
 
         void initGlfw();
 
         unsigned int pickerBuffer;
         void initPickerBuffer();
 
-        void initMushroomModels();
-
         void render();
         void renderPickerBuffer();
+        
         void handleMouseClick();
         void processInput();
         void processEvents();
 
         void handleMouse();
+        static void mouseClickCallback(GLFWwindow* window, int button, int action, int mods);
+
     public:
         Game(int width, int height);
         ~Game();

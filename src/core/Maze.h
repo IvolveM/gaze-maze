@@ -2,6 +2,8 @@
 
 #include "../objects/based/Cube.h"
 #include "../objects/model/Model.h"
+#include "../utils/ColorPicker.h"
+
 #include <vector>
 #include <random>
 
@@ -14,8 +16,12 @@ class Maze {
 
         ~Maze();
         void draw();
+        void drawPickerBuffer();
         Mesh getMesh();
         std::vector<std::vector<Maze::Object>> getGrid();
+
+        void addPickableModels(char* modelPath, const int amount);
+        void removePickableModel(unsigned char pixel[4]);
 
         // builder class
         class MazeBuilder{
@@ -31,6 +37,8 @@ class Maze {
     private:
         std::vector<std::vector<Maze::Object>> objects;
         Cube* cubes;
-        std::vector<Model> models{};
+        std::vector<Model*> models{};
+        ColorPicker* picker;
+        
         Maze(std::vector<std::vector<Maze::Object>> objects);
 };

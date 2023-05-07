@@ -52,14 +52,13 @@ Game::Game(int width, int height)
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(proj));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);  
 
-    this->colorPicker = new ColorPicker();
-
     this->player = new Player();
 
     this->crosshair = new Crosshair(1.0f / windowWidth * 20.0f, 1.0f / windowHeight * 20.0f);
 
     // this->maze = MazeLoader().loadMazeFromFile("../assets/maze.txt");
     this->maze = MazeGenerator().getMaze();
+    this->maze->addPickableModels("../assets/meshes/Fantasy/Shroom/Mushroom.obj", 10);
     
     this->ground = new Plane(glm::vec3{0.0f, -0.5f, 0.0f}, 100.0f, 1.0f);
 
@@ -68,13 +67,11 @@ Game::Game(int width, int height)
     // this->model = new Model("../assets/meshes/backpack/backpack.obj");
     this->skybox = new Skybox();
 
-    this->lights.push_back(new Model("../assets/meshes/Fantasy/LanternLit.obj", pointLightPositions[0]));
-    this->lights.push_back(new Model("../assets/meshes/Fantasy/LanternLit.obj", pointLightPositions[1]));
-
-    initMushroomModels();
+    this->lights.push_back(new Model("../assets/meshes/Fantasy/Lantern/LanternLit.obj", pointLightPositions[0]));
+    this->lights.push_back(new Model("../assets/meshes/Fantasy/Lantern/LanternLit.obj", pointLightPositions[1]));
 
     initPickerBuffer();
-    glfwSetMouseButtonCallback(window, ColorPicker::mouseClickCallback);
+    glfwSetMouseButtonCallback(window, mouseClickCallback);
 }
 
 Game::~Game() {
@@ -84,11 +81,7 @@ Game::~Game() {
     for (auto light: lights){
         delete light;
     }
-    for (auto mushroom: mushrooms){
-        delete mushroom;
-    }
     delete skybox;
-    delete colorPicker;
     delete enemy;
 
     glfwTerminate();
@@ -159,9 +152,6 @@ void Game::render() {
         light->draw();
     }
     player->draw(); // for particles
-    for (auto shroom: mushrooms) {
-        shroom->draw();
-    }
     crosshair->draw();
 }
 
@@ -169,8 +159,9 @@ void Game::renderPickerBuffer() {
     glBindFramebuffer(GL_FRAMEBUFFER, this->pickerBuffer);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    this->maze->drawPickerBuffer();
     
-    this->colorPicker->drawModels();
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
@@ -235,14 +226,8 @@ void Game::handleMouseClick() {
     // std::cout << "Clicked color: (" << static_cast<int>(pixel[0]) << ", " << static_cast<int>(pixel[1]) << ", " << static_cast<int>(pixel[2]) << ")" << std::endl;
     
     if (static_cast<int>(pixel[0]) != 0) {
-        Model* m = this->colorPicker->getModelByColor(pixel);
-        auto it{std::find_if(mushrooms.begin(), mushrooms.end(), [m](const Model* mushroom){return m == mushroom;})};
-        if (it != mushrooms.end()) {
-            auto idx{it - mushrooms.begin()};
-            this->mushrooms.erase(mushrooms.begin() + idx);
-            this->colorPicker->removeModelByColor(pixel);
+        this->maze->removePickableModel(pixel);
             ResourceManager::playSound("eating");
-        }
     }
     clicked = false;
 }
@@ -259,12 +244,8 @@ void Game::initPickerBuffer() {
     glBindTexture(GL_TEXTURE_2D, 0);
 }   
 
-void Game::initMushroomModels() {
-    srand(unsigned(time(NULL)));
-    for (int i = 0; i < 10; i++) {
-        glm::vec3 randomPos = glm::vec3(rand() % 11, i, rand() % 11);
-        Model* mushroom = new Model("../assets/meshes/Fantasy/Mushroom.obj", randomPos);
-        this->mushrooms.push_back(mushroom);
-        this->colorPicker->addModel(mushroom);
+void Game::mouseClickCallback(GLFWwindow* window, int button, int action, int mods) {
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+        clicked = true;    
     }
 }

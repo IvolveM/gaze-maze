@@ -120,7 +120,7 @@ std::vector<MeshTexture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureT
 
         std::string filename = std::string(str.C_Str());
         std::string path = directory + '/' + filename;
-        texture.id = ResourceManager::setTexture(filename, path.c_str()).getId();
+        texture.id = ResourceManager::setTexture(path, path.c_str()).getId();
         texture.type = typeName;
         texture.path = str.C_Str();
         textures.push_back(texture);
