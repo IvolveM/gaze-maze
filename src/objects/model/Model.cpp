@@ -7,8 +7,7 @@ Model::Model(
     float rotation,
     bool flipUvs,
     Shader shader
-)
-    : shader{shader},
+): shader{shader},
     pickerShader{ResourceManager::getShader("picker")},
     position{position},
     size{size},
@@ -21,9 +20,9 @@ void Model::draw()
 {
     shader.use();
     glm::mat4 model = glm::mat4(1.0f);
-    model = glm::scale(model, this->size);
-    model = glm::rotate(model, rotation, glm::vec3(0.0f, 1.0f, 0.0f));
 	model = glm::translate(model, this->position);
+    model = glm::rotate(model, rotation, glm::vec3(0.0f, 1.0f, 0.0f));
+    model = glm::scale(model, this->size);
     shader.setMatrixFloat4("model", model);
     for(unsigned int i = 0; i < meshes.size(); i++){
         meshes[i].draw(shader);
@@ -135,9 +134,9 @@ void Model::drawPicker(int id) {
     this->pickerShader.setVec3Float("idCol", glm::vec3(id, 0.0f, 0.0f));
 
     glm::mat4 model = glm::mat4(1.0f);
-	model = glm::scale(model, this->size);
-    model = glm::rotate(model, rotation, glm::vec3(0.0f, 1.0f, 0.0f));
 	model = glm::translate(model, this->position);
+    model = glm::rotate(model, rotation, glm::vec3(0.0f, 1.0f, 0.0f));
+	model = glm::scale(model, this->size);
     pickerShader.setMatrixFloat4("model", model);
     for(unsigned int i = 0; i < meshes.size(); i++){
         meshes[i].drawPicker(pickerShader);
