@@ -75,15 +75,6 @@ Game::Game(int width, int height)
 
     initPickerBuffer();
     glfwSetMouseButtonCallback(window, ColorPicker::mouseClickCallback);
-
-    animatedModel = new Model(
-        "../assets/meshes/vampire/dancing_vampire.dae", 
-        glm::vec3{0.0f}, 
-        glm::vec3{1.0f},
-        ResourceManager::getShader("meshAnimated")
-    );
-    danceAnimation = new Animation("../assets/meshes/vampire/dancing_vampire.dae", animatedModel);
-    animator = new Animator(danceAnimation);
 }
 
 Game::~Game() {
@@ -171,14 +162,6 @@ void Game::render() {
     for (auto shroom: mushrooms) {
         shroom->draw();
     }
-
-
-    Shader shader = ResourceManager::getShader("meshAnimated");
-    shader.use();
-    auto transforms = animator->GetFinalBoneMatrices();
-    for (int i = 0; i < transforms.size(); ++i)
-        shader.setMatrixFloat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
-    animatedModel->draw();
     crosshair->draw();
 }
 
@@ -227,7 +210,6 @@ void Game::processEvents()
     player->update(this->dt);
     player->doCollisions(this->maze->getMesh());
     enemy->update(this->dt);
-    animator->UpdateAnimation(this->dt);
 }
 
 void Game::handleMouse()

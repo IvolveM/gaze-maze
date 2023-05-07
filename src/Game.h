@@ -25,9 +25,6 @@
 #include "core/Skybox.h"
 #include "objects/Crosshair.h"
 
-#include "objects/model/Animation.h"
-#include "objects/model/Animator.h"
-
 class Game{
     private:
         GLFWwindow* window;
@@ -49,10 +46,6 @@ class Game{
 
         Skybox* skybox;
         ColorPicker* colorPicker;
-
-        Model* animatedModel;
-        Animation* danceAnimation;
-        Animator* animator;
 
         void initGlfw();
 
