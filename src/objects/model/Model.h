@@ -16,7 +16,7 @@ class Model{
             char *path,  
             glm::vec3 position = glm::vec3{0.0f}, 
             glm::vec3 size = glm::vec3{1.0f},
-            float rotation = 0.0f,
+            float rotationAngle = 0.0f,
             bool flipUvs = true,
             Shader shader = {ResourceManager::getShader("mesh")}
         );
@@ -32,7 +32,7 @@ class Model{
         Shader shader;
         Shader pickerShader;
         glm::vec3 position, size;
-        float rotationAngle = 0.0f;
+        float rotationAngle;
 
         std::vector<ModelMesh> meshes;
         std::string directory;

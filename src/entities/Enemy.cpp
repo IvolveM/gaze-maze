@@ -38,7 +38,6 @@ void Enemy::update(float dt) {
         // find new target and set new moving direction
         this->targetPos = calculateNewTargetPos();
         this->distanceToTravel = glm::distance(this->targetPos, this->position);
-        auto oldMovingDir = this->movingDir;
         this->movingDir = glm::normalize(this->targetPos - this->position);
         updateRotation();
     }
