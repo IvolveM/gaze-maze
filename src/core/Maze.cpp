@@ -81,8 +81,12 @@ std::vector<std::vector<Maze::Object>> Maze::getGrid() {
     return this->objects;
 }
 
-void Maze::addPickableModels(char* modelPath, const int amount) {
+void Maze::addPickableModels(char* modelPath, const int amount, const bool flipUvs) {
     srand(unsigned(time(NULL)));
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<double> distPos(-0.25, 0.25);
+    std::uniform_real_distribution<double> distRot(0, 359);
     int count = 0;
 
     for (int row = 0; row < objects.size(); row++){
@@ -92,10 +96,13 @@ void Maze::addPickableModels(char* modelPath, const int amount) {
 
             Object obj = objects[row][col];
             if (obj == Maze::Object::EMPTY && rand() % 2){
-                float x = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
-                float y = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
+                float x = distPos(gen);
+                float z = distPos(gen);
+                float r = distRot(gen);
 
-                Model* m = new Model(modelPath, glm::vec3(col + x, 0.0f, row + y), glm::vec3(1.0f, 1.0f, 1.0f));
+                Model* m = new Model(modelPath, glm::vec3(col + x, -0.43f, row + z), 
+                                    glm::vec3(0.3f, 0.3f, 0.3f),
+                                    r, flipUvs, ResourceManager::getShader("mesh"));
                 models.push_back(m);
                 picker->addModel(m);
 

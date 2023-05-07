@@ -19,8 +19,9 @@ Enemy::Enemy(
         "../assets/meshes/Amongus/scene.gltf", 
         glm::vec3{0.0f, -0.5f, 0.0f}, 
         glm::vec3{0.005f},
-        ResourceManager::getShader("meshAnimated"),
-        false
+        0.0f,
+        false,
+        ResourceManager::getShader("meshAnimated")
     );
     animation = new Animation("../assets/meshes/Amongus/scene.gltf", model);
     animator = new Animator(animation);
@@ -37,7 +38,6 @@ void Enemy::update(float dt) {
         // find new target and set new moving direction
         this->targetPos = calculateNewTargetPos();
         this->distanceToTravel = glm::distance(this->targetPos, this->position);
-        auto oldMovingDir = this->movingDir;
         this->movingDir = glm::normalize(this->targetPos - this->position);
         updateRotation();
     }
@@ -49,7 +49,6 @@ void Enemy::update(float dt) {
     glm::vec3 particlePosition = {this->position.x, this->position.y-0.45f, this->position.z};
     particleGenerator.addParticles(dt, particlePosition);
     particleGenerator.update(dt);
-    
 }
 
 void Enemy::draw() {

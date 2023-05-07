@@ -4,13 +4,14 @@ Model::Model(
     char *path,
     glm::vec3 position,
     glm::vec3 size,
-    Shader shader,
-    bool flipUvs
-)
-    : shader{shader},
+    float rotationAngle,
+    bool flipUvs,
+    Shader shader
+): shader{shader},
     pickerShader{ResourceManager::getShader("picker")},
     position{position},
-    size{size}
+    size{size},
+    rotationAngle{rotationAngle}
 {
     loadModel(path, flipUvs);
 }
