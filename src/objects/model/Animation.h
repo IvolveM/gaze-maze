@@ -21,7 +21,7 @@ public:
     Animation(const std::string& animationPath, Model* model)
     {
         Assimp::Importer importer;
-        const aiScene* scene = importer.ReadFile(animationPath, aiProcess_Triangulate | aiProcess_FlipUVs);
+        const aiScene* scene = importer.ReadFile(animationPath, aiProcess_Triangulate);
         if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
         {
             std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;

@@ -16,7 +16,8 @@ class Model{
             char *path,  
             glm::vec3 position = glm::vec3{0.0f}, 
             glm::vec3 size = glm::vec3{1.0f},
-            Shader shader = {ResourceManager::getShader("mesh")}
+            Shader shader = {ResourceManager::getShader("mesh")},
+            bool flipUvs = true
         );
         void draw();
         void drawPicker(int id);
@@ -31,7 +32,7 @@ class Model{
 
         std::vector<ModelMesh> meshes;
         std::string directory;
-        void loadModel(std::string path);
+        void loadModel(std::string path, bool flipUvs);
         void processNode(aiNode *node, const aiScene *scene);
         ModelMesh processMesh(aiMesh *mesh, const aiScene *scene);
         std::vector<MeshTexture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);

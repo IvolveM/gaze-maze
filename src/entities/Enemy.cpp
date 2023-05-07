@@ -16,12 +16,13 @@ Enemy::Enemy(
     targetPos{0.0f, 0.0f, 0.0f}
 {
     model = new Model(
-        "../assets/meshes/vampire/dancing_vampire.dae", 
+        "../assets/meshes/Amongus/scene.gltf", 
         glm::vec3{0.0f, -0.5f, 0.0f}, 
-        glm::vec3{1.0f},
-        ResourceManager::getShader("meshAnimated")
+        glm::vec3{0.005f},
+        ResourceManager::getShader("meshAnimated"),
+        false
     );
-    animation = new Animation("../assets/meshes/vampire/dancing_vampire.dae", model);
+    animation = new Animation("../assets/meshes/Amongus/scene.gltf", model);
     animator = new Animator(animation);
 }
 

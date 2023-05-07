@@ -1,17 +1,18 @@
 #include "Model.h"
 
 Model::Model(
-    char *path,  
+    char *path,
     glm::vec3 position,
     glm::vec3 size,
-    Shader shader
+    Shader shader,
+    bool flipUvs
 )
     : shader{shader},
     pickerShader{ResourceManager::getShader("picker")},
     position{position},
     size{size}
 {
-    loadModel(path);
+    loadModel(path, flipUvs);
 }
 
 void Model::draw()
@@ -26,13 +27,14 @@ void Model::draw()
     }
 }
 
-void Model::loadModel(std::string path)
+void Model::loadModel(std::string path, bool flipUvs)
 {
     Assimp::Importer importer;
     // postprocessing options:
     // * aiProcess_GenNormals: generates normals for all vectors
     // * aiProcess_OptimizeMeshes: joins several meshes to reduce draw calls
-    const aiScene *scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+    auto postprocessing = flipUvs ? (aiProcess_Triangulate | aiProcess_FlipUVs) : (aiProcess_Triangulate);
+    const aiScene *scene = importer.ReadFile(path, postprocessing);
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
         std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
