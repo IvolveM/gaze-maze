@@ -1,19 +1,11 @@
 #include "ColorPicker.h"
 
-extern bool clicked;
-
 ColorPicker::ColorPicker() {
-    
+
 }
 
 ColorPicker::~ColorPicker() {
     
-}
-
-void ColorPicker::mouseClickCallback(GLFWwindow* window, int button, int action, int mods) {
-    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-        clicked = true;    
-    }
 }
 
 int ColorPicker::addModel(Model* m) {
@@ -35,4 +27,3 @@ void ColorPicker::drawModels() {
         modelPair.second->drawPicker(modelPair.first);
     }
 }
-

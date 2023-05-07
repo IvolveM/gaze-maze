@@ -1,9 +1,12 @@
 #include "Maze.h"
 
 Maze::Maze(std::vector<std::vector<Maze::Object>> objects)
-    : objects{objects}
+    : objects{objects},
+    picker{new ColorPicker()}
 {
+    srand(unsigned(time(NULL)));
     std::vector<glm::vec3> cubePositions{};
+
     for (int row = 0; row < objects.size(); row++){
         for (int col = 0; col < objects[row].size(); col++){
             Object obj = objects[row][col];
@@ -18,7 +21,7 @@ Maze::Maze(std::vector<std::vector<Maze::Object>> objects)
                 float y1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
                 // float y2 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
                 // float y3 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
-                models.push_back(Model("../assets/meshes/grassSpot/grassSpot.obj", glm::vec3(col + x1, -0.5f, row + y1)));
+                models.push_back(new Model("../assets/meshes/grassSpot/grassSpot.obj", glm::vec3(col + x1, -0.5f, row + y1)));
                 // models.push_back(Model("../assets/meshes/grassSpot/grassSpot.obj", glm::vec3(col + x2, -0.5f, row + y2)));
                 // models.push_back(Model("../assets/meshes/grassSpot/grassSpot.obj", glm::vec3(col + x3, -0.5f, row + y3)));
             }
@@ -30,13 +33,16 @@ Maze::Maze(std::vector<std::vector<Maze::Object>> objects)
 Maze::~Maze()
 {
     delete cubes;
+    for (auto m : models)
+        delete m;
+    delete picker;
 }
 
 void Maze::draw()
 {
     cubes->draw();
     for (auto model: models){
-        model.draw();
+        model->draw();
     }
 }
 
@@ -73,4 +79,47 @@ Mesh Maze::getMesh(){
 
 std::vector<std::vector<Maze::Object>> Maze::getGrid() {
     return this->objects;
+}
+
+void Maze::addPickableModels(char* modelPath, const int amount) {
+    srand(unsigned(time(NULL)));
+    int count = 0;
+
+    for (int row = 0; row < objects.size(); row++){
+        for (int col = 0; col < objects[row].size(); col++){
+            if (count == amount) 
+                return;
+
+            Object obj = objects[row][col];
+            if (obj == Maze::Object::EMPTY && rand() % 2){
+                float x = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
+                float y = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
+
+                Model* m = new Model(modelPath, glm::vec3(col + x, 0.0f, row + y), glm::vec3(1.0f, 1.0f, 1.0f));
+                models.push_back(m);
+                picker->addModel(m);
+
+                ++count;
+            }
+        }
+    }
+}
+
+void Maze::removePickableModel(unsigned char pixel[4]) {
+    Model* m = this->picker->getModelByColor(pixel);
+    if (m == nullptr){
+        std::cout << "Could not find object with id " << pixel << std::endl;
+        return;
+    } 
+    auto it{std::find_if(models.begin(), models.end(), [m](const Model* model){return m == model;})};
+    if (it != models.end()) {
+        auto idx{it - models.begin()};
+        this->models.erase(models.begin() + idx);
+        this->picker->removeModelByColor(pixel);
+        delete m;
+    }
+}
+
+void Maze::drawPickerBuffer() {
+    this->picker->drawModels();
 }
