@@ -12,17 +12,22 @@ Enemy::Enemy(
     gridBlockSize{gridBlockSize},
     gridPosition{initialPos},
     movingDir{0.0f, 0.0f, 0.0f},
-    particleGenerator{100, ResourceManager::getTexture("smoke")}
+    particleGenerator{100, ResourceManager::getTexture("smoke")},
+    targetPos{0.0f, 0.0f, 0.0f}
 {
     this->cube = new Cube(this->position);
 }
 
 void Enemy::update(float dt) {
-    std::cout << "target: " << glm::to_string(targetPos) << std::endl;
+    // std::cout << "target: " << glm::to_string(targetPos) << std::endl;
+    std::cout << "movingDir: " << glm::to_string(this->movingDir) << std::endl;
+    // std::cout << "currpos: " << glm::to_string(this->position) << std::endl;
+
     // update particles
     glm::vec3 particlePosition = {this->position.x, this->position.y-0.45f, this->position.z};
     particleGenerator.addParticles(particlePosition);
     particleGenerator.update(dt);
+    
     // target reached
     if (std::abs(glm::distance(this->targetPos, this->position)) <= gridBlockSize.x * 0.01) {
         // lock to target        
@@ -44,7 +49,7 @@ void Enemy::draw() {
 
 glm::vec3 Enemy::calculateNewTargetPos() {
     std::vector<std::pair<int, int>> possibleDirs = {
-        {0,0}, {1,0}, {0,1},
+        /*{0,0},*/ {1,0}, {0,1},
         {-1,0}, {0,-1}
     };
 
@@ -55,6 +60,9 @@ glm::vec3 Enemy::calculateNewTargetPos() {
             possiblePos.push_back(newPos);
         }
     }
+    std::cout << "possibles-----------" << std::endl;
+    for (auto pos: possiblePos)
+        std::cout << pos.first << " " << pos.second << std::endl;
 
     std::srand(time(NULL));
     std::pair<int,int> newGridPos = possiblePos[rand() % possiblePos.size()];

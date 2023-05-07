@@ -120,7 +120,7 @@ void Game::mainloop() {
         this->dt = newTime - oldTime;
         oldTime = newTime;
         float fps = 1/dt;
-        std::cout<< "FPS: " << fps << std::endl;
+        // std::cout<< "FPS: " << fps << std::endl;
 
         processInput();
         processEvents();
@@ -167,7 +167,7 @@ void Game::render() {
 void Game::renderPickerBuffer() {
     glBindFramebuffer(GL_FRAMEBUFFER, this->pickerBuffer);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // fills the screen with the color configured by glClearColor, and clears the depth buffer bit
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     this->colorPicker->drawModels();
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
