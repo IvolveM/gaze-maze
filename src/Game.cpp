@@ -35,6 +35,7 @@ Game::Game(int width, int height)
 
     ResourceManager::initShaders(pointLightPositions);
     ResourceManager::initTextures();
+    ResourceManager::addSound("eating", "../assets/audio/eatingSound.wav");
 
     // init shader matrices buffer
     glGenBuffers(1, &uboMatrices);
@@ -240,7 +241,7 @@ void Game::handleMouseClick() {
             auto idx{it - mushrooms.begin()};
             this->mushrooms.erase(mushrooms.begin() + idx);
             this->colorPicker->removeModelByColor(pixel);
-            soundEngine->play2D("../assets/audio/eatingSound.wav", false);
+            ResourceManager::playSound("eating");
         }
     }
     clicked = false;

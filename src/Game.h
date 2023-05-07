@@ -11,7 +11,6 @@
 #include <exception>
 #include <functional> // for std::bind
 #include <algorithm>
-#include <irrklang/irrKlang.h>
 
 #include "stb_image.h"
 #include "resources/shaders/Shader.h"
@@ -26,18 +25,14 @@
 #include "core/Skybox.h"
 #include "objects/Crosshair.h"
 
-using namespace irrklang;
-
 class Game{
     private:
         GLFWwindow* window;
-        ISoundEngine *soundEngine = createIrrKlangDevice();
 
         int windowHeight = 0;
         int windowWidth = 0;
 
         unsigned int uboMatrices;
-
 
         float dt = 0.0f;
 

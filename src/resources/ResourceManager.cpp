@@ -3,16 +3,8 @@
 // initialize members
 std::map<std::string, Shader> ResourceManager::shaders{};
 std::map<std::string, Texture> ResourceManager::textures{};
-
-Texture ResourceManager::setTexture(std::string textureName, std::string texturePath, bool pixelated)
-{
-    if (textures.count(textureName) != 0){
-        return getTexture(textureName);
-    }
-    Texture texture = Texture(texturePath, pixelated);
-    textures.emplace(textureName, texture);
-    return texture;
-}
+std::map<std::string, std::string> ResourceManager::sounds{};
+irrklang::ISoundEngine *ResourceManager::soundEngine = irrklang::createIrrKlangDevice();
 
 Shader ResourceManager::addShader(std::string shaderName, std::string vertexPath, std::string fragmentPath)
 {
@@ -24,13 +16,6 @@ Shader ResourceManager::addShader(std::string shaderName, std::string vertexPath
     return shader;
 }
 
-Texture ResourceManager::getTexture(std::string textureName) {
-    if (textures.count(textureName) == 0){
-        std::cout << "Texture -> " + textureName << std::endl;
-        throw NoResourceFoundException("Texture -> " + textureName);
-    }
-    return textures.at(textureName);
-}
 
 Shader ResourceManager::getShader(std::string shaderName) {
     if (shaders.count(shaderName) == 0){
@@ -39,6 +24,47 @@ Shader ResourceManager::getShader(std::string shaderName) {
     }
     return shaders.at(shaderName);
 }
+
+
+Texture ResourceManager::setTexture(std::string textureName, std::string texturePath, bool pixelated)
+{
+    if (textures.count(textureName) != 0){
+        return getTexture(textureName);
+    }
+    Texture texture = Texture(texturePath, pixelated);
+    textures.emplace(textureName, texture);
+    return texture;
+}
+
+
+Texture ResourceManager::getTexture(std::string textureName) {
+    if (textures.count(textureName) == 0){
+        std::cout << "Texture -> " + textureName << std::endl;
+        throw NoResourceFoundException("Texture -> " + textureName);
+    }
+    return textures.at(textureName);
+}
+
+
+void ResourceManager::addSound(std::string soundName, std::string soundPath)
+{
+    if (sounds.count(soundName) != 0){
+        std::cout << "sound -> " + soundName << std::endl;
+        throw NoResourceFoundException("Sound -> " + soundName);
+    }
+    sounds.emplace(soundName, soundPath);
+}
+
+
+void ResourceManager::playSound(std::string soundName)
+{
+    if (sounds.count(soundName) == 0){
+        std::cout << "Sound -> " + soundName << std::endl;
+        throw NoResourceFoundException("Sound -> " + soundName);
+    }
+    soundEngine->play2D(sounds.at(soundName).c_str());
+}
+
 
 void ResourceManager::initShaders(glm::vec3 pointLightPositions[])
 {
