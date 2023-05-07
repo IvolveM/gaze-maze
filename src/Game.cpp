@@ -64,7 +64,7 @@ Game::Game(int width, int height)
 
     this->enemy = new Enemy(100.0f, {0,0}, this->maze->getGrid(), glm::vec3(1.0f,1.0f,1.0f));
 
-    // this->model = new Model("../assets/meshes/backpack/backpack.obj");
+    this->model = new Model("../assets/meshes/Tree/Tree.obj", glm::vec3{0.0f, -0.5f, 0.0f});
     this->skybox = new Skybox();
 
     this->lights.push_back(new Model("../assets/meshes/Fantasy/Lantern/LanternLit.obj", pointLightPositions[0]));
@@ -152,6 +152,7 @@ void Game::render() {
         light->draw();
     }
     player->draw(); // for particles
+    model->draw();
     crosshair->draw();
 }
 
