@@ -137,3 +137,8 @@ void Model::drawPicker(int id) {
         meshes[i].drawPicker(pickerShader);
     }
 }
+
+void Model::move(glm::vec3 direction)
+{
+    this->position += direction;
+}

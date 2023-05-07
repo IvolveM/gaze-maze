@@ -15,6 +15,7 @@ class Model{
         );
         void draw();
         void drawPicker(int id);
+        void move(glm::vec3 direction);
     private:
         Shader shader;
         Shader pickerShader;

@@ -15,7 +15,7 @@ Enemy::Enemy(
     particleGenerator{100, ResourceManager::getTexture("smoke")},
     targetPos{0.0f, 0.0f, 0.0f}
 {
-    this->cube = new Cube(this->position);
+    this->model = new Model("../assets/meshes/backpack/backpack.obj", this->position);
 }
 
 void Enemy::update(float dt) {
@@ -28,7 +28,7 @@ void Enemy::update(float dt) {
     if (this->distanceToTravel <= 0.0f) {
         // lock to target        
         this->gridPosition = std::pair<int,int>(targetPos.x, targetPos.z);
-        this->cube->move(targetPos - position);
+        this->model->move(targetPos - position);
         this->position = targetPos;
 
         // find new target and set new moving direction
@@ -41,7 +41,7 @@ void Enemy::update(float dt) {
 
 void Enemy::draw() {
     this->particleGenerator.draw();
-    this->cube->draw();
+    this->model->draw();
 }
 
 glm::vec3 Enemy::calculateNewTargetPos() {
@@ -68,7 +68,7 @@ void Enemy::updateNewPosition(float dt) {
         if (toIncrement[i] > gridBlockSize[i])
             toIncrement[i] = gridBlockSize[i];
     }
-    this->cube->move(toIncrement);
+    this->model->move(toIncrement);
     this->position += toIncrement;
     this->distanceToTravel -= glm::length(toIncrement);
 }
