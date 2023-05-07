@@ -3,9 +3,10 @@
 Model::Model(
     char *path,  
     glm::vec3 position,
-    glm::vec3 size
+    glm::vec3 size,
+    Shader shader
 )
-    : shader{ResourceManager::getShader("mesh")},
+    : shader{shader},
     pickerShader{ResourceManager::getShader("picker")},
     position{position},
     size{size}
@@ -64,25 +65,22 @@ ModelMesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
     for(unsigned int i = 0; i < mesh->mNumVertices; i++)
     {
         Vertex vertex;
+
+        setVertexBoneDataToDefault(vertex);
+
         // process vertex positions, normals and texture coordinates
-        glm::vec3 vector;
-        vector.x = mesh->mVertices[i].x;
-        vector.y = mesh->mVertices[i].y;
-        vector.z = mesh->mVertices[i].z;
-        vertex.Position = vector;
-        vector.x = mesh->mNormals[i].x;
-        vector.y = mesh->mNormals[i].y;
-        vector.z = mesh->mNormals[i].z;
-        vertex.Normal = vector;
+        vertex.position = AssimpGLMHelpers::GetGLMVec(mesh->mVertices[i]);
+        vertex.normal = AssimpGLMHelpers::GetGLMVec(mesh->mNormals[i]);
+
         if(mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
         {
             glm::vec2 vec;
             vec.x = mesh->mTextureCoords[0][i].x;
             vec.y = mesh->mTextureCoords[0][i].y;
-            vertex.TexCoords = vec;
+            vertex.texCoords = vec;
         }
         else{
-            vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+            vertex.texCoords = glm::vec2(0.0f, 0.0f);
         }
         vertices.push_back(vertex);
     }
@@ -103,6 +101,8 @@ ModelMesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
         std::vector<MeshTexture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
         textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
     }
+
+    extractBoneWeightForVertices(vertices, mesh, scene);
     return ModelMesh(vertices, indices, textures);
 }
 
@@ -141,4 +141,61 @@ void Model::drawPicker(int id) {
 void Model::move(glm::vec3 direction)
 {
     this->position += direction;
+}
+
+
+void Model::setVertexBoneDataToDefault(Vertex &vertex){
+    for (int i = 0; i < MAX_BONE_WEIGHTS; i++)
+    {
+        vertex.boneIDs[i] = -1;
+        vertex.weights[i] = 0.0f;
+    }
+}
+
+void Model::setVertexBoneData(Vertex &vertex, int boneID, float weight)
+{
+    for (int i = 0; i < MAX_BONE_WEIGHTS; ++i)
+    {
+        if (vertex.boneIDs[i] < 0)
+        {
+            vertex.weights[i] = weight;
+            vertex.boneIDs[i] = boneID;
+            break;
+        }
+    }
+}
+
+void Model::extractBoneWeightForVertices(std::vector<Vertex> &vertices, aiMesh *mesh, const aiScene *scene)
+{
+    for (int boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex)
+    {
+        int boneID = -1;
+        std::string boneName = mesh->mBones[boneIndex]->mName.C_Str();
+        if (boneInfoMap.find(boneName) == boneInfoMap.end())
+        {
+            BoneInfo newBoneInfo;
+            newBoneInfo.id = boneCounter;
+            newBoneInfo.offset = AssimpGLMHelpers::ConvertMatrixToGLMFormat(
+                mesh->mBones[boneIndex]->mOffsetMatrix);
+            boneInfoMap[boneName] = newBoneInfo;
+            boneID = boneCounter;
+            boneCounter++;
+        }
+        else
+        {
+            boneID = boneInfoMap[boneName].id;
+        }
+        assert(boneID != -1);
+        auto weights = mesh->mBones[boneIndex]->mWeights;
+        int numWeights = mesh->mBones[boneIndex]->mNumWeights;
+
+        for (int weightIndex = 0; weightIndex < numWeights; ++weightIndex)
+        {
+            int vertexId = weights[weightIndex].mVertexId;
+            float weight = weights[weightIndex].mWeight;
+            assert(vertexId <= vertices.size());
+            setVertexBoneData(vertices[vertexId], boneID, weight);
+        }
+    }
+    //...
 }
