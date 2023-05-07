@@ -47,7 +47,7 @@ void Player::update(float dt)
     if(movingDirection != glm::vec2{0.0f} && isOnGround){
         glm::vec3 pos = this->getPosition();
         glm::vec3 particlePosition = {pos.x, pos.y-0.45f, pos.z};
-        particleGenerator.addParticles(particlePosition);
+        particleGenerator.addParticles(dt, particlePosition);
     }
     particleGenerator.update(dt);
     // update player

@@ -21,7 +21,7 @@ Enemy::Enemy(
 void Enemy::update(float dt) {
     // update particles
     glm::vec3 particlePosition = {this->position.x, this->position.y-0.45f, this->position.z};
-    particleGenerator.addParticles(particlePosition);
+    particleGenerator.addParticles(dt, particlePosition);
     particleGenerator.update(dt);
     
     // target reached

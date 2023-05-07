@@ -40,12 +40,16 @@ ParticleGenerator::ParticleGenerator(int amount, Texture texture)
     glEnableVertexAttribArray(1);
 }
 
-void ParticleGenerator::addParticles(glm::vec3 position){
-    int amountNewParticles = 1;
-    for (int i = 0; i < amountNewParticles; i++){
-        int deadParticleIndex = getFirstDeadParticleIndex();
-        if (deadParticleIndex != -1){
-            particles[deadParticleIndex].respawn(position);
+void ParticleGenerator::addParticles(float dt, glm::vec3 position){
+    timePassedSincePrevSpawn += dt;
+    if (timePassedSincePrevSpawn >= particleSpawnDelay){
+        timePassedSincePrevSpawn = 0.0f;
+        int amountNewParticles = 1;
+        for (int i = 0; i < amountNewParticles; i++){
+            int deadParticleIndex = getFirstDeadParticleIndex();
+            if (deadParticleIndex != -1){
+                particles[deadParticleIndex].respawn(position);
+            }
         }
     }
 }
