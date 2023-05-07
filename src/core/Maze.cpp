@@ -99,7 +99,7 @@ void Maze::addPickableModels(char* modelPath, const int amount, const bool flipU
                 float z = distPos(gen);
                 float r = distRot(gen);
 
-                Model* m = new Model(modelPath, glm::vec3(col + x, -0.45f, row + z), 
+                Model* m = new Model(modelPath, glm::vec3(col + x, -0.43f, row + z), 
                                     glm::vec3(0.3f, 0.3f, 0.3f),
                                     r, flipUvs, ResourceManager::getShader("mesh"));
                 models.push_back(m);
