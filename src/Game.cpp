@@ -240,6 +240,7 @@ void Game::handleMouseClick() {
             auto idx{it - mushrooms.begin()};
             this->mushrooms.erase(mushrooms.begin() + idx);
             this->colorPicker->removeModelByColor(pixel);
+            soundEngine->play2D("../assets/audio/eatingSound.wav", false);
         }
     }
     clicked = false;

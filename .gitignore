@@ -32,7 +32,9 @@
 # *.app
 
 # build
-/build
+/build/*
+!/build/ikpFlac.so
+!/build/ikpMP3.so
 
 ### CMake ###
 # CMakeLists.txt.user
