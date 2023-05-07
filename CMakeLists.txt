@@ -3,7 +3,10 @@ project(gaze-maze)
 
 set(CMAKE_CXX_STANDARD 17)
 
+find_package(Threads REQUIRED)
+
 link_directories(${CMAKE_CORE_DIR}/lib)
+link_directories(${CMAKE_CORE_DIR}/bin/irrKlang/linux-gcc-64)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules/")
 
@@ -18,7 +21,18 @@ message(STATUS "Found GLFW3 in ${GLFW3_INCLUDE_DIR}")
 set(LIBS glfw GL X11 pthread Xrandr Xi dl assimp)
 
 add_library(GLAD "src/glad.c")
-set(LIBS ${LIBS} GLAD)
+set(IRRKLANG_LIBRARY ikpMP3.so)
+add_library(Irrklang STATIC IMPORTED)
+set_property(TARGET Irrklang PROPERTY IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/bin/irrKlang/linux-gcc-64/libIrrKlang.so)
+set(IRRKLANG_LIBRARY libIrrKlang.so)
+# add_library(IkpMP3 STATIC IMPORTED)
+# set_property(TARGET IkpMP3 PROPERTY IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/bin/linux-gcc-64/ikpFlac.so)
+# set(IRRKLANG_LIBRARY ikpFlac.so)
+# add_library(IkpFlac STATIC IMPORTED)
+# set_property(TARGET IkpFlac PROPERTY IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/bin/linux-gcc-64/ikpMP3.so)
+
+set(LIBS ${LIBS} GLAD Irrklang) #IkpMP3 IkpFlac)
+
 
 include_directories(${CMAKE_SOURCE_DIR}/includes)
 add_executable(gaze-maze 
@@ -70,4 +84,9 @@ add_executable(gaze-maze
     src/utils/ColorPicker.h
     src/utils/ColorPicker.cpp
 )
-target_link_libraries(gaze-maze ${LIBS}) # -lglfw3 -lGL -lGLU -lX11 -lXxf86vm -lXrandr -lpthread -lXi
+
+target_include_directories(gaze-maze PUBLIC ${CMAKE_SOURCE_DIR}/bin/irrKlang/linux-gcc-64)
+
+target_link_libraries(gaze-maze 
+    ${LIBS}
+) # -lglfw3 -lGL -lGLU -lX11 -lXxf86vm -lXrandr -lpthread -lXi

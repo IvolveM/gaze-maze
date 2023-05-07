@@ -35,6 +35,7 @@ Game::Game(int width, int height)
 
     ResourceManager::initShaders(pointLightPositions);
     ResourceManager::initTextures();
+    ResourceManager::addSound("eating", "../assets/audio/eatingSound.wav");
 
     // init shader matrices buffer
     glGenBuffers(1, &uboMatrices);
@@ -226,6 +227,7 @@ void Game::handleMouseClick() {
     
     if (static_cast<int>(pixel[0]) != 0) {
         this->maze->removePickableModel(pixel);
+            ResourceManager::playSound("eating");
     }
     clicked = false;
 }

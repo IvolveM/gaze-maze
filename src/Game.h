@@ -12,7 +12,6 @@
 #include <functional> // for std::bind
 
 #include "stb_image.h"
-
 #include "resources/shaders/Shader.h"
 #include "resources/ResourceManager.h"
 #include "objects/based/Plane.h"
@@ -28,6 +27,7 @@
 class Game{
     private:
         GLFWwindow* window;
+
         int windowHeight = 0;
         int windowWidth = 0;
 

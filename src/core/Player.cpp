@@ -47,7 +47,7 @@ void Player::update(float dt)
     if(movingDirection != glm::vec2{0.0f} && isOnGround){
         glm::vec3 pos = this->getPosition();
         glm::vec3 particlePosition = {pos.x, pos.y-0.45f, pos.z};
-        particleGenerator.addParticles(particlePosition);
+        particleGenerator.addParticles(dt, particlePosition);
     }
     particleGenerator.update(dt);
     // update player
@@ -94,10 +94,12 @@ void Player::doCollisions(Mesh m)
     glm::vec3 totalTranslationVector = glm::vec3(0.0f);
     int c = 1;
     for (auto col: collisions) {
-        totalTranslationVector += resolveCollision(col);
+        if (col.isColliding(this->collisioner)){ // check again
+            totalTranslationVector = resolveCollision(col);
+            incrementPosition(totalTranslationVector);
+        }
     }
-    if (collisions.size() > 0)
-        incrementPosition(totalTranslationVector);
+    // if (collisions.size() > 0)
 }
 
 glm::vec3 Player::resolveCollision(Collisioner c) {

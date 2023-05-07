@@ -8,6 +8,9 @@ class ParticleGenerator{
         int amount = 1;
         int lastUsedParticleIndex = 0;
 
+        float timePassedSincePrevSpawn = 0.0f;
+        float particleSpawnDelay = 0.01f;
+
         unsigned int VAO;
         unsigned int EBO;
 
@@ -22,6 +25,6 @@ class ParticleGenerator{
         );
 
         void update(float dt);
-        void addParticles(glm::vec3 position);
+        void addParticles(float dt, glm::vec3 position);
         void draw();
 };

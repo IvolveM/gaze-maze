@@ -22,7 +22,6 @@ class Enemy : public Entity {
         void draw() override;
 
     private:
-        void move();
         glm::vec3 calculateNewTargetPos();
         void updateNewPosition(float dt);
         bool inBounds(std::pair<int,int> pos);
@@ -38,6 +37,6 @@ class Enemy : public Entity {
         glm::vec3 gridBlockSize;
         std::pair<int,int> gridPosition;
 
-        Cube* cube;
+        Model* model;
         ParticleGenerator particleGenerator;
 };
