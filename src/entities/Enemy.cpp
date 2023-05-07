@@ -19,8 +19,9 @@ Enemy::Enemy(
         "../assets/meshes/Amongus/scene.gltf", 
         glm::vec3{0.0f, -0.5f, 0.0f}, 
         glm::vec3{0.005f},
-        ResourceManager::getShader("meshAnimated"),
-        false
+        0.0f,
+        false,
+        ResourceManager::getShader("meshAnimated")
     );
     animation = new Animation("../assets/meshes/Amongus/scene.gltf", model);
     animator = new Animator(animation);

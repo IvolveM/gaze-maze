@@ -20,7 +20,7 @@ class Maze {
         Mesh getMesh();
         std::vector<std::vector<Maze::Object>> getGrid();
 
-        void addPickableModels(char* modelPath, const int amount);
+        void addPickableModels(char* modelPath, const int amount, const bool flipUvs = true);
         void removePickableModel(unsigned char pixel[4]);
 
         // builder class
