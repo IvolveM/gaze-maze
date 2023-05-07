@@ -2,6 +2,8 @@
 
 #include <vector>
 #include <utility>
+#include <glm/glm.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 
 #include "Entity.h"
 #include "../core/Maze.h"
@@ -28,6 +30,7 @@ class Enemy : public Entity {
         glm::vec3 calculateNewTargetPos();
         void updateNewPosition(float dt);
         bool inBounds(std::pair<int,int> pos);
+        void updateRotation();
 
         float health;
         float speed = 2.0f;
