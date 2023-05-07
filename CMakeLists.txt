@@ -67,6 +67,11 @@ add_executable(gaze-maze
     src/objects/model/Model.cpp
     src/objects/model/ModelMesh.h
     src/objects/model/ModelMesh.cpp
+    src/objects/model/Bone.h
+    src/objects/model/BoneInfo.h
+    src/objects/model/Animation.h
+    src/objects/model/Animator.h
+    src/objects/model/AssimpGLMHelpers.h
     src/resources/ResourceManager.h 
     src/resources/ResourceManager.cpp
     src/resources/shaders/Shader.h 

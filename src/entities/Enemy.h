@@ -7,7 +7,10 @@
 #include "../core/Maze.h"
 #include "./ParticleGenerator.h"
 
-#include "../objects/based/Cube.h" //testing
+#include "../objects/model/Model.h"
+
+#include "../objects/model/Animation.h"
+#include "../objects/model/Animator.h"
 
 class Enemy : public Entity {
     public:
@@ -38,5 +41,7 @@ class Enemy : public Entity {
         std::pair<int,int> gridPosition;
 
         Model* model;
+        Animation* animation;
+        Animator* animator;
         ParticleGenerator particleGenerator;
 };

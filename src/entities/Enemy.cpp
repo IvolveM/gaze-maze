@@ -15,15 +15,18 @@ Enemy::Enemy(
     particleGenerator{100, ResourceManager::getTexture("smoke")},
     targetPos{0.0f, 0.0f, 0.0f}
 {
-    this->model = new Model("../assets/meshes/backpack/backpack.obj", this->position);
+    model = new Model(
+        "../assets/meshes/Amongus/scene.gltf", 
+        glm::vec3{0.0f, -0.5f, 0.0f}, 
+        glm::vec3{0.005f},
+        ResourceManager::getShader("meshAnimated"),
+        false
+    );
+    animation = new Animation("../assets/meshes/Amongus/scene.gltf", model);
+    animator = new Animator(animation);
 }
 
 void Enemy::update(float dt) {
-    // update particles
-    glm::vec3 particlePosition = {this->position.x, this->position.y-0.45f, this->position.z};
-    particleGenerator.addParticles(dt, particlePosition);
-    particleGenerator.update(dt);
-    
     // target reached
     if (this->distanceToTravel <= 0.0f) {
         // lock to target        
@@ -37,11 +40,26 @@ void Enemy::update(float dt) {
         this->movingDir = glm::normalize(this->targetPos - this->position);
     }
     updateNewPosition(dt);
+
+    // update animation
+    animator->UpdateAnimation(dt);
+    // update particles
+    glm::vec3 particlePosition = {this->position.x, this->position.y-0.45f, this->position.z};
+    particleGenerator.addParticles(dt, particlePosition);
+    particleGenerator.update(dt);
+    
 }
 
 void Enemy::draw() {
     this->particleGenerator.draw();
     this->model->draw();
+
+    Shader shader = ResourceManager::getShader("meshAnimated");
+    shader.use();
+    auto transforms = animator->GetFinalBoneMatrices();
+    for (int i = 0; i < transforms.size(); ++i)
+        shader.setMatrixFloat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
+    model->draw();
 }
 
 glm::vec3 Enemy::calculateNewTargetPos() {

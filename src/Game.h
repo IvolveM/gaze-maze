@@ -41,7 +41,6 @@ class Game{
         std::vector<Model*> lights{};
         Plane* ground;
         Enemy* enemy;
-        // Model* model;
 
         Skybox* skybox;
 

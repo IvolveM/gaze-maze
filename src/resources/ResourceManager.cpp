@@ -80,6 +80,7 @@ void ResourceManager::initShaders(glm::vec3 pointLightPositions[])
     addShader("default", appendVert(defaultPath), appendFrag(defaultPath)).use().setBlockBinding("Matrices", 0);
     addShader("defaultInstancing", appendVert(defaultPath, true), appendFrag(defaultPath)).use().setBlockBinding("Matrices", 0);
     addShader("mesh", appendVert(defaultPath), appendFrag(defaultPath)).use().setBlockBinding("Matrices", 0);
+    addShader("meshAnimated", appendVert(meshPath), appendFrag(defaultPath)).use().setBlockBinding("Matrices", 0);
     addShader("skybox", appendVert(skyboxPath), appendFrag(skyboxPath)).use().setBlockBinding("Matrices", 0);
     addShader("particle", appendVert(particlePath), appendFrag(particlePath)).use().setBlockBinding("Matrices", 0);
     addShader("picker", appendVert(defaultPath), appendFrag(pickerPath)).use().setBlockBinding("Matrices", 0);
@@ -109,6 +110,14 @@ void ResourceManager::initShaders(glm::vec3 pointLightPositions[])
     meshShader.setFloat3("material.diffuse", 0.55f, 0.55f, 0.55f);
     meshShader.setFloat3("material.specular", 0.7f, 0.7f, 0.7f);
     meshShader.setFloat("material.shininess", 0.25f);
+
+    Shader animatedMeshShader = getShader("meshAnimated");
+    animatedMeshShader.use();
+    setLightSources(animatedMeshShader, pointLightPositions);
+    animatedMeshShader.setFloat3("material.ambient", 1.0f, 1.0f, 1.0f);
+    animatedMeshShader.setFloat3("material.diffuse", 0.55f, 0.55f, 0.55f);
+    animatedMeshShader.setFloat3("material.specular", 0.7f, 0.7f, 0.7f);
+    animatedMeshShader.setFloat("material.shininess", 0.25f);
 }
 
 void ResourceManager::initTextures(){

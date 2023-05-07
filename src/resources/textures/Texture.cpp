@@ -8,7 +8,6 @@ Texture::Texture(std::string texturePath, bool pixelated)
     glGenTextures(1, &this->textureId);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, textureId);
-    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
     // set the texture wrapping/filtering options
     // GL_REPEAT, GL_MIRRORED_REPEAT, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_BORDER 
