@@ -82,6 +82,7 @@ std::vector<std::vector<Maze::Object>> Maze::getGrid() {
 }
 
 void Maze::addPickableModels(char* modelPath, const int amount, const bool flipUvs) {
+    srand(unsigned(time(NULL)));
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<double> distPos(-0.25, 0.25);
