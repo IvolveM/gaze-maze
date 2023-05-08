@@ -25,7 +25,7 @@ class Player: public Camera{
         bool isOnGround = false;
         void handleVerticalMovement(float dt);
 
-        glm::vec3 resolveCollision(Collisioner c);
+        void resolveCollision(Collisioner c);
     public:
         enum class InputEvent
         {

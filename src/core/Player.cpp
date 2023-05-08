@@ -91,19 +91,16 @@ void Player::handleVerticalMovement(float dt)
 void Player::doCollisions(Mesh m)
 {
     std::vector<Collisioner> collisions = m.isColliding(this->collisioner);
-    glm::vec3 totalTranslationVector = glm::vec3(0.0f);
-    int c = 1;
     for (auto col: collisions) {
-        if (col.isColliding(this->collisioner)){ // check again
-            totalTranslationVector = resolveCollision(col);
-            incrementPosition(totalTranslationVector);
+        // resolve each collision by itself
+        if (col.isColliding(this->collisioner)){
+            resolveCollision(col);
         }
     }
-    // if (collisions.size() > 0)
 }
 
-glm::vec3 Player::resolveCollision(Collisioner c) {
+void Player::resolveCollision(Collisioner c) {
     auto vec = this->collisioner.getVectorToTranslate(c);
+    incrementPosition(vec);
     this->movingDirection = glm::vec2{0.0f, 0.0f};
-    return vec;
 }

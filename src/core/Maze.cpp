@@ -87,6 +87,9 @@ void Maze::addPickableModels(char* modelPath, const int amount, const bool flipU
     std::mt19937 gen(rd());
     std::uniform_real_distribution<double> distPos(-0.25, 0.25);
     std::uniform_real_distribution<double> distRot(0, 359);
+
+    // using a float in range [0,1] and rounding it after seems to produce less clusters
+    std::uniform_real_distribution<double> choice(0, 1);
     int count = 0;
 
     for (int row = 0; row < objects.size(); row++){
@@ -95,7 +98,7 @@ void Maze::addPickableModels(char* modelPath, const int amount, const bool flipU
                 return;
 
             Object obj = objects[row][col];
-            if (obj == Maze::Object::EMPTY && rand() % 2){
+            if (obj == Maze::Object::EMPTY && std::round(choice(gen))){
                 float x = distPos(gen);
                 float z = distPos(gen);
                 float r = distRot(gen);

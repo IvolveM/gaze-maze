@@ -27,6 +27,7 @@ void Mesh::draw(){
 }
 
 std::vector<Collisioner> Mesh::isColliding(Collisioner c) {
+    // if instanced return all colliding bounding boxes
     if (this->instancing) {
         std::vector<Collisioner> boxes = {};
         for (auto box : this->instanceCollisioners) {
@@ -36,8 +37,10 @@ std::vector<Collisioner> Mesh::isColliding(Collisioner c) {
         }
         return boxes;
     }
-    else if (this->collisioner.isColliding(c));
+    // if not instanced and colliding return this bounding box 
+    if (this->collisioner.isColliding(c));
         return std::vector{this->collisioner};
-        
+    
+    // else return empty vec
     return std::vector<Collisioner>();
 }
