@@ -21,9 +21,9 @@ Maze::Maze(std::vector<std::vector<Maze::Object>> objects)
                 float y2 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
                 int randomNum = rand()%4;
                 if (randomNum == 0){
-                    models.push_back(new Model("../assets/meshes/Rocks/Rocks.dae", glm::vec3(col + x1, -0.35f, row + y1), glm::vec3{0.3f,0.3f,0.3f}, 0.0f, false));
+                    addRandomizedModel("../assets/meshes/Rocks/Rocks.dae", glm::vec3{col, -0.35f, row}, glm::vec3{0.3f}, false);
                 }else if (randomNum == 1){
-                    models.push_back(new Model("../assets/meshes/RocksVar1/RocksVar1.dae", glm::vec3(col + x2, -0.35f, row + y2), glm::vec3{0.3f,0.3f,0.3f}, 0.0f, false));
+                    addRandomizedModel("../assets/meshes/RocksVar1/RocksVar1.dae", glm::vec3{col, -0.35f, row}, glm::vec3{0.3f}, false);
                 }
                 for (int i = 0; i < 2; i++){
                     addRandomizedModel("../assets/meshes/LowPolyPlant/LowPolyPlant.dae", glm::vec3{col, -0.55f, row}, glm::vec3{0.1f}, false);
@@ -32,6 +32,7 @@ Maze::Maze(std::vector<std::vector<Maze::Object>> objects)
             }
         }
     }
+    addSpawnSurroundingCubes(cubePositions);
     cubes = new Cube{cubePositions};
 }
 
@@ -41,6 +42,21 @@ void Maze::addRandomizedModel(std::string path, glm::vec3 position, glm::vec3 si
     float sizeOffset = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
     float rotation = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) * 3.14f;
     models.push_back(new Model(path.c_str(), glm::vec3(position.x + x, position.y, position.z + z), size + glm::vec3{(sizeOffset/2.0f)/10.0f}, glm::degrees(rotation), flip));
+}
+
+void Maze::addSpawnSurroundingCubes(std::vector<glm::vec3> &cubePositions){
+    std::vector<glm::vec3> positions = {
+        {-1.0f, 0.0f, -1.0f}, 
+        {0.0f, 0.0f, -1.0f}, 
+        {1.0f, 0.0f, -1.0f}, 
+        {2.0f, 0.0f, -1.0f}, 
+        {-1.0f, 0.0f, 0.0f},
+        {-1.0f, 0.0f, 1.0f},
+        {-1.0f, 0.0f, 2.0f},
+    };
+    for(auto pos: positions){
+        cubePositions.push_back(pos);
+    }
 }
 
 Maze::~Maze()
@@ -60,12 +76,13 @@ void Maze::draw()
 }
 
 Maze::MazeBuilder::MazeBuilder(int width, int height)
-    : objects {
+    : 
+    width{width},
+    height{height},
+    objects {
         height,
         std::vector{width, Maze::Object::EMPTY}
-    },
-    width{width},
-    height{height}
+    }
 {
 
 }
