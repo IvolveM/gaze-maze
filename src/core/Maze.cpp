@@ -28,6 +28,7 @@ Maze::Maze(std::vector<std::vector<Maze::Object>> objects)
         }
     }
     cubes = new Cube{cubePositions};
+    models.push_back(new Model("../assets/meshes/vines/vines.obj"));
 }
 
 Maze::~Maze()
@@ -86,7 +87,7 @@ void Maze::addPickableModels(char* modelPath, const int amount, const bool flipU
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<double> distPos(-0.25, 0.25);
-    std::uniform_real_distribution<double> distRot(0, 359);
+    std::uniform_int_distribution<> distRot(0, 359);
 
     // using a float in range [0,1] and rounding it after seems to produce less clusters
     std::uniform_real_distribution<double> choice(0, 1);

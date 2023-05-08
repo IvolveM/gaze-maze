@@ -9,7 +9,7 @@
 #include <unordered_map>
 
 /***
- * This class is not responsible for managing the lifetime of its objects
+ * This class is not responsible for managing the lifetime of its objects/models
 */
 
 class ColorPicker {
