@@ -44,7 +44,7 @@ void Enemy::update(float dt) {
     updateNewPosition(dt);
 
     // update animation
-    animator->UpdateAnimation(dt);
+    animator->updateAnimation(dt);
     // update particles
     glm::vec3 particlePosition = {this->position.x, this->position.y-0.45f, this->position.z};
     particleGenerator.addParticles(dt, particlePosition);
@@ -57,7 +57,7 @@ void Enemy::draw() {
 
     Shader shader = ResourceManager::getShader("meshAnimated");
     shader.use();
-    auto transforms = animator->GetFinalBoneMatrices();
+    auto transforms = animator->getFinalBoneMatrices();
     for (int i = 0; i < transforms.size(); ++i)
         shader.setMatrixFloat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
     model->draw();

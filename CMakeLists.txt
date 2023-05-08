@@ -72,6 +72,7 @@ add_executable(gaze-maze
     src/objects/model/Animation.h
     src/objects/model/Animation.cpp
     src/objects/model/Animator.h
+    src/objects/model/Animator.cpp
     src/objects/model/AssimpGLMHelpers.h
     src/resources/ResourceManager.h 
     src/resources/ResourceManager.cpp
