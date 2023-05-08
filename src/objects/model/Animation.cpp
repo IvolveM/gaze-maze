@@ -1,5 +1,26 @@
 #include "Animation.h"
 
+
+Animation::Animation(const std::string &animationPath, Model *model)
+{
+    Assimp::Importer importer;
+    const aiScene* scene = importer.ReadFile(animationPath, aiProcess_Triangulate);
+    if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+    {
+        std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
+        return;
+    }
+    auto animation = scene->mAnimations[0];
+    duration = animation->mDuration;
+    ticksPerSecond = animation->mTicksPerSecond;
+    readHierarchyData(rootNode, scene->mRootNode);
+    readMissingBones(animation, *model);
+}
+
+Animation::~Animation()
+{
+}
+
 void Animation::readMissingBones(const aiAnimation *animation, Model &model)
 {
     int size = animation->mNumChannels;
@@ -40,32 +61,12 @@ void Animation::readHierarchyData(AssimpNodeData &dest, const aiNode *src)
     }
 }
 
-Animation::Animation(const std::string &animationPath, Model *model)
-{
-    Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(animationPath, aiProcess_Triangulate);
-    if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
-    {
-        std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
-        return;
-    }
-    auto animation = scene->mAnimations[0];
-    duration = animation->mDuration;
-    ticksPerSecond = animation->mTicksPerSecond;
-    readHierarchyData(rootNode, scene->mRootNode);
-    readMissingBones(animation, *model);
-}
-
-Animation::~Animation()
-{
-}
-
 Bone *Animation::findBone(const std::string &name)
 {
     auto iter = std::find_if(bones.begin(), bones.end(),
         [&](const Bone& Bone)
         {
-            return Bone.GetBoneName() == name;
+            return Bone.getBoneName() == name;
         }
     );
     if (iter == bones.end()) return nullptr;

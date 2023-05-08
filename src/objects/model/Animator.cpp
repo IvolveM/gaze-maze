@@ -18,17 +18,17 @@ void Animator::updateAnimation(float dt)
     {
         currentTime += currentAnimation->getTicksPerSecond() * dt;
         currentTime = fmod(currentTime, currentAnimation->getDuration());
-        palculateBoneTransform(&currentAnimation->getRootNode(), glm::mat4(1.0f));
+        calculateBoneTransform(&currentAnimation->getRootNode(), glm::mat4(1.0f));
     }
 }
 
-void Animator::playAnimation(Animation *pAnimation)
+void Animator::playAnimation(Animation *animation)
 {
-    currentAnimation = pAnimation;
+    currentAnimation = animation;
     currentTime = 0.0f;
 }
 
-void Animator::palculateBoneTransform(const AssimpNodeData *node, glm::mat4 parentTransform)
+void Animator::calculateBoneTransform(const AssimpNodeData *node, glm::mat4 parentTransform)
 {
     if (node == nullptr){
         return;
@@ -40,8 +40,8 @@ void Animator::palculateBoneTransform(const AssimpNodeData *node, glm::mat4 pare
 
     if (Bone)
     {
-        Bone->Update(currentTime);
-        nodeTransform = Bone->GetLocalTransform();
+        Bone->update(currentTime);
+        nodeTransform = Bone->getLocalTransform();
     }
 
     glm::mat4 globalTransformation = parentTransform * nodeTransform;
@@ -55,7 +55,7 @@ void Animator::palculateBoneTransform(const AssimpNodeData *node, glm::mat4 pare
     }
 
     for (int i = 0; i < node->childrenCount; i++)
-        palculateBoneTransform(&node->children[i], globalTransformation);
+        calculateBoneTransform(&node->children[i], globalTransformation);
 }
 
 std::vector<glm::mat4> Animator::getFinalBoneMatrices()

@@ -19,27 +19,25 @@ struct AssimpNodeData
 
 class Animation
 {
-private:
-    float duration;
-    int ticksPerSecond;
-    std::vector<Bone> bones;
-    AssimpNodeData rootNode;
-    std::map<std::string, BoneInfo> boneInfoMap;
+    private:
+        float duration;
+        int ticksPerSecond;
+        std::vector<Bone> bones;
+        AssimpNodeData rootNode;
+        std::map<std::string, BoneInfo> boneInfoMap;
 
-    void readMissingBones(const aiAnimation* animation, Model& model);
-    void readHierarchyData(AssimpNodeData& dest, const aiNode* src);
-public:
-    Animation() = default;
+        void readMissingBones(const aiAnimation* animation, Model& model);
+        void readHierarchyData(AssimpNodeData& dest, const aiNode* src);
+    public:
+        Animation(const std::string& animationPath, Model* model);
 
-    Animation(const std::string& animationPath, Model* model);
+        ~Animation();
 
-    ~Animation();
+        Bone* findBone(const std::string& name);
+        
+        float getTicksPerSecond();
+        float getDuration();
+        const AssimpNodeData& getRootNode();
 
-    Bone* findBone(const std::string& name);
-	
-    float getTicksPerSecond();
-    float getDuration();
-    const AssimpNodeData& getRootNode();
-
-    const std::map<std::string,BoneInfo>& getBoneIDMap();
+        const std::map<std::string,BoneInfo>& getBoneIDMap();
 };

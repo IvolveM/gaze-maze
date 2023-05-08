@@ -9,18 +9,18 @@
 
 class Animator
 {	
-public:
-    Animator(Animation* animation);
-	
-    void updateAnimation(float dt);
-	
-    void playAnimation(Animation* pAnimation);
-    void palculateBoneTransform(const AssimpNodeData* node, glm::mat4 parentTransform);
-    std::vector<glm::mat4> getFinalBoneMatrices();
-		
-private:
-    std::vector<glm::mat4> finalBoneMatrices;
-    Animation* currentAnimation;
-    float currentTime;
-    float deltaTime;	
+    public:
+        Animator(Animation* animation);
+        
+        void updateAnimation(float dt);
+        
+        void playAnimation(Animation* pAnimation);
+        void calculateBoneTransform(const AssimpNodeData* node, glm::mat4 parentTransform);
+        std::vector<glm::mat4> getFinalBoneMatrices();
+            
+    private:
+        std::vector<glm::mat4> finalBoneMatrices;
+        Animation* currentAnimation;
+        float currentTime;
+        float deltaTime;
 };
