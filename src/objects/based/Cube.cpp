@@ -5,7 +5,7 @@ Cube::Cube(glm::vec3 position) :
 	Mesh{position, glm::vec3(1.0f), Collisioner::BoundingBoxType::CUBE},
     shader{ResourceManager::getShader("default")},
     diffuse{ResourceManager::getTexture("wallDiffuse")},
-	specular{ResourceManager::getTexture("wallDiffuse")}
+	specular{ResourceManager::getTexture("wallSpecular")}
 {
 	initVertices();
 	initDefaultVaoVbo();
@@ -15,7 +15,7 @@ Cube::Cube(std::vector<glm::vec3> instancePositions, glm::vec3 size) :
 	Mesh{instancePositions, size, Collisioner::BoundingBoxType::CUBE},
     shader{ResourceManager::getShader("defaultInstancing")},
     diffuse{ResourceManager::getTexture("wallDiffuse")},
-	specular{ResourceManager::getTexture("wallDiffuse")}
+	specular{ResourceManager::getTexture("wallSpecular")}
 {
 	initVertices();
 

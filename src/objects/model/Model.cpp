@@ -1,7 +1,7 @@
 #include "Model.h"
 
 Model::Model(
-    char *path,
+    std::string path,
     glm::vec3 position,
     glm::vec3 size,
     float rotationAngle,

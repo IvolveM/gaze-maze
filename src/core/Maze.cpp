@@ -16,18 +16,31 @@ Maze::Maze(std::vector<std::vector<Maze::Object>> objects)
             }
             else if (obj == Maze::Object::EMPTY){
                 float x1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
-                // float x2 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
-                // float x3 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
+                float x2 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
                 float y1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
-                // float y2 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
-                // float y3 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
-                models.push_back(new Model("../assets/meshes/grassSpot/grassSpot.obj", glm::vec3(col + x1, -0.5f, row + y1)));
-                // models.push_back(Model("../assets/meshes/grassSpot/grassSpot.obj", glm::vec3(col + x2, -0.5f, row + y2)));
-                // models.push_back(Model("../assets/meshes/grassSpot/grassSpot.obj", glm::vec3(col + x3, -0.5f, row + y3)));
+                float y2 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
+                int randomNum = rand()%4;
+                if (randomNum == 0){
+                    models.push_back(new Model("../assets/meshes/Rocks/Rocks.dae", glm::vec3(col + x1, -0.35f, row + y1), glm::vec3{0.3f,0.3f,0.3f}, 0.0f, false));
+                }else if (randomNum == 1){
+                    models.push_back(new Model("../assets/meshes/RocksVar1/RocksVar1.dae", glm::vec3(col + x2, -0.35f, row + y2), glm::vec3{0.3f,0.3f,0.3f}, 0.0f, false));
+                }
+                for (int i = 0; i < 2; i++){
+                    addRandomizedModel("../assets/meshes/LowPolyPlant/LowPolyPlant.dae", glm::vec3{col, -0.55f, row}, glm::vec3{0.1f}, false);
+                }
+                addRandomizedModel("../assets/meshes/grassSpot/grassSpot.obj", glm::vec3{col, -0.5f, row});
             }
         }
     }
     cubes = new Cube{cubePositions};
+}
+
+void Maze::addRandomizedModel(std::string path, glm::vec3 position, glm::vec3 size, bool flip){
+    float x = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
+    float z = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
+    float sizeOffset = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
+    float rotation = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) * 3.14f;
+    models.push_back(new Model(path.c_str(), glm::vec3(position.x + x, position.y, position.z + z), size + glm::vec3{(sizeOffset/2.0f)/10.0f}, glm::degrees(rotation), flip));
 }
 
 Maze::~Maze()

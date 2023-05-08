@@ -41,4 +41,5 @@ class Maze {
         ColorPicker* picker;
         
         Maze(std::vector<std::vector<Maze::Object>> objects);
+        void addRandomizedModel(std::string path, glm::vec3 position, glm::vec3 size = glm::vec3{1.0f}, bool flip = true);
 };

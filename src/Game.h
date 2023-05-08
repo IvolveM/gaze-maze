@@ -44,7 +44,7 @@ class Game{
 
         Skybox* skybox;
 
-        Model* model;
+        // Model* model;
 
         void initGlfw();
 

@@ -123,7 +123,9 @@ void ResourceManager::initShaders(glm::vec3 pointLightPositions[])
 void ResourceManager::initTextures(){
     std::string texturesPath = "../assets/textures/";
     setTexture("wallDiffuse", texturesPath + "wall/diffuse.jpg");
+    setTexture("wallSpecular", texturesPath + "wall/specular.png");
     setTexture("groundDiffuse", texturesPath + "ground/diffuse.jpg");
+    setTexture("groundSpecular", texturesPath + "ground/specular.png");
     setTexture("smoke", texturesPath + "smoke/smoke.png", true);
 }
 

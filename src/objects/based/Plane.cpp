@@ -4,7 +4,7 @@ Plane::Plane(glm::vec3 position, float sizeScalar, float textureSize) :
     Mesh{glm::vec3{position}, glm::vec3{sizeScalar}},
     shader{ResourceManager::getShader("default")},
     diffuse{ResourceManager::getTexture("groundDiffuse")},
-    specular{ResourceManager::getTexture("groundDiffuse")}
+    specular{ResourceManager::getTexture("groundSpecular")}
 {
     vertices = {
 		0.5f,  0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f*sizeScalar/textureSize, 1.0f*sizeScalar/textureSize, // 1

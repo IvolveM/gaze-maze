@@ -38,7 +38,6 @@ MazeGenerator::MazeGenerator(int width, int height)
                 mazeBuilder.addWall(xWorld - 1, yWorld);
             }
         }
-        std::cout << std::endl;
     }
 }    
 
