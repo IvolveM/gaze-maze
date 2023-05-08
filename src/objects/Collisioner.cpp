@@ -48,13 +48,11 @@ bool Collisioner::isColliding(Collisioner col) {
                 this->minVec.z < col.maxVec.z;
     }
     else if (this->boxType == BoundingBoxType::SPHERE && col.boxType == BoundingBoxType::SPHERE) {
-        // TODO: SPHERE TO SPHERE COLLISION
-        // const distance = Math.sqrt(
-        //     (sphere.x - other.x) * (sphere.x - other.x) +
-        //     (sphere.y - other.y) * (sphere.y - other.y) +
-        //     (sphere.z - other.z) * (sphere.z - other.z)
-        // );
-        // return distance < sphere.radius + other.radius;
+        glm::vec3 dstVecSqrd = (this->center - col.getCenter()) * (this->center - col.getCenter());
+        float dstSqrd = dstVecSqrd.x + dstVecSqrd.y + dstVecSqrd.z;
+
+        float r1plusr2 = (this->size.x + col.size.x) * 0.5f;
+        return dstSqrd < r1plusr2 * r1plusr2;
     }
     else {
         Collisioner cube, sphere;
@@ -69,6 +67,7 @@ bool Collisioner::isColliding(Collisioner col) {
         float sphereR = sphere.size.x * 0.5f;
         glm::vec3 closestPointClamped = glm::clamp(sphere.getCenter(), cube.getMinVec(), cube.getMaxVec());
 
+        // use squared distance because 💨💨💨
         glm::vec3 dstVecSqrd = (closestPointClamped - sphere.getCenter()) * (closestPointClamped - sphere.getCenter());
         float dstSqrd = dstVecSqrd.x + dstVecSqrd.y + dstVecSqrd.z;
 
@@ -77,17 +76,24 @@ bool Collisioner::isColliding(Collisioner col) {
 }
 
 glm::vec3 Collisioner::getVectorToTranslate(Collisioner col) {
+    // find the point on the cube that is closest to the sphere
     glm::vec3 closestPointClamped = glm::clamp(this->center, col.getMinVec(), col.getMaxVec());
+    // calculate the distance to this point
     float closestDistance = glm::distance(this->center, closestPointClamped);
+
+    // find direction of this to point
     glm::vec3 direction = closestPointClamped - this->center;
-    // can't normalize 0-vector
+    // can't normalize 0-vector (happens when centers overlap -> direction to point is 0)
     if (direction == glm::vec3(0.0f)){
         return glm::vec3(1.0f);
     }
     glm::vec3 directionNormalized = glm::normalize(closestPointClamped - this->center);
-    float translationDistance = closestDistance - (this->size.x * 0.5f);
 
-    glm::vec3 translationVector = directionNormalized * translationDistance;
+    // find the penetration depth (inset)
+    float penDepth = closestDistance - (this->size.x * 0.5f);
+
+    // calculate the vector that is needed to correct the position of the colliding object
+    glm::vec3 translationVector = directionNormalized * penDepth;
     return translationVector;
 }
 
