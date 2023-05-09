@@ -29,7 +29,8 @@ class ColorPicker {
         void draw();
 
     private:
-        int currId = 1;
+        int currModelId = 1;
+        int currEnemyId = 1;
         std::unordered_map<int, Model*> modelMap;
         std::unordered_map<int, Enemy*> enemyMap;
 };

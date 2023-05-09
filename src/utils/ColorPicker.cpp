@@ -9,9 +9,9 @@ ColorPicker::~ColorPicker() {
 }
 
 int ColorPicker::addModel(Model* m) {
-    this->modelMap[currId] = m;
-    currId++;
-    return currId - 1;
+    this->modelMap[currModelId] = m;
+    currModelId++;
+    return currModelId - 1;
 }
 
 Model* ColorPicker::getModelByColor(int color) {
@@ -32,9 +32,9 @@ void ColorPicker::draw() {
 }
 
 int ColorPicker::addEnemy(Enemy* e) {
-    this->enemyMap[currId] = e;
-    currId++;
-    return currId - 1;
+    this->enemyMap[currEnemyId] = e;
+    currEnemyId++;
+    return currEnemyId - 1;
 }
 
 Enemy* ColorPicker::getEnemyByColor(int color) {

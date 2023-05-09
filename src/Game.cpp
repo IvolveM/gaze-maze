@@ -222,7 +222,7 @@ void Game::handleMouseClick() {
         this->maze->removePickableModel(static_cast<int>(pixel[0]), this->player->getPosition(), 1.25f);
     }
     else if (static_cast<int>(pixel[1]) != 0) {
-        this->maze->damageEnemy(static_cast<int>(pixel[1]));
+        this->maze->damageEnemy(static_cast<int>(pixel[1]), this->player->getPosition(), 5.0f);
     }
 }
 

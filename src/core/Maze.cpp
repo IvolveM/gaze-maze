@@ -209,16 +209,20 @@ void Maze::addEnemies(const int amount) {
     }
 }
 
-void Maze::damageEnemy(int id) {
+void Maze::damageEnemy(int id, const glm::vec3& playerPos, const float minDistance) {
     Enemy* e = this->picker->getEnemyByColor(id);
     if (e == nullptr){
         std::cout << "Could not find enemy with id " << id << std::endl;
         return;
     } 
+
+    if (glm::distance2(playerPos, e->getPosition()) > minDistance * minDistance)
+        return;
+
     auto it{std::find_if(enemies.begin(), enemies.end(), [e](const Enemy* enemy){return e == enemy;})};
     if (it != enemies.end()) {
         auto idx{it - enemies.begin()};
-        e->attack(25.0f);
+        e->attack(100.0f);
         if (e->isDead()) {
             this->enemies.erase(enemies.begin() + idx);
             this->picker->removeEnemyByColor(id);
