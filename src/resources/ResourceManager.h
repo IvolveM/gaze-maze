@@ -15,8 +15,8 @@ class ResourceManager{
         static std::map<std::string, Texture> textures;
         static std::map<std::string, std::string> sounds;
 
-        static std::string appendVert(const std::string& path, bool instancing = false);
-        static std::string appendFrag(const std::string& path, bool instancing = false);
+        static std::string appendVert(const std::string& path, bool instancing = false, bool animated = false);
+        static std::string appendFrag(const std::string& path, bool instancing = false, bool animated = false);
         static void setLightSources(Shader shader, glm::vec3 pointLightPositions[]); 
     public:
         ResourceManager(ResourceManager &other) = delete;

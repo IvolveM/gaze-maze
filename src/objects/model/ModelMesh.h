@@ -33,9 +33,12 @@ class ModelMesh{
         unsigned int VAO;
         unsigned int VBO, EBO;
 
+        std::vector<glm::mat4> instanceModelMatrices = {};
+
         void setupMesh();
     public:
         ModelMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<MeshTexture> textures);
+        ModelMesh(std::vector<glm::mat4> instanceModelMatrices, std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<MeshTexture> textures);
         void draw(Shader &shader);
         void drawPicker(Shader &shader);
 };

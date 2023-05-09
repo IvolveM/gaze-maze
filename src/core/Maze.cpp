@@ -14,21 +14,26 @@ Maze::Maze(std::vector<std::vector<Maze::Object>> objects)
                 auto cubePos = glm::vec3(col, 0, row);
                 cubePositions.push_back(cubePos);
             }
-            else if (obj == Maze::Object::EMPTY){
-                int randomNum = rand() % 4;
-                int placeFlower = rand() % 2;
-                if (randomNum == 0){
-                    addRandomizedModel("../assets/meshes/Rocks/Rocks.dae", glm::vec3{col, -0.35f, row}, glm::vec3{0.3f}, false);
-                }else if (randomNum == 1){
-                    addRandomizedModel("../assets/meshes/RocksVar1/RocksVar1.dae", glm::vec3{col, -0.35f, row}, glm::vec3{0.3f}, false);
-                }
-                if (placeFlower) {
-                    addRandomizedModel("../assets/meshes/LowPolyPlant/LowPolyPlant.dae", glm::vec3{col, -0.55f, row}, glm::vec3{0.1f}, false);
-                }
-                addRandomizedModel("../assets/meshes/grassSpot/grassSpot.obj", glm::vec3{col, -0.5f, row});
-            }
+            // else if (obj == Maze::Object::EMPTY){
+            //     int randomNum = rand() % 4;
+            //     int placeFlower = rand() % 2;
+            //     if (randomNum == 0){
+            //         addRandomizedModel("../assets/meshes/Rocks/Rocks.dae", glm::vec3{col, -0.35f, row}, glm::vec3{0.3f}, false);
+            //     }else if (randomNum == 1){
+            //         addRandomizedModel("../assets/meshes/RocksVar1/RocksVar1.dae", glm::vec3{col, -0.35f, row}, glm::vec3{0.3f}, false);
+            //     }
+            //     if (placeFlower) {
+            //         addRandomizedModel("../assets/meshes/LowPolyPlant/LowPolyPlant.dae", glm::vec3{col, -0.55f, row}, glm::vec3{0.1f}, false);
+            //     }
+            //     addRandomizedModel("../assets/meshes/grassSpot/grassSpot.obj", glm::vec3{col, -0.5f, row});
+            // }
         }
     }
+    glm::mat4 model{1.0f};
+    model = glm::translate(model, glm::vec3{0.0f, 1.0f, 0.0f});
+    std::vector<glm::mat4> modelPositions = {};
+    modelPositions.push_back(model);
+    models.push_back(new Model("../assets/meshes/Rocks/Rocks.dae", modelPositions, false));
     addSpawnSurroundingCubes(cubePositions);
     cubes = new Cube{cubePositions};
 }
@@ -66,7 +71,7 @@ Maze::~Maze()
 
 void Maze::draw()
 {
-    cubes->draw();
+    // cubes->draw();
     for (auto model: models){
         model->draw();
     }

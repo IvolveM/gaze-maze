@@ -9,6 +9,36 @@ ModelMesh::ModelMesh(std::vector<Vertex> vertices, std::vector<unsigned int> ind
     setupMesh();
 }
 
+ModelMesh::ModelMesh(std::vector<glm::mat4> instanceModelMatrices, std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<MeshTexture> textures)
+    : instanceModelMatrices{instanceModelMatrices},
+    vertices{vertices},
+    indices{indices},
+    textures{textures}
+{
+    setupMesh();
+
+	unsigned int instancingVBO;
+    glGenBuffers(1, &instancingVBO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, instancingVBO);
+    glBufferData(GL_ARRAY_BUFFER, this->instanceModelMatrices.size() * sizeof(glm::mat4), &this->instanceModelMatrices[0], GL_DYNAMIC_DRAW);
+	size_t vec4Size = sizeof(glm::vec4);
+
+	glEnableVertexAttribArray(7);
+	glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, 4*vec4Size, (void*)0);
+	glEnableVertexAttribArray(8);
+	glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, 4*vec4Size, (void*)(vec4Size));
+	glEnableVertexAttribArray(9);
+	glVertexAttribPointer(9, 4, GL_FLOAT, GL_FALSE, 4*vec4Size, (void*)(2 * vec4Size));
+	glEnableVertexAttribArray(10);
+	glVertexAttribPointer(10, 4, GL_FLOAT, GL_FALSE, 4*vec4Size, (void*)(3 * vec4Size));
+
+	glVertexAttribDivisor(7, 1);
+	glVertexAttribDivisor(8, 1);
+	glVertexAttribDivisor(9, 1);
+	glVertexAttribDivisor(10, 1);
+}
+
 void ModelMesh::setupMesh()
 {
     glGenVertexArrays(1, &VAO);
@@ -75,15 +105,32 @@ void ModelMesh::draw(Shader &shader)
         glBindTexture(GL_TEXTURE_2D, textures[i].id);
     }
     
-    glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
+    if (instanceModelMatrices.empty()){
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
 
-    glActiveTexture(GL_TEXTURE0);
+        glActiveTexture(GL_TEXTURE0);
+    }
+    else{
+        std::cout << "drawing instanced model" << std::endl;
+        glBindVertexArray(VAO);
+        glDrawArraysInstanced(GL_TRIANGLES, 0, static_cast<unsigned int>(indices.size()), instanceModelMatrices.size());
+        glBindVertexArray(0);
+        
+        glActiveTexture(GL_TEXTURE0);
+    }
 }
 
 void ModelMesh::drawPicker(Shader &shader) {
-    glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
+    if (instanceModelMatrices.empty()){
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
+    }
+    else{
+        glBindVertexArray(VAO);
+        glDrawArraysInstanced(GL_TRIANGLES, 0, static_cast<unsigned int>(indices.size()), instanceModelMatrices.size());
+        glBindVertexArray(0);
+    }
 }

@@ -17,14 +17,29 @@ Model::Model(
     std::cout << "Model: " << path << ": " << meshes.size() << std::endl;
 }
 
+Model::Model(
+    std::string path,
+    std::vector<glm::mat4> instancePositions, 
+    bool flipUvs,
+    Shader shader
+): shader{shader},
+    instancePositions{instancePositions},
+    pickerShader{ResourceManager::getShader("picker")}
+{
+    loadModel(path, flipUvs);
+    std::cout << "Model: " << path << ": " << meshes.size() << std::endl;
+}
+
 void Model::draw()
 {
     shader.use();
-    glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, this->position);
-    model = glm::rotate(model, glm::radians(this->rotationAngle), glm::vec3{0.0f, 1.0f, 0.0f});
-    model = glm::scale(model, this->size);
-    shader.setMatrixFloat4("model", model);
+    if (instancePositions.empty()){
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, this->position);
+        model = glm::rotate(model, glm::radians(this->rotationAngle), glm::vec3{0.0f, 1.0f, 0.0f});
+        model = glm::scale(model, this->size);
+        shader.setMatrixFloat4("model", model);
+    }
     for(unsigned int i = 0; i < meshes.size(); i++){
         meshes[i].draw(shader);
     }
@@ -108,7 +123,12 @@ ModelMesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
     }
 
     extractBoneWeightForVertices(vertices, mesh, scene);
-    return ModelMesh(vertices, indices, textures);
+    if (instancePositions.empty()){
+        return ModelMesh(vertices, indices, textures);
+    }else{
+        std::cout << "instanced model" << std::endl;
+        return ModelMesh(instancePositions, vertices, indices, textures); // instancing
+    }
 }
 
 std::vector<MeshTexture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)

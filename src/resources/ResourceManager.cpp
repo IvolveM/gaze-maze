@@ -80,7 +80,8 @@ void ResourceManager::initShaders(glm::vec3 pointLightPositions[])
     addShader("default", appendVert(defaultPath), appendFrag(defaultPath)).use().setBlockBinding("Matrices", 0);
     addShader("defaultInstancing", appendVert(defaultPath, true), appendFrag(defaultPath)).use().setBlockBinding("Matrices", 0);
     addShader("mesh", appendVert(defaultPath), appendFrag(defaultPath)).use().setBlockBinding("Matrices", 0);
-    addShader("meshAnimated", appendVert(meshPath), appendFrag(defaultPath)).use().setBlockBinding("Matrices", 0);
+    addShader("meshInstancing", appendVert(meshPath, true), appendFrag(defaultPath)).use().setBlockBinding("Matrices", 0);
+    addShader("meshAnimated", appendVert(meshPath, false, true), appendFrag(defaultPath)).use().setBlockBinding("Matrices", 0);
     addShader("skybox", appendVert(skyboxPath), appendFrag(skyboxPath)).use().setBlockBinding("Matrices", 0);
     addShader("particle", appendVert(particlePath), appendFrag(particlePath)).use().setBlockBinding("Matrices", 0);
     addShader("picker", appendVert(defaultPath), appendFrag(pickerPath)).use().setBlockBinding("Matrices", 0);
@@ -117,18 +118,26 @@ void ResourceManager::initTextures(){
     setTexture("smoke", texturesPath + "smoke/smoke.png", true);
 }
 
-std::string ResourceManager::appendVert(const std::string& path, bool instancing){
+std::string ResourceManager::appendVert(const std::string& path, bool instancing, bool animated){
+    std::string newPath = path;
     if (instancing){
-        return path + "Instancing.vert";
+        newPath += "Instancing";
     }
-    return path + ".vert";
+    if (animated){
+        newPath += "Animated";
+    }
+    return newPath + ".vert";
 }
 
-std::string ResourceManager::appendFrag(const std::string& path, bool instancing){
+std::string ResourceManager::appendFrag(const std::string& path, bool instancing, bool animated){
+    std::string newPath = path;
     if (instancing){
-        return path + "Instancing.frag";
+        newPath += "Instancing";
     }
-    return path + ".frag";
+    if (animated){
+        newPath += "Animated";
+    }
+    return newPath + ".frag";
 }
 
 void ResourceManager::setLightSources(Shader shader, glm::vec3 pointLightPositions[])

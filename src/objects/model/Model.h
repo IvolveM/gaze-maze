@@ -20,6 +20,12 @@ class Model{
             bool flipUvs = true,
             Shader shader = {ResourceManager::getShader("mesh")}
         );
+        Model(
+            std::string path, 
+            std::vector<glm::mat4> instancePositions, 
+            bool flipUvs = true, 
+            Shader shader = {ResourceManager::getShader("meshInstancing")}
+        );
         void draw();
         void drawPicker(int id);
         void move(glm::vec3 direction);
@@ -31,11 +37,14 @@ class Model{
     private:
         Shader shader;
         Shader pickerShader;
-        glm::vec3 position, size;
+        glm::vec3 position = glm::vec3{0.0f}, size = glm::vec3{1.0f};
         float rotationAngle;
 
         std::vector<ModelMesh> meshes;
         std::string directory;
+
+        std::vector<glm::mat4> instancePositions;
+
         void loadModel(std::string path, bool flipUvs);
         void processNode(aiNode *node, const aiScene *scene);
         ModelMesh processMesh(aiMesh *mesh, const aiScene *scene);
