@@ -37,6 +37,7 @@ ModelMesh::ModelMesh(std::vector<glm::mat4> instanceModelMatrices, std::vector<V
 	glVertexAttribDivisor(8, 1);
 	glVertexAttribDivisor(9, 1);
 	glVertexAttribDivisor(10, 1);
+    glBindVertexArray(0);
 }
 
 void ModelMesh::setupMesh()
@@ -73,7 +74,6 @@ void ModelMesh::setupMesh()
     // weights
     glEnableVertexAttribArray(6);
     glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, weights));
-    glBindVertexArray(0);
 }
 
 void ModelMesh::draw(Shader &shader)

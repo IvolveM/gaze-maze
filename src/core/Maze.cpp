@@ -30,7 +30,7 @@ Maze::Maze(std::vector<std::vector<Maze::Object>> objects)
         }
     }
     glm::mat4 model{1.0f};
-    model = glm::translate(model, glm::vec3{0.0f, 1.0f, 0.0f});
+    model = glm::translate(model, glm::vec3{0.0f, 0.0f, 0.0f});
     std::vector<glm::mat4> modelPositions = {};
     modelPositions.push_back(model);
     models.push_back(new Model("../assets/meshes/Rocks/Rocks.dae", modelPositions, false));
