@@ -15,13 +15,14 @@ Maze::Maze(std::vector<std::vector<Maze::Object>> objects)
                 cubePositions.push_back(cubePos);
             }
             else if (obj == Maze::Object::EMPTY){
-                int randomNum = rand()%4;
+                int randomNum = rand() % 4;
+                int placeFlower = rand() % 2;
                 if (randomNum == 0){
                     addRandomizedModel("../assets/meshes/Rocks/Rocks.dae", glm::vec3{col, -0.35f, row}, glm::vec3{0.3f}, false);
                 }else if (randomNum == 1){
                     addRandomizedModel("../assets/meshes/RocksVar1/RocksVar1.dae", glm::vec3{col, -0.35f, row}, glm::vec3{0.3f}, false);
                 }
-                for (int i = 0; i < 2; i++){
+                if (placeFlower) {
                     addRandomizedModel("../assets/meshes/LowPolyPlant/LowPolyPlant.dae", glm::vec3{col, -0.55f, row}, glm::vec3{0.1f}, false);
                 }
                 addRandomizedModel("../assets/meshes/grassSpot/grassSpot.obj", glm::vec3{col, -0.5f, row});
