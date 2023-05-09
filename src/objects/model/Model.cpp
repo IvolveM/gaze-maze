@@ -14,6 +14,7 @@ Model::Model(
     rotationAngle{rotationAngle}
 {
     loadModel(path, flipUvs);
+    std::cout << "Model: " << path << ": " << meshes.size() << std::endl;
 }
 
 void Model::draw()

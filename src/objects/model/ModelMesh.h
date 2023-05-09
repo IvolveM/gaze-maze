@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <ranges>
 #include "../../resources/ResourceManager.h"
 #include "../../stb_image.h"
 
@@ -28,7 +29,7 @@ class ModelMesh{
         // mesh Data
         std::vector<Vertex>       vertices;
         std::vector<unsigned int> indices;
-        std::vector<MeshTexture>      textures;
+        std::vector<MeshTexture>  textures;
         unsigned int VAO;
         unsigned int VBO, EBO;
 

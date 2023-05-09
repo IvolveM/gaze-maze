@@ -6,6 +6,7 @@
 
 #include <vector>
 #include <random>
+#include <numeric>
 
 class Maze {
     public:

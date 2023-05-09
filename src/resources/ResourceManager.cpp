@@ -90,33 +90,21 @@ void ResourceManager::initShaders(glm::vec3 pointLightPositions[])
     Shader defaultShader = getShader("default");
     defaultShader.use();
     setLightSources(defaultShader, pointLightPositions);
-    defaultShader.setFloat3("material.ambient", 1.0f, 1.0f, 1.0f);
-    defaultShader.setFloat3("material.diffuse", 0.55f, 0.55f, 0.55f);
-    defaultShader.setFloat3("material.specular", 0.7f, 0.7f, 0.7f);
     defaultShader.setFloat("material.shininess", 0.05f);
 
     Shader instanceShader = getShader("defaultInstancing");
     instanceShader.use();
     setLightSources(instanceShader, pointLightPositions);
-    instanceShader.setFloat3("material.ambient", 1.0f, 1.0f, 1.0f);
-    instanceShader.setFloat3("material.diffuse", 0.55f, 0.55f, 0.55f);
-    instanceShader.setFloat3("material.specular", 0.7f, 0.7f, 0.7f);
     instanceShader.setFloat("material.shininess", 0.25f);
 
     Shader meshShader = getShader("mesh");
     meshShader.use();
     setLightSources(meshShader, pointLightPositions);
-    meshShader.setFloat3("material.ambient", 1.0f, 1.0f, 1.0f);
-    meshShader.setFloat3("material.diffuse", 0.55f, 0.55f, 0.55f);
-    meshShader.setFloat3("material.specular", 0.7f, 0.7f, 0.7f);
     meshShader.setFloat("material.shininess", 0.25f);
 
     Shader animatedMeshShader = getShader("meshAnimated");
     animatedMeshShader.use();
     setLightSources(animatedMeshShader, pointLightPositions);
-    animatedMeshShader.setFloat3("material.ambient", 1.0f, 1.0f, 1.0f);
-    animatedMeshShader.setFloat3("material.diffuse", 0.55f, 0.55f, 0.55f);
-    animatedMeshShader.setFloat3("material.specular", 0.7f, 0.7f, 0.7f);
     animatedMeshShader.setFloat("material.shininess", 0.25f);
 }
 
