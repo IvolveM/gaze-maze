@@ -2,22 +2,23 @@
 
 Enemy::Enemy(
     float health, 
-    std::pair<int,int> initialPos, 
-    std::vector<std::vector<Maze::Object>> grid,
+    glm::ivec2 initialPos, 
+    std::vector<std::vector<MazeItem::Object>> grid,
     glm::vec3 gridBlockSize
 ) : 
-    Entity{glm::vec3(initialPos.first, 0.0f, initialPos.second) * gridBlockSize},
+    Entity{glm::vec3(initialPos.x, 0.0f, initialPos.y) * gridBlockSize},
     health{health},
     grid{grid},
     gridBlockSize{gridBlockSize},
     gridPosition{initialPos},
     movingDir{0.0f, 0.0f, 0.0f},
     particleGenerator{100, ResourceManager::getTexture("smoke")},
-    targetPos{0.0f, 0.0f, 0.0f}
+    targetPos{this->position}
 {
+    std::cout << "imposter initial pos: " << glm::to_string(initialPos) << std::endl;
     model = new Model(
         "../assets/meshes/Amongus/scene.gltf", 
-        glm::vec3{0.0f, -0.5f, 0.0f}, 
+        glm::vec3{this->position.x, -0.5f, this->position.z}, 
         glm::vec3{0.005f},
         0.0f,
         false,
@@ -31,14 +32,14 @@ void Enemy::update(float dt) {
     // target reached
     if (this->distanceToTravel <= 0.0f) {
         // lock to target        
-        this->gridPosition = std::pair<int,int>(targetPos.x, targetPos.z);
+        this->gridPosition = glm::ivec2(targetPos.x, targetPos.z);
         this->model->move(targetPos - position);
         this->position = targetPos;
 
         // find new target and set new moving direction
         this->targetPos = calculateNewTargetPos();
         this->distanceToTravel = glm::distance(this->targetPos, this->position);
-        this->movingDir = glm::normalize(this->targetPos - this->position);
+        this->movingDir = this->targetPos - this->position;
         updateRotation();
     }
     updateNewPosition(dt);
@@ -64,20 +65,20 @@ void Enemy::draw() {
 }
 
 glm::vec3 Enemy::calculateNewTargetPos() {
-    std::vector<std::pair<int, int>> possibleDirs = {
+    std::vector<glm::ivec2> possibleDirs = {
         {1,0}, {0,1},
         {-1,0}, {0,-1}
     };
-    std::vector<std::pair<int, int>> possiblePos = {};
+    std::vector<glm::ivec2> possiblePos = {};
     for (auto dir : possibleDirs) {
-        std::pair<int,int> newPos = { this->gridPosition.second + dir.second, this->gridPosition.first + dir.first };
-        if (inBounds(newPos) && grid[newPos.first][newPos.second] == Maze::Object::EMPTY) {
+        glm::ivec2 newPos = { this->gridPosition.y + dir.y, this->gridPosition.x + dir.x };
+        if (inBounds(newPos) && grid[newPos.x][newPos.y] == MazeItem::Object::EMPTY) {
             possiblePos.push_back(newPos);
         }
     }
     std::srand(time(NULL));
-    std::pair<int,int> newGridPos = possiblePos[rand() % possiblePos.size()];
-    return glm::vec3(newGridPos.second, 0.0f, newGridPos.first);
+    glm::ivec2 newGridPos = possiblePos[rand() % possiblePos.size()];
+    return glm::vec3(newGridPos.y, 0.0f, newGridPos.x);
 }
 
 void Enemy::updateNewPosition(float dt) {
@@ -92,9 +93,9 @@ void Enemy::updateNewPosition(float dt) {
     this->distanceToTravel -= glm::length(toIncrement);
 }
 
-bool Enemy::inBounds(std::pair<int,int> pos) {
-    return pos.first >= 0 && pos.first <= this->grid.size() 
-        && pos.second >= 0 && pos.second <= this->grid[0].size();
+bool Enemy::inBounds(const glm::ivec2 &pos) {
+    return pos.x >= 0 && pos.x <= this->grid.size() 
+        && pos.y >= 0 && pos.y <= this->grid[0].size();
 }
 
 void Enemy::updateRotation()

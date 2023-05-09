@@ -1,6 +1,6 @@
 #include "Maze.h"
 
-Maze::Maze(std::vector<std::vector<Maze::Object>> objects)
+Maze::Maze(std::vector<std::vector<MazeItem::Object>> objects)
     : objects{objects},
     picker{new ColorPicker()}
 {
@@ -9,12 +9,12 @@ Maze::Maze(std::vector<std::vector<Maze::Object>> objects)
 
     for (int row = 0; row < objects.size(); row++){
         for (int col = 0; col < objects[row].size(); col++){
-            Object obj = objects[row][col];
-            if (obj == Maze::Object::WALL){
+            MazeItem::Object obj = objects[row][col];
+            if (obj == MazeItem::Object::WALL){
                 auto cubePos = glm::vec3(col, 0, row);
                 cubePositions.push_back(cubePos);
             }
-            else if (obj == Maze::Object::EMPTY){
+            else if (obj == MazeItem::Object::EMPTY){
                 int randomNum = rand() % 4;
                 int placeFlower = rand() % 2;
                 if (randomNum == 0){
@@ -59,16 +59,26 @@ void Maze::addSpawnSurroundingCubes(std::vector<glm::vec3> &cubePositions){
 Maze::~Maze()
 {
     delete cubes;
-    for (auto m : models)
-        delete m;
+    for (auto model : models)
+        delete model;
     delete picker;
+    for (auto enemy : enemies)
+        delete enemy;
 }
 
-void Maze::draw()
-{
+void Maze::draw() {
     cubes->draw();
-    for (auto model: models){
+    for (const auto& model: models){
         model->draw();
+    }
+    for (const auto& enemy: enemies){
+        enemy->draw();
+    }
+}
+
+void Maze::update(const float dt) {
+    for (const auto& enemy: enemies){
+        enemy->update(dt);
     }
 }
 
@@ -78,7 +88,7 @@ Maze::MazeBuilder::MazeBuilder(int width, int height)
     height{height},
     objects {
         height,
-        std::vector{width, Maze::Object::EMPTY}
+        std::vector{width, MazeItem::Object::EMPTY}
     }
 {
 
@@ -86,17 +96,17 @@ Maze::MazeBuilder::MazeBuilder(int width, int height)
 
 void Maze::MazeBuilder::addWall(int x, int y)
 {
-    objects[y][x] = Maze::Object::WALL;
+    objects[y][x] = MazeItem::Object::WALL;
 }
 
 Maze* Maze::MazeBuilder::build()
 {
-    objects[0][0] = Maze::Object::EMPTY;
-    objects[0][1] = Maze::Object::EMPTY;
-    objects[1][0] = Maze::Object::EMPTY;
-    objects[height - 1][width - 1] = Maze::Object::EMPTY;
-    objects[height - 1][width - 2] = Maze::Object::EMPTY;
-    objects[height - 2][width - 1] = Maze::Object::EMPTY;
+    objects[0][0] = MazeItem::Object::EMPTY;
+    objects[0][1] = MazeItem::Object::EMPTY;
+    objects[1][0] = MazeItem::Object::EMPTY;
+    objects[height - 1][width - 1] = MazeItem::Object::EMPTY;
+    objects[height - 1][width - 2] = MazeItem::Object::EMPTY;
+    objects[height - 2][width - 1] = MazeItem::Object::EMPTY;
     return new Maze(objects);
 }
 
@@ -104,16 +114,11 @@ Mesh Maze::getMesh(){
     return *(this->cubes);
 }
 
-std::vector<std::vector<Maze::Object>> Maze::getGrid() {
-    return this->objects;
-}
-
 void Maze::addPickableModels(char* modelPath, const int amount, const bool flipUvs) {
-    srand(unsigned(time(NULL)));
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<double> distPos(-0.25, 0.25);
-    std::uniform_real_distribution<double> distRot(0, 359);
+    std::uniform_int_distribution<> distRot(0, 359);
 
     // using a float in range [0,1] and rounding it after seems to produce less clusters
     std::uniform_real_distribution<double> choice(0, 1);
@@ -124,8 +129,8 @@ void Maze::addPickableModels(char* modelPath, const int amount, const bool flipU
             if (count == amount) 
                 return;
 
-            Object obj = objects[row][col];
-            if (obj == Maze::Object::EMPTY && std::round(choice(gen))){
+            MazeItem::Object obj = objects[row][col];
+            if (obj == MazeItem::Object::EMPTY && std::round(choice(gen))){
                 float x = distPos(gen);
                 float z = distPos(gen);
                 float r = distRot(gen);
@@ -142,12 +147,16 @@ void Maze::addPickableModels(char* modelPath, const int amount, const bool flipU
     }
 }
 
-void Maze::removePickableModel(unsigned char pixel[4]) {
+void Maze::removePickableModel(unsigned char pixel[4], const glm::vec3& playerPos, const float minDistance) {
     Model* m = this->picker->getModelByColor(pixel);
     if (m == nullptr){
         std::cout << "Could not find object with id " << pixel << std::endl;
         return;
     } 
+
+    if (glm::distance2(playerPos, m->getPosition()) > minDistance * minDistance)
+        return;
+
     auto it{std::find_if(models.begin(), models.end(), [m](const Model* model){return m == model;})};
     if (it != models.end()) {
         auto idx{it - models.begin()};
@@ -155,8 +164,32 @@ void Maze::removePickableModel(unsigned char pixel[4]) {
         this->picker->removeModelByColor(pixel);
         delete m;
     }
+    ResourceManager::playSound("eating");
 }
 
 void Maze::drawPickerBuffer() {
     this->picker->drawModels();
+}
+
+glm::ivec2 Maze::getRandomEmptyPos() const {
+    std::vector<glm::ivec2> empty = {};
+    for (int row = 0; row < objects.size(); row++){
+        for (int col = 0; col < objects[row].size(); col++){
+            if (objects[row][col] == MazeItem::Object::EMPTY) {
+                empty.push_back(glm::ivec2(col, row));
+            }
+        }
+    }
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> randomPos(0, empty.size()-1);
+    return empty[randomPos(gen)];
+}
+
+void Maze::addEnemies(const int amount) {
+    for (int i = 0; i < amount; i++) {
+        this->enemies.push_back(
+            new Enemy(100.0f, getRandomEmptyPos(), objects, glm::vec3(1.0f,1.0f,1.0f))
+        );
+    }
 }

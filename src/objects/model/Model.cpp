@@ -46,6 +46,10 @@ void Model::loadModel(std::string path, bool flipUvs)
     processNode(scene->mRootNode, scene);
 }
 
+glm::vec3 Model::getPosition() const {
+    return this->position;
+}
+
 void Model::processNode(aiNode *node, const aiScene *scene)
 {
     // process meshes

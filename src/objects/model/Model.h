@@ -23,6 +23,7 @@ class Model{
         void draw();
         void drawPicker(int id);
         void move(glm::vec3 direction);
+        glm::vec3 getPosition() const;
 
         auto& getBoneInfoMap() { return boneInfoMap; }
         int& getBoneCount() { return boneCounter; }

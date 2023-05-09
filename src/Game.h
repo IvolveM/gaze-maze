@@ -19,7 +19,6 @@
 #include "core/Maze.h"
 #include "utils/MazeLoader.h"
 #include "utils/MazeGenerator.h"
-#include "entities/Enemy.h"
 #include "utils/ColorPicker.h"
 #include "core/Skybox.h"
 #include "objects/Crosshair.h"
@@ -40,7 +39,6 @@ class Game{
         Maze* maze;
         std::vector<Model*> lights{};
         Plane* ground;
-        Enemy* enemy;
 
         Skybox* skybox;
 
@@ -51,6 +49,8 @@ class Game{
         unsigned int pickerBuffer;
         void initPickerBuffer();
 
+        void fillMaze();
+
         void render();
         void renderPickerBuffer();
         
@@ -59,7 +59,6 @@ class Game{
         void processEvents();
 
         void handleMouse();
-        static void mouseClickCallback(GLFWwindow* window, int button, int action, int mods);
 
     public:
         Game(int width, int height);
