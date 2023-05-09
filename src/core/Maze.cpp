@@ -7,6 +7,10 @@ Maze::Maze(std::vector<std::vector<Maze::Object>> objects)
     srand(unsigned(time(NULL)));
     std::vector<glm::vec3> cubePositions{};
 
+    std::vector<glm::mat4> rockPositions = {};
+    std::vector<glm::mat4> rockVarPositions = {};
+    std::vector<glm::mat4> lowPolyPlantPositions = {};
+    std::vector<glm::mat4> grassSpotPositions = {};
     for (int row = 0; row < objects.size(); row++){
         for (int col = 0; col < objects[row].size(); col++){
             Object obj = objects[row][col];
@@ -14,36 +18,41 @@ Maze::Maze(std::vector<std::vector<Maze::Object>> objects)
                 auto cubePos = glm::vec3(col, 0, row);
                 cubePositions.push_back(cubePos);
             }
-            // else if (obj == Maze::Object::EMPTY){
-            //     int randomNum = rand() % 4;
-            //     int placeFlower = rand() % 2;
-            //     if (randomNum == 0){
-            //         addRandomizedModel("../assets/meshes/Rocks/Rocks.dae", glm::vec3{col, -0.35f, row}, glm::vec3{0.3f}, false);
-            //     }else if (randomNum == 1){
-            //         addRandomizedModel("../assets/meshes/RocksVar1/RocksVar1.dae", glm::vec3{col, -0.35f, row}, glm::vec3{0.3f}, false);
-            //     }
-            //     if (placeFlower) {
-            //         addRandomizedModel("../assets/meshes/LowPolyPlant/LowPolyPlant.dae", glm::vec3{col, -0.55f, row}, glm::vec3{0.1f}, false);
-            //     }
-            //     addRandomizedModel("../assets/meshes/grassSpot/grassSpot.obj", glm::vec3{col, -0.5f, row});
-            // }
+            else if (obj == Maze::Object::EMPTY){
+                int randomNum = rand() % 4;
+                int placeFlower = rand() % 2;
+                if (randomNum == 0){
+                    rockPositions.push_back(getRandomizedModelMatrix(glm::vec3{col, -0.35f, row}, glm::vec3{0.3f}, false));
+                }else if (randomNum == 1){
+                    rockVarPositions.push_back(getRandomizedModelMatrix(glm::vec3{col, -0.35f, row}, glm::vec3{0.3f}, false));
+                }
+                if (placeFlower) {
+                    lowPolyPlantPositions.push_back(getRandomizedModelMatrix(glm::vec3{col, -0.55f, row}, glm::vec3{0.1f}, false));
+                }
+                grassSpotPositions.push_back(getRandomizedModelMatrix(glm::vec3{col, -0.5f, row}));
+            }
         }
     }
-    glm::mat4 model{1.0f};
-    model = glm::translate(model, glm::vec3{0.0f, 0.0f, 0.0f});
-    std::vector<glm::mat4> modelPositions = {};
-    modelPositions.push_back(model);
-    models.push_back(new Model("../assets/meshes/Rocks/Rocks.dae", modelPositions, false));
+    models.push_back(new Model("../assets/meshes/Rocks/Rocks.dae", rockPositions, false));
+    models.push_back(new Model("../assets/meshes/RocksVar1/RocksVar1.dae", rockVarPositions, false));
+    models.push_back(new Model("../assets/meshes/LowPolyPlant/LowPolyPlant.dae", lowPolyPlantPositions, false));
+    models.push_back(new Model("../assets/meshes/grassSpot/grassSpot.obj", grassSpotPositions, false));
     addSpawnSurroundingCubes(cubePositions);
     cubes = new Cube{cubePositions};
 }
 
-void Maze::addRandomizedModel(std::string path, glm::vec3 position, glm::vec3 size, bool flip){
+glm::mat4 Maze::getRandomizedModelMatrix(glm::vec3 position, glm::vec3 size, bool flip){
     float x = (float) rand() / RAND_MAX - 0.5f;
     float z = (float) rand() / RAND_MAX - 0.5f;
     float sizeOffset = (float) rand() / RAND_MAX - 0.5f;
     float rotation = (float) rand() / RAND_MAX * 360.0f;
-    models.push_back(new Model(path.c_str(), glm::vec3(position.x + x, position.y, position.z + z), size + glm::vec3{(sizeOffset/2.0f)/10.0f}, rotation, flip));
+    glm::vec3 newPosition(position.x + x, position.y, position.z + z);
+    glm::vec3 newSize = size + glm::vec3{(sizeOffset/2.0f)/10.0f};
+    glm::mat4 model{1.0f};
+    model = glm::translate(model, newPosition);
+    model = glm::scale(model, newSize);
+    model = glm::rotate(model, glm::radians(rotation), glm::vec3{0.0f, 1.0f, 0.0f});
+    return model;
 }
 
 void Maze::addSpawnSurroundingCubes(std::vector<glm::vec3> &cubePositions){
@@ -71,7 +80,7 @@ Maze::~Maze()
 
 void Maze::draw()
 {
-    // cubes->draw();
+    cubes->draw();
     for (auto model: models){
         model->draw();
     }

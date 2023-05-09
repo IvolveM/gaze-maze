@@ -113,7 +113,6 @@ void ModelMesh::draw(Shader &shader)
         glActiveTexture(GL_TEXTURE0);
     }
     else{
-        std::cout << "drawing instanced model" << std::endl;
         glBindVertexArray(VAO);
         glDrawArraysInstanced(GL_TRIANGLES, 0, static_cast<unsigned int>(indices.size()), instanceModelMatrices.size());
         glBindVertexArray(0);
