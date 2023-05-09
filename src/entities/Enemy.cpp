@@ -99,8 +99,8 @@ void Enemy::updateNewPosition(float dt) {
 }
 
 bool Enemy::inBounds(const glm::ivec2 &pos) {
-    return pos.x >= 0 && pos.x <= this->grid.size() 
-        && pos.y >= 0 && pos.y <= this->grid[0].size();
+    return pos.x >= 0 && pos.x < this->grid.size() 
+        && pos.y >= 0 && pos.y < this->grid[0].size();
 }
 
 void Enemy::updateRotation()

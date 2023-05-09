@@ -197,7 +197,7 @@ glm::ivec2 Maze::getRandomEmptyPos() const {
             }
         }
     }
-    int randomPos = rand()%empty.size();
+    int randomPos = rand() % empty.size();
     return empty[randomPos];
 }
 
