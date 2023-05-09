@@ -15,7 +15,6 @@ Enemy::Enemy(
     particleGenerator{100, ResourceManager::getTexture("smoke")},
     targetPos{this->position}
 {
-    std::cout << "imposter initial pos: " << glm::to_string(initialPos) << std::endl;
     model = new Model(
         "../assets/meshes/Amongus/scene.gltf", 
         glm::vec3{this->position.x, -0.5f, this->position.z}, 
