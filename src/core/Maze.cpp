@@ -15,10 +15,6 @@ Maze::Maze(std::vector<std::vector<Maze::Object>> objects)
                 cubePositions.push_back(cubePos);
             }
             else if (obj == Maze::Object::EMPTY){
-                float x1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
-                float x2 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
-                float y1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
-                float y2 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
                 int randomNum = rand()%4;
                 if (randomNum == 0){
                     addRandomizedModel("../assets/meshes/Rocks/Rocks.dae", glm::vec3{col, -0.35f, row}, glm::vec3{0.3f}, false);
