@@ -17,6 +17,6 @@
 
 int main() {
     srand(unsigned(time(NULL)));
-    Game game = Game(1200,800);
+    Game game = Game(1920,1080);
     game.mainloop();
 }

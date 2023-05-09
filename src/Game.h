@@ -44,8 +44,6 @@ class Game{
 
         Skybox* skybox;
 
-        // Model* model;
-
         void initGlfw();
 
         unsigned int pickerBuffer;

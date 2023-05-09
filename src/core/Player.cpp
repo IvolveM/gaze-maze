@@ -88,9 +88,9 @@ void Player::handleVerticalMovement(float dt)
     }
 }
 
-void Player::doCollisions(Mesh m)
+void Player::doCollisions(std::vector<Collisioner> collisioners)
 {
-    std::vector<Collisioner> collisions = m.isColliding(this->collisioner);
+    std::vector<Collisioner> collisions = findColliding(collisioners);
     for (auto col: collisions) {
         // resolve each collision by itself
         if (col.isColliding(this->collisioner)){
@@ -103,4 +103,14 @@ void Player::resolveCollision(Collisioner c) {
     auto vec = this->collisioner.getVectorToTranslate(c);
     incrementPosition(vec);
     this->movingDirection = glm::vec2{0.0f, 0.0f};
+}
+
+std::vector<Collisioner> Player::findColliding(std::vector<Collisioner> collisioners) {
+    std::vector<Collisioner> collisionResults = {};
+    for (auto box : collisioners) {
+        if (this->collisioner.isColliding(box)) {
+            collisionResults.push_back(box);
+        }
+    }
+    return collisionResults;
 }

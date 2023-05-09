@@ -14,26 +14,44 @@ Model::Model(
     rotationAngle{rotationAngle}
 {
     loadModel(path, flipUvs);
-    std::cout << "Model: " << path << ": " << meshes.size() << std::endl;
 }
 
 Model::Model(
     std::string path,
-    std::vector<glm::mat4> instancePositions, 
+    std::vector<glm::mat4> instanceMatrices, 
     bool flipUvs,
     Shader shader
 ): shader{shader},
-    instancePositions{instancePositions},
+    instanceMatrices{instanceMatrices},
     pickerShader{ResourceManager::getShader("picker")}
 {
     loadModel(path, flipUvs);
-    std::cout << "Model: " << path << ": " << meshes.size() << std::endl;
+}
+
+Model::Model(
+    std::string path,
+    std::vector<glm::vec3> instancePositions, 
+    glm::vec3 instanceSize,
+    bool flipUvs,
+    Shader shader
+): shader{shader},
+    pickerShader{ResourceManager::getShader("picker")}
+{
+    for (auto pos: instancePositions){
+        glm::mat4 model{1.0f};
+        model = glm::translate(model, pos);
+        model = glm::scale(model, instanceSize);
+        instanceMatrices.push_back(model);
+
+        collisioners.push_back(Collisioner(glm::vec3{1.0f}, pos, Collisioner::BoundingBoxType::CUBE));
+    }
+    loadModel(path, flipUvs);
 }
 
 void Model::draw()
 {
     shader.use();
-    if (instancePositions.empty()){
+    if (instanceMatrices.empty()){
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, this->position);
         model = glm::rotate(model, glm::radians(this->rotationAngle), glm::vec3{0.0f, 1.0f, 0.0f});
@@ -123,11 +141,10 @@ ModelMesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
     }
 
     extractBoneWeightForVertices(vertices, mesh, scene);
-    if (instancePositions.empty()){
+    if (instanceMatrices.empty()){
         return ModelMesh(vertices, indices, textures);
     }else{
-        std::cout << "instanced model" << std::endl;
-        return ModelMesh(instancePositions, vertices, indices, textures); // instancing
+        return ModelMesh(instanceMatrices, vertices, indices, textures); // instancing
     }
 }
 
@@ -172,6 +189,11 @@ void Model::move(glm::vec3 direction)
 void Model::setRotation(float angle)
 {
     this->rotationAngle = angle;
+}
+
+std::vector<Collisioner> Model::getCollisioners()
+{
+    return collisioners;
 }
 
 void Model::setVertexBoneDataToDefault(Vertex &vertex){

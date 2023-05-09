@@ -20,7 +20,6 @@ Game::Game(int width, int height)
 
 	glEnable(GL_DEPTH_TEST); // enable depth testing
     glEnable(GL_CULL_FACE); // can't see inside of faces
-    // glEnable(GL_MULTISAMPLE); // enable multisampling
 
     glEnable(GL_BLEND); // enable so we can use alpha values in fragment shaders
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -64,7 +63,6 @@ Game::Game(int width, int height)
 
     this->enemy = new Enemy(100.0f, {0,0}, this->maze->getGrid(), glm::vec3(1.0f,1.0f,1.0f));
 
-    // this->model = new Model("../assets/meshes/Tree/Tree.obj", glm::vec3{0.0f, -0.5f, 0.0f});
     this->skybox = new Skybox();
 
     this->lights.push_back(new Model("../assets/meshes/Fantasy/Lantern/LanternLit.obj", pointLightPositions[0]));
@@ -92,19 +90,14 @@ void Game::initGlfw() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    // glfwWindowHint(GLFW_SAMPLES, 4); // sampling hints
-    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
-    this->window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
+    this->window = glfwCreateWindow(windowWidth, windowHeight, "Gaze Maze", NULL, NULL);
     if (window == NULL) {
         glfwTerminate();
         throw FailedGLFWInit();
     }
     glfwMakeContextCurrent(window);
-}
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-    glViewport(0, 0, width, height);
 }
 
 void Game::mainloop() {
@@ -146,7 +139,6 @@ void Game::render() {
     maze->draw();
     ground->draw();
     enemy->draw();
-    // model->draw();
     skybox->draw();
     for (auto light : lights){
         light->draw();
@@ -168,7 +160,11 @@ void Game::renderPickerBuffer() {
 void Game::processInput() {
     handleMouse();
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
-        glfwSetWindowShouldClose(window, true);
+        if (glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED){
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        }else{
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        }
     }
 
     if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS){
@@ -199,7 +195,7 @@ void Game::processInput() {
 void Game::processEvents()
 {
     player->update(this->dt);
-    player->doCollisions(this->maze->getMesh());
+    player->doCollisions(this->maze->getCollisioners());
     enemy->update(this->dt);
 }
 
@@ -248,4 +244,8 @@ void Game::mouseClickCallback(GLFWwindow* window, int button, int action, int mo
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
         clicked = true;    
     }
+}
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+    glViewport(0, 0, width, height);
 }

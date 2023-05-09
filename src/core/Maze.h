@@ -18,7 +18,7 @@ class Maze {
         ~Maze();
         void draw();
         void drawPickerBuffer();
-        Mesh getMesh();
+        std::vector<Collisioner> getCollisioners();
         std::vector<std::vector<Maze::Object>> getGrid();
 
         void addPickableModels(char* modelPath, const int amount, const bool flipUvs = true);
@@ -43,5 +43,5 @@ class Maze {
         
         Maze(std::vector<std::vector<Maze::Object>> objects);
         glm::mat4 getRandomizedModelMatrix(glm::vec3 position, glm::vec3 size = glm::vec3{1.0f}, bool flip = true);
-        void addSpawnSurroundingCubes(std::vector<glm::mat4> &cubePositions);
+        void addSpawnSurroundingCubes(std::vector<glm::vec3> &cubePositions);
 };

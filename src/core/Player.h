@@ -26,6 +26,8 @@ class Player: public Camera{
         void handleVerticalMovement(float dt);
 
         void resolveCollision(Collisioner c);
+        std::vector<Collisioner> findColliding(std::vector<Collisioner> collisioners);
+
     public:
         enum class InputEvent
         {
@@ -35,6 +37,6 @@ class Player: public Camera{
         void handleKeyInput(InputEvent event);
         
         void update(float dt);
-        void doCollisions(Mesh m);
+        void doCollisions(std::vector<Collisioner> m);
         void draw();
 };

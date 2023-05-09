@@ -5,7 +5,7 @@ Maze::Maze(std::vector<std::vector<Maze::Object>> objects)
     picker{new ColorPicker()}
 {
     srand(unsigned(time(NULL)));
-    std::vector<glm::mat4> cubeModelMatrices = {};
+    std::vector<glm::vec3> cubePositions = {};
 
     std::vector<glm::mat4> rockPositions = {};
     std::vector<glm::mat4> rockVarPositions = {};
@@ -15,10 +15,7 @@ Maze::Maze(std::vector<std::vector<Maze::Object>> objects)
         for (int col = 0; col < objects[row].size(); col++){
             Object obj = objects[row][col];
             if (obj == Maze::Object::WALL){
-                glm::mat4 model{1.0f};
-                model = glm::translate(model, glm::vec3{col, 0.0f, row});
-                model = glm::scale(model, glm::vec3{0.5f});
-                cubeModelMatrices.push_back(model);
+                cubePositions.push_back(glm::vec3{col, 0.0f, row});
             }
             else if (obj == Maze::Object::EMPTY){
                 int randomNum = rand() % 4;
@@ -40,8 +37,8 @@ Maze::Maze(std::vector<std::vector<Maze::Object>> objects)
     models.push_back(new Model("../assets/meshes/RocksVar1/RocksVar1.dae", rockVarPositions, false));
     models.push_back(new Model("../assets/meshes/LowPolyPlant/LowPolyPlant.dae", lowPolyPlantPositions, false));
     models.push_back(new Model("../assets/meshes/grassSpot/grassSpot.obj", grassSpotPositions, false));
-    addSpawnSurroundingCubes(cubeModelMatrices);
-    cubes = new Model{"../assets/meshes/Wall/Wall.dae", cubeModelMatrices};
+    addSpawnSurroundingCubes(cubePositions);
+    cubes = new Model{"../assets/meshes/Wall/Wall.dae", cubePositions, glm::vec3{0.5f}};
 }
 
 glm::mat4 Maze::getRandomizedModelMatrix(glm::vec3 position, glm::vec3 size, bool flip){
@@ -58,7 +55,7 @@ glm::mat4 Maze::getRandomizedModelMatrix(glm::vec3 position, glm::vec3 size, boo
     return model;
 }
 
-void Maze::addSpawnSurroundingCubes(std::vector<glm::mat4> &cubeModelMatrices){
+void Maze::addSpawnSurroundingCubes(std::vector<glm::vec3> &cubePositions){
     std::vector<glm::vec3> positions = {
         {-1.0f, 0.0f, -1.0f}, 
         {0.0f, 0.0f, -1.0f}, 
@@ -69,10 +66,7 @@ void Maze::addSpawnSurroundingCubes(std::vector<glm::mat4> &cubeModelMatrices){
         {-1.0f, 0.0f, 2.0f},
     };
     for(auto pos: positions){
-        glm::mat4 model{1.0f};
-        model = glm::translate(model, pos);
-        model = glm::scale(model, glm::vec3{0.5f});
-        cubeModelMatrices.push_back(model);
+        cubePositions.push_back(pos);
     }
 }
 
@@ -120,8 +114,8 @@ Maze* Maze::MazeBuilder::build()
     return new Maze(objects);
 }
 
-Mesh Maze::getMesh(){
-    return Cube();
+std::vector<Collisioner> Maze::getCollisioners(){
+    return cubes->getCollisioners();
 }
 
 std::vector<std::vector<Maze::Object>> Maze::getGrid() {
@@ -136,34 +130,32 @@ void Maze::addPickableModels(char* modelPath, const int amount, const bool flipU
     std::uniform_real_distribution<double> distRot(0, 359);
 
     // shuffle indices
-    std::vector<int> rowIndices(objects.size());
-    std::vector<int> columnIndices(objects[0].size());
-    std::iota(rowIndices.begin(), rowIndices.end(), 0);
-    std::iota(columnIndices.begin(), columnIndices.end(), 0);
-    std::random_shuffle(rowIndices.begin(), rowIndices.end());
-    std::random_shuffle(columnIndices.begin(), columnIndices.end());
+    std::vector<glm::vec2> allCoords{};
+    for (int i = 0; i < objects.size(); i++){
+        for (int j = 0; j < objects[0].size(); j++){
+            allCoords.push_back(glm::vec2{j, i});
+        }
+    }
+    std::random_shuffle(allCoords.begin(), allCoords.end());
 
     int count = 0;
+    for (auto coord : allCoords){
+        if (count == amount) 
+            return;
 
-    for (int row : rowIndices){
-        for (int col : columnIndices){
-            if (count == amount) 
-                return;
+        Object obj = objects[coord.y][coord.x];
+        if (obj == Maze::Object::EMPTY){
+            float x = distPos(gen);
+            float z = distPos(gen);
+            float r = distRot(gen);
 
-            Object obj = objects[row][col];
-            if (obj == Maze::Object::EMPTY){
-                float x = distPos(gen);
-                float z = distPos(gen);
-                float r = distRot(gen);
+            Model* m = new Model(modelPath, glm::vec3(coord.x + x, -0.43f, coord.y + z), 
+                                glm::vec3(0.3f, 0.3f, 0.3f),
+                                r, flipUvs, ResourceManager::getShader("mesh"));
+            models.push_back(m);
+            picker->addModel(m);
 
-                Model* m = new Model(modelPath, glm::vec3(col + x, -0.43f, row + z), 
-                                    glm::vec3(0.3f, 0.3f, 0.3f),
-                                    r, flipUvs, ResourceManager::getShader("mesh"));
-                models.push_back(m);
-                picker->addModel(m);
-
-                ++count;
-            }
+            ++count;
         }
     }
 }
