@@ -28,7 +28,6 @@ glm::vec3 Camera::getPosition(){
     return this->position;
 }
 
-
 void Camera::setDirectionByMouse(float xPos, float yPos)
 {
     float xOffset = xPos - lastX;

@@ -2,8 +2,6 @@
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
-bool clicked = false;
-
 Game::Game(int width, int height)
 :   windowWidth{width},
     windowHeight{height}
@@ -57,19 +55,17 @@ Game::Game(int width, int height)
 
     // this->maze = MazeLoader().loadMazeFromFile("../assets/maze.txt");
     this->maze = MazeGenerator().getMaze();
-    this->maze->addPickableModels("../assets/meshes/Fantasy/Shroom/Mushroom.obj", 20, false);
+    fillMaze();
     
     this->ground = new Plane(glm::vec3{0.0f, -0.5f, 0.0f}, 100.0f, 1.0f);
 
-    this->enemy = new Enemy(100.0f, {0,0}, this->maze->getGrid(), glm::vec3(1.0f,1.0f,1.0f));
-
+    // this->model = new Model("../assets/meshes/Tree/Tree.obj", glm::vec3{0.0f, -0.5f, 0.0f});
     this->skybox = new Skybox();
 
     this->lights.push_back(new Model("../assets/meshes/Fantasy/Lantern/LanternLit.obj", pointLightPositions[0]));
     this->lights.push_back(new Model("../assets/meshes/Fantasy/Lantern/LanternLit.obj", pointLightPositions[1]));
 
     initPickerBuffer();
-    glfwSetMouseButtonCallback(window, mouseClickCallback);
 }
 
 Game::~Game() {
@@ -80,7 +76,6 @@ Game::~Game() {
         delete light;
     }
     delete skybox;
-    delete enemy;
 
     glfwTerminate();
 }
@@ -138,7 +133,6 @@ void Game::render() {
     // handle render calls here
     maze->draw();
     ground->draw();
-    enemy->draw();
     skybox->draw();
     for (auto light : lights){
         light->draw();
@@ -185,10 +179,12 @@ void Game::processInput() {
     if(glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS){
         delete this->maze;
         this->maze = MazeLoader().loadMazeFromFile("../assets/maze.txt");
+        fillMaze();
     }
     if(glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS){
         delete this->maze;
         this->maze = MazeGenerator().getMaze();
+        fillMaze();
     }
 }
 
@@ -196,7 +192,7 @@ void Game::processEvents()
 {
     player->update(this->dt);
     player->doCollisions(this->maze->getCollisioners());
-    enemy->update(this->dt);
+    maze->update(this->dt);
 }
 
 void Game::handleMouse()
@@ -205,7 +201,7 @@ void Game::handleMouse()
     glfwGetCursorPos(window, &xPos, &yPos);
     player->setDirectionByMouse((float)xPos, (float)yPos);
 
-    if (clicked) {
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
         handleMouseClick();
     }
 }
@@ -222,10 +218,8 @@ void Game::handleMouseClick() {
     // std::cout << "Clicked color: (" << static_cast<int>(pixel[0]) << ", " << static_cast<int>(pixel[1]) << ", " << static_cast<int>(pixel[2]) << ")" << std::endl;
     
     if (static_cast<int>(pixel[0]) != 0) {
-        this->maze->removePickableModel(pixel);
-            ResourceManager::playSound("eating");
+        this->maze->removePickableModel(pixel, this->player->getPosition(), 1.25f);
     }
-    clicked = false;
 }
 
 void Game::initPickerBuffer() {
@@ -240,12 +234,11 @@ void Game::initPickerBuffer() {
     glBindTexture(GL_TEXTURE_2D, 0);
 }   
 
-void Game::mouseClickCallback(GLFWwindow* window, int button, int action, int mods) {
-    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-        clicked = true;    
-    }
-}
-
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
+}
+
+void Game::fillMaze() {
+    this->maze->addPickableModels("../assets/meshes/Fantasy/Shroom/Mushroom.obj", 20, false);
+    this->maze->addEnemies(2);
 }

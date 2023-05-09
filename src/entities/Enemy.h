@@ -4,9 +4,10 @@
 #include <utility>
 #include <glm/glm.hpp>
 #include <glm/gtx/rotate_vector.hpp>
+#include <glm/gtx/string_cast.hpp>
 
 #include "Entity.h"
-#include "../core/Maze.h"
+#include "../Globals.h"
 #include "./ParticleGenerator.h"
 
 #include "../objects/model/Model.h"
@@ -14,22 +15,24 @@
 #include "../objects/model/Animation.h"
 #include "../objects/model/Animator.h"
 
+
+
 class Enemy : public Entity {
     public:
         Enemy(
             float health, 
-            std::pair<int,int> initialPos, 
-            std::vector<std::vector<Maze::Object>> grid,
+            glm::ivec2 initialPos, 
+            std::vector<std::vector<MazeItem::Object>> grid,
             glm::vec3 gridBlockSize
         );
-        ~Enemy() = default;
+        ~Enemy();
         void update(float dt) override;
         void draw() override;
 
     private:
         glm::vec3 calculateNewTargetPos();
         void updateNewPosition(float dt);
-        bool inBounds(std::pair<int,int> pos);
+        bool inBounds(const glm::ivec2 &pos);
         void updateRotation();
 
         float health;
@@ -39,9 +42,9 @@ class Enemy : public Entity {
         glm::vec3 targetPos;
         float distanceToTravel = 0.0f;
 
-        std::vector<std::vector<Maze::Object>> grid;
+        std::vector<std::vector<MazeItem::Object>> grid;
         glm::vec3 gridBlockSize;
-        std::pair<int,int> gridPosition;
+        glm::ivec2 gridPosition;
 
         Model* model;
         Animation* animation;
