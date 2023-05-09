@@ -4,13 +4,12 @@ Maze::Maze(std::vector<std::vector<MazeItem::Object>> objects)
     : objects{objects},
     picker{new ColorPicker()}
 {
-    srand(unsigned(time(NULL)));
     std::vector<glm::vec3> cubePositions = {};
-
     std::vector<glm::mat4> rockPositions = {};
     std::vector<glm::mat4> rockVarPositions = {};
     std::vector<glm::mat4> lowPolyPlantPositions = {};
     std::vector<glm::mat4> grassSpotPositions = {};
+    
     for (int row = 0; row < objects.size(); row++){
         for (int col = 0; col < objects[row].size(); col++){
             MazeItem::Object obj = objects[row][col];
