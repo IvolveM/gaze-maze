@@ -107,6 +107,11 @@ void ResourceManager::initShaders(glm::vec3 pointLightPositions[])
     animatedMeshShader.use();
     setLightSources(animatedMeshShader, pointLightPositions);
     animatedMeshShader.setFloat("material.shininess", 0.25f);
+
+    Shader instanceMeshShader = getShader("meshInstancing");
+    instanceMeshShader.use();
+    setLightSources(instanceMeshShader, pointLightPositions);
+    instanceMeshShader.setFloat("material.shininess", 0.25f);
 }
 
 void ResourceManager::initTextures(){
