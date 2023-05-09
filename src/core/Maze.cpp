@@ -37,8 +37,8 @@ void Maze::addRandomizedModel(std::string path, glm::vec3 position, glm::vec3 si
     float x = (float) rand() / RAND_MAX - 0.5f;
     float z = (float) rand() / RAND_MAX - 0.5f;
     float sizeOffset = (float) rand() / RAND_MAX - 0.5f;
-    float rotation = (float) rand() / RAND_MAX * 3.14f;
-    models.push_back(new Model(path.c_str(), glm::vec3(position.x + x, position.y, position.z + z), size + glm::vec3{(sizeOffset/2.0f)/10.0f}, glm::degrees(rotation), flip));
+    float rotation = (float) rand() / RAND_MAX * 360.0f;
+    models.push_back(new Model(path.c_str(), glm::vec3(position.x + x, position.y, position.z + z), size + glm::vec3{(sizeOffset/2.0f)/10.0f}, rotation, flip));
 }
 
 void Maze::addSpawnSurroundingCubes(std::vector<glm::vec3> &cubePositions){
@@ -120,17 +120,23 @@ void Maze::addPickableModels(char* modelPath, const int amount, const bool flipU
     std::uniform_real_distribution<double> distPos(-0.25, 0.25);
     std::uniform_int_distribution<> distRot(0, 359);
 
-    // using a float in range [0,1] and rounding it after seems to produce less clusters
-    std::uniform_real_distribution<double> choice(0, 1);
+    // shuffle indices
+    std::vector<int> rowIndices(objects.size());
+    std::vector<int> columnIndices(objects[0].size());
+    std::iota(rowIndices.begin(), rowIndices.end(), 0);
+    std::iota(columnIndices.begin(), columnIndices.end(), 0);
+    std::random_shuffle(rowIndices.begin(), rowIndices.end());
+    std::random_shuffle(columnIndices.begin(), columnIndices.end());
+
     int count = 0;
 
-    for (int row = 0; row < objects.size(); row++){
-        for (int col = 0; col < objects[row].size(); col++){
+    for (int row : rowIndices){
+        for (int col : columnIndices){
             if (count == amount) 
                 return;
 
             MazeItem::Object obj = objects[row][col];
-            if (obj == MazeItem::Object::EMPTY && std::round(choice(gen))){
+            if (obj == MazeItem::Object::EMPTY){
                 float x = distPos(gen);
                 float z = distPos(gen);
                 float r = distRot(gen);
