@@ -21,7 +21,7 @@ ModelMesh::ModelMesh(std::vector<glm::mat4> instanceModelMatrices, std::vector<V
     glGenBuffers(1, &instancingVBO);
 
     glBindBuffer(GL_ARRAY_BUFFER, instancingVBO);
-    glBufferData(GL_ARRAY_BUFFER, this->instanceModelMatrices.size() * sizeof(glm::mat4), &this->instanceModelMatrices[0], GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, this->instanceModelMatrices.size() * sizeof(glm::mat4), &this->instanceModelMatrices[0], GL_STATIC_DRAW);
 	size_t vec4Size = sizeof(glm::vec4);
 
 	glEnableVertexAttribArray(7);
