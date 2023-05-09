@@ -37,11 +37,11 @@ class Maze {
         };
     private:
         std::vector<std::vector<Maze::Object>> objects;
-        Cube* cubes;
+        Model* cubes;
         std::vector<Model*> models{};
         ColorPicker* picker;
         
         Maze(std::vector<std::vector<Maze::Object>> objects);
-        void addRandomizedModel(std::string path, glm::vec3 position, glm::vec3 size = glm::vec3{1.0f}, bool flip = true);
-        void addSpawnSurroundingCubes(std::vector<glm::vec3> &cubePositions);
+        glm::mat4 getRandomizedModelMatrix(glm::vec3 position, glm::vec3 size = glm::vec3{1.0f}, bool flip = true);
+        void addSpawnSurroundingCubes(std::vector<glm::mat4> &cubePositions);
 };

@@ -21,7 +21,7 @@ ModelMesh::ModelMesh(std::vector<glm::mat4> instanceModelMatrices, std::vector<V
     glGenBuffers(1, &instancingVBO);
 
     glBindBuffer(GL_ARRAY_BUFFER, instancingVBO);
-    glBufferData(GL_ARRAY_BUFFER, this->instanceModelMatrices.size() * sizeof(glm::mat4), &this->instanceModelMatrices[0], GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, this->instanceModelMatrices.size() * sizeof(glm::mat4), &this->instanceModelMatrices[0], GL_STATIC_DRAW);
 	size_t vec4Size = sizeof(glm::vec4);
 
 	glEnableVertexAttribArray(7);
@@ -37,6 +37,7 @@ ModelMesh::ModelMesh(std::vector<glm::mat4> instanceModelMatrices, std::vector<V
 	glVertexAttribDivisor(8, 1);
 	glVertexAttribDivisor(9, 1);
 	glVertexAttribDivisor(10, 1);
+    glBindVertexArray(0);
 }
 
 void ModelMesh::setupMesh()
@@ -73,7 +74,6 @@ void ModelMesh::setupMesh()
     // weights
     glEnableVertexAttribArray(6);
     glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, weights));
-    glBindVertexArray(0);
 }
 
 void ModelMesh::draw(Shader &shader)
@@ -113,7 +113,6 @@ void ModelMesh::draw(Shader &shader)
         glActiveTexture(GL_TEXTURE0);
     }
     else{
-        std::cout << "drawing instanced model" << std::endl;
         glBindVertexArray(VAO);
         glDrawArraysInstanced(GL_TRIANGLES, 0, static_cast<unsigned int>(indices.size()), instanceModelMatrices.size());
         glBindVertexArray(0);

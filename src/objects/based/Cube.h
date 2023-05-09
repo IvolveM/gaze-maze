@@ -17,7 +17,7 @@ class Cube : public Mesh {
         void initDefaultVaoVbo();
 
     public:
-        Cube(glm::vec3 position);
+        Cube(glm::vec3 position = glm::vec3{0.0f});
         Cube(std::vector<glm::vec3> instancePositions, glm::vec3 size = glm::vec3(1.0f));
 
         void draw() override;
