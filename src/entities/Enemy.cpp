@@ -60,14 +60,13 @@ void Enemy::update(float dt) {
 
 void Enemy::draw() {
     this->particleGenerator.draw();
-    this->model->draw();
 
     Shader shader = ResourceManager::getShader("meshAnimated");
     shader.use();
     auto transforms = animator->getFinalBoneMatrices();
     for (int i = 0; i < transforms.size(); ++i)
         shader.setMatrixFloat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
-    model->draw();
+    this->model->draw();
 }
 
 glm::vec3 Enemy::calculateNewTargetPos() {
