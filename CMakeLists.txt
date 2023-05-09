@@ -25,13 +25,8 @@ set(IRRKLANG_LIBRARY ikpMP3.so)
 add_library(Irrklang STATIC IMPORTED)
 set_property(TARGET Irrklang PROPERTY IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/bin/irrKlang/linux-gcc-64/libIrrKlang.so)
 set(IRRKLANG_LIBRARY libIrrKlang.so)
-# add_library(IkpMP3 STATIC IMPORTED)
-# set_property(TARGET IkpMP3 PROPERTY IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/bin/linux-gcc-64/ikpFlac.so)
-# set(IRRKLANG_LIBRARY ikpFlac.so)
-# add_library(IkpFlac STATIC IMPORTED)
-# set_property(TARGET IkpFlac PROPERTY IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/bin/linux-gcc-64/ikpMP3.so)
 
-set(LIBS ${LIBS} GLAD Irrklang) #IkpMP3 IkpFlac)
+set(LIBS ${LIBS} GLAD Irrklang) 
 
 
 include_directories(${CMAKE_SOURCE_DIR}/includes)

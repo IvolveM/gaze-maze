@@ -240,5 +240,5 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 
 void Game::fillMaze() {
     this->maze->addPickableModels("../assets/meshes/Fantasy/Shroom/Mushroom.obj", 20, false);
-    this->maze->addEnemies(2);
+    this->maze->addEnemies(3);
 }

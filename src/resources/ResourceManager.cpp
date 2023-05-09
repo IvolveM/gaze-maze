@@ -150,7 +150,7 @@ void ResourceManager::setLightSources(Shader shader, glm::vec3 pointLightPositio
     // directional light
     shader.setFloat3("dirLight.direction", -0.2f, -1.0f, -0.3f);
     shader.setFloat3("dirLight.ambient", 0.1f, 0.1f, 0.1f);
-    shader.setFloat3("dirLight.diffuse", 0.0f, 0.0f, 0.0f); // darkened
+    shader.setFloat3("dirLight.diffuse", 255.0f/255.0f/100.0f, 224.0f/255.0f/100.0f, 166.0f/255.0f/100.0f); // darkened
     shader.setFloat3("dirLight.specular", 0.1f, 0.1f, 0.1f);
     for (int i = 0; i < pointLightPositions->length(); i++){
         shader.setFloat3("pointLights[" + std::to_string(i) + "].position", pointLightPositions[i]);
