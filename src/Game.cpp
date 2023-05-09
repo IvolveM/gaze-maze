@@ -33,6 +33,7 @@ Game::Game(int width, int height)
     ResourceManager::initShaders(pointLightPositions);
     ResourceManager::initTextures();
     ResourceManager::addSound("eating", "../assets/audio/eatingSound.wav");
+    ResourceManager::addSound("damage", "../assets/audio/damageSound.wav");
 
     // init shader matrices buffer
     glGenBuffers(1, &uboMatrices);
@@ -218,7 +219,10 @@ void Game::handleMouseClick() {
     // std::cout << "Clicked color: (" << static_cast<int>(pixel[0]) << ", " << static_cast<int>(pixel[1]) << ", " << static_cast<int>(pixel[2]) << ")" << std::endl;
     
     if (static_cast<int>(pixel[0]) != 0) {
-        this->maze->removePickableModel(pixel, this->player->getPosition(), 1.25f);
+        this->maze->removePickableModel(static_cast<int>(pixel[0]), this->player->getPosition(), 1.25f);
+    }
+    else if (static_cast<int>(pixel[1]) != 0) {
+        this->maze->damageEnemy(static_cast<int>(pixel[1]));
     }
 }
 

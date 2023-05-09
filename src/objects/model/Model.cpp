@@ -171,9 +171,9 @@ std::vector<MeshTexture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureT
     return textures;
 }
 
-void Model::drawPicker(int id) {
+void Model::drawPicker(glm::vec3 id) {
     this->pickerShader.use();
-    this->pickerShader.setVec3Float("idCol", glm::vec3(id, 0.0f, 0.0f));
+    this->pickerShader.setVec3Float("idCol", id);
 
     glm::mat4 model = glm::mat4(1.0f);
 	model = glm::translate(model, this->position);

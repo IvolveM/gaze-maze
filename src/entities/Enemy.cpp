@@ -60,7 +60,6 @@ void Enemy::update(float dt) {
 
 void Enemy::draw() {
     this->particleGenerator.draw();
-    this->model->draw();
 
     Shader shader = ResourceManager::getShader("meshAnimated");
     shader.use();
@@ -68,6 +67,10 @@ void Enemy::draw() {
     for (int i = 0; i < transforms.size(); ++i)
         shader.setMatrixFloat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
     model->draw();
+}
+
+void Enemy::drawPicker(glm::vec3 id) {
+    this->model->drawPicker(id);
 }
 
 glm::vec3 Enemy::calculateNewTargetPos() {
@@ -118,4 +121,12 @@ void Enemy::updateRotation()
         angle = 0.0f;
 
     this->model->setRotation(angle);
+}
+
+void Enemy::attack(float damage) {
+    this->health -= damage;
+}
+
+bool Enemy::isDead() {
+    return this->health <= 0.0f;
 }
