@@ -35,8 +35,8 @@ Maze::Maze(std::vector<std::vector<Maze::Object>> objects)
 void Maze::addRandomizedModel(std::string path, glm::vec3 position, glm::vec3 size, bool flip){
     float x = (float) rand() / RAND_MAX - 0.5f;
     float z = (float) rand() / RAND_MAX - 0.5f;
-    float sizeOffset = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) - 0.5f;
-    float rotation = static_cast <float> (rand()) / static_cast <float> (RAND_MAX) * 3.14f;
+    float sizeOffset = (float) rand() / RAND_MAX - 0.5f;
+    float rotation = (float) rand() / RAND_MAX * 3.14f;
     models.push_back(new Model(path.c_str(), glm::vec3(position.x + x, position.y, position.z + z), size + glm::vec3{(sizeOffset/2.0f)/10.0f}, glm::degrees(rotation), flip));
 }
 
