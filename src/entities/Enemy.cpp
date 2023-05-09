@@ -82,7 +82,6 @@ glm::vec3 Enemy::calculateNewTargetPos() {
             possiblePos.push_back(newPos);
         }
     }
-    std::srand(time(NULL));
     glm::ivec2 newGridPos = possiblePos[rand() % possiblePos.size()];
     return glm::vec3(newGridPos.y, 0.0f, newGridPos.x);
 }
