@@ -42,6 +42,7 @@ class Maze {
         std::vector<Model*> models{};
         std::vector<Enemy*> enemies{};
         ColorPicker* picker;
+        bool backgroundMusicPlaying = false;
         
         Maze(std::vector<std::vector<MazeItem::Object>> objects);
         glm::mat4 getRandomizedModelMatrix(glm::vec3 position, glm::vec3 size = glm::vec3{1.0f}, bool flip = true);

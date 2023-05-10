@@ -182,6 +182,10 @@ void Maze::removePickableModel(int id, const glm::vec3& playerPos, const float m
         delete m;
     }
     ResourceManager::playSound("eating");
+    if (!backgroundMusicPlaying){
+        ResourceManager::playSound("space-jazz", 0.2f, true);
+        backgroundMusicPlaying = true;
+    }
 }
 
 void Maze::drawPickerBuffer() {

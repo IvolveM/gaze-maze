@@ -221,10 +221,6 @@ void Game::handleMouseClick() {
     
     if (static_cast<int>(pixel[0]) != 0) {
         this->maze->removePickableModel(static_cast<int>(pixel[0]), this->player->getPosition(), 1.25f);
-        if (!backgroundMusicPlaying){
-            ResourceManager::playSound("space-jazz", 0.2f, true);
-            backgroundMusicPlaying = true;
-        }
     }
     else if (static_cast<int>(pixel[1]) != 0) {
         this->maze->damageEnemy(static_cast<int>(pixel[1]), this->player->getPosition(), 5.0f);
@@ -249,5 +245,5 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 
 void Game::fillMaze() {
     this->maze->addPickableModels("../assets/meshes/Fantasy/Shroom/Mushroom.obj", 20, false);
-    this->maze->addEnemies(3);
+    this->maze->addEnemies(4);
 }
