@@ -56,13 +56,14 @@ void ResourceManager::addSound(std::string soundName, std::string soundPath)
 }
 
 
-void ResourceManager::playSound(std::string soundName)
+void ResourceManager::playSound(std::string soundName, irrklang::ik_f32 volume, bool loop)
 {
     if (sounds.count(soundName) == 0){
         std::cout << "Sound -> " + soundName << std::endl;
         throw NoResourceFoundException("Sound -> " + soundName);
     }
-    soundEngine->play2D(sounds.at(soundName).c_str());
+    auto sound = soundEngine->play2D(sounds.at(soundName).c_str(), loop, false, true);
+    sound->setVolume(volume);
 }
 
 

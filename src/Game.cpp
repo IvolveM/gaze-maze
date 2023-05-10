@@ -34,6 +34,7 @@ Game::Game(int width, int height)
     ResourceManager::initTextures();
     ResourceManager::addSound("eating", "../assets/audio/eatingSound.wav");
     ResourceManager::addSound("damage", "../assets/audio/damageSound.wav");
+    ResourceManager::addSound("space-jazz", "../assets/audio/space-jazz.mp3");
 
     // init shader matrices buffer
     glGenBuffers(1, &uboMatrices);
@@ -220,6 +221,10 @@ void Game::handleMouseClick() {
     
     if (static_cast<int>(pixel[0]) != 0) {
         this->maze->removePickableModel(static_cast<int>(pixel[0]), this->player->getPosition(), 1.25f);
+        if (!backgroundMusicPlaying){
+            ResourceManager::playSound("space-jazz", 0.2f, true);
+            backgroundMusicPlaying = true;
+        }
     }
     else if (static_cast<int>(pixel[1]) != 0) {
         this->maze->damageEnemy(static_cast<int>(pixel[1]), this->player->getPosition(), 5.0f);

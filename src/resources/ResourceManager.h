@@ -28,7 +28,7 @@ class ResourceManager{
 
         static Texture getTexture(std::string);
         static Shader getShader(std::string);
-        static void playSound(std::string soundName);
+        static void playSound(std::string soundName, irrklang::ik_f32 volume = 1.0f, bool loop = false);
 
         static void initShaders(glm::vec3 pointLightPositions[]);
         static void initTextures();

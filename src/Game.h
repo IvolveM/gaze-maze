@@ -34,6 +34,8 @@ class Game{
 
         float dt = 0.0f;
 
+        bool backgroundMusicPlaying = false;
+
         Crosshair* crosshair;
         Player* player;
         Maze* maze;
