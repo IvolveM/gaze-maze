@@ -15,8 +15,11 @@ class Entity {
         Entity(glm::vec3 position);
         ~Entity() = default;
 
+        glm::vec3 getPosition() const { return this->position; };
+
         virtual void update(float dt) = 0;
         virtual void draw() = 0;
+        virtual void drawPicker(glm::vec3 id) {};
 
     protected:
         glm::vec3 position;

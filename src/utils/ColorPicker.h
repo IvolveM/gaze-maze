@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 
 #include "../objects/model/Model.h"
+#include "../entities/Enemy.h"
 
 #include <iostream>
 #include <unordered_map>
@@ -18,11 +19,18 @@ class ColorPicker {
         ~ColorPicker();
 
         int addModel(Model* m);
-        Model* getModelByColor(unsigned char color[4]);
-        void removeModelByColor(unsigned char color[4]);
-        void drawModels();
+        int addEnemy(Enemy* e);
+
+        Model* getModelByColor(int color);
+        Enemy* getEnemyByColor(int color);
+
+        void removeModelByColor(int color);
+        void removeEnemyByColor(int color);
+        void draw();
 
     private:
-        int currId = 1;
+        int currModelId = 1;
+        int currEnemyId = 1;
         std::unordered_map<int, Model*> modelMap;
+        std::unordered_map<int, Enemy*> enemyMap;
 };

@@ -21,8 +21,9 @@ class Maze {
         std::vector<std::vector<MazeItem::Object>> getGrid();
 
         void addPickableModels(char* modelPath, const int amount, const bool flipUvs = true);
-        void removePickableModel(unsigned char pixel[4], const glm::vec3& playerPos, const float minDistance);
+        void removePickableModel(int id, const glm::vec3& playerPos, const float minDistance);
         void addEnemies(const int amount);
+        void damageEnemy(int id, const glm::vec3& playerPos, const float minDistance);
 
         // builder class
         class MazeBuilder{

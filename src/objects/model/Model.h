@@ -35,7 +35,7 @@ class Model{
             Shader shader = {ResourceManager::getShader("meshInstancing")}
         );
         void draw();
-        void drawPicker(int id);
+        void drawPicker(glm::vec3 id);
         void move(glm::vec3 direction);
         glm::vec3 getPosition() const;
 

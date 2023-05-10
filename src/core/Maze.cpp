@@ -164,10 +164,10 @@ void Maze::addPickableModels(char* modelPath, const int amount, const bool flipU
     }
 }
 
-void Maze::removePickableModel(unsigned char pixel[4], const glm::vec3& playerPos, const float minDistance) {
-    Model* m = this->picker->getModelByColor(pixel);
+void Maze::removePickableModel(int id, const glm::vec3& playerPos, const float minDistance) {
+    Model* m = this->picker->getModelByColor(id);
     if (m == nullptr){
-        std::cout << "Could not find object with id " << pixel << std::endl;
+        std::cout << "Could not find object with id " << id << std::endl;
         return;
     } 
 
@@ -178,14 +178,14 @@ void Maze::removePickableModel(unsigned char pixel[4], const glm::vec3& playerPo
     if (it != models.end()) {
         auto idx{it - models.begin()};
         this->models.erase(models.begin() + idx);
-        this->picker->removeModelByColor(pixel);
+        this->picker->removeModelByColor(id);
         delete m;
     }
     ResourceManager::playSound("eating");
 }
 
 void Maze::drawPickerBuffer() {
-    this->picker->drawModels();
+    this->picker->draw();
 }
 
 glm::ivec2 Maze::getRandomEmptyPos() const {
@@ -203,8 +203,31 @@ glm::ivec2 Maze::getRandomEmptyPos() const {
 
 void Maze::addEnemies(const int amount) {
     for (int i = 0; i < amount; i++) {
-        this->enemies.push_back(
-            new Enemy(100.0f, getRandomEmptyPos(), objects, glm::vec3(1.0f,1.0f,1.0f))
-        );
+        Enemy* e = new Enemy(100.0f, getRandomEmptyPos(), objects, glm::vec3(1.0f,1.0f,1.0f));
+        this->enemies.push_back(e);
+        this->picker->addEnemy(e);
+    }
+}
+
+void Maze::damageEnemy(int id, const glm::vec3& playerPos, const float minDistance) {
+    Enemy* e = this->picker->getEnemyByColor(id);
+    if (e == nullptr){
+        std::cout << "Could not find enemy with id " << id << std::endl;
+        return;
+    } 
+
+    if (glm::distance2(playerPos, e->getPosition()) > minDistance * minDistance)
+        return;
+
+    auto it{std::find_if(enemies.begin(), enemies.end(), [e](const Enemy* enemy){return e == enemy;})};
+    if (it != enemies.end()) {
+        auto idx{it - enemies.begin()};
+        e->attack(100.0f);
+        if (e->isDead()) {
+            this->enemies.erase(enemies.begin() + idx);
+            this->picker->removeEnemyByColor(id);
+            delete e;
+        }
+        ResourceManager::playSound("damage");
     }
 }

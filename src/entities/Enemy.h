@@ -28,6 +28,10 @@ class Enemy : public Entity {
         ~Enemy();
         void update(float dt) override;
         void draw() override;
+        void drawPicker(glm::vec3 id) override;
+
+        void attack(float damage);
+        bool isDead();
 
     private:
         glm::vec3 calculateNewTargetPos();

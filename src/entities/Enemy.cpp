@@ -69,6 +69,10 @@ void Enemy::draw() {
     this->model->draw();
 }
 
+void Enemy::drawPicker(glm::vec3 id) {
+    this->model->drawPicker(id);
+}
+
 glm::vec3 Enemy::calculateNewTargetPos() {
     std::vector<glm::ivec2> possibleDirs = {
         {1,0}, {0,1},
@@ -117,4 +121,12 @@ void Enemy::updateRotation()
         angle = 0.0f;
 
     this->model->setRotation(angle);
+}
+
+void Enemy::attack(float damage) {
+    this->health -= damage;
+}
+
+bool Enemy::isDead() {
+    return this->health <= 0.0f;
 }
