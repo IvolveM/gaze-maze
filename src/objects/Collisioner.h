@@ -7,33 +7,36 @@
 #include <cmath>
 
 // Collisioner is always a box shape
-class Collisioner {
-    public:
-        enum class BoundingBoxType {
-            SPHERE,
-            CUBE,
-            NONE
-        };
+class Collisioner
+{
+public:
+    enum class BoundingBoxType
+    {
+        SPHERE,
+        CUBE,
+        NONE
+    };
 
-        Collisioner() = default;
-        Collisioner(glm::vec3 size, glm::vec3 center, BoundingBoxType boxType);
-        ~Collisioner();
+    Collisioner() = default;
+    Collisioner(glm::vec3 size, glm::vec3 center, BoundingBoxType boxType);
+    ~Collisioner();
 
-        void setCenter(glm::vec3 center);
-        glm::vec3 getCenter();
-        glm::vec3 getMinVec();
-        glm::vec3 getMaxVec();
+    void setCenter(glm::vec3 center);
+    glm::vec3 getCenter();
+    glm::vec3 getMinVec();
+    glm::vec3 getMaxVec();
 
-        glm::vec3 minVec;
-        glm::vec3 maxVec;
+    glm::vec3 minVec;
+    glm::vec3 maxVec;
 
-        bool isColliding(Collisioner col);
-        glm::vec3 getVectorToTranslate(Collisioner col);
+    bool isColliding(Collisioner col);
+    glm::vec3 getVectorToTranslate(Collisioner col);
 
-        BoundingBoxType getType();
-        
-        glm::vec3 size;
-    private:
-        glm::vec3 center;
-        BoundingBoxType boxType = BoundingBoxType::NONE;
+    BoundingBoxType getType();
+
+    glm::vec3 size;
+
+private:
+    glm::vec3 center;
+    BoundingBoxType boxType = BoundingBoxType::NONE;
 };

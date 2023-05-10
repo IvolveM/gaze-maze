@@ -28,43 +28,43 @@ struct KeyScale
 
 class Bone
 {
-    private:
-        std::vector<KeyPosition> positions;
-        std::vector<KeyRotation> rotations;
-        std::vector<KeyScale> scales;
-        int numPositions;
-        int numRotations;
-        int numScalings;
-        
-        glm::mat4 localTransform;
-        std::string name;
-        int ID;
+private:
+    std::vector<KeyPosition> positions;
+    std::vector<KeyRotation> rotations;
+    std::vector<KeyScale> scales;
+    int numPositions;
+    int numRotations;
+    int numScalings;
 
-        void initPositions(const aiNodeAnim *channel);
-        void initRotatings(const aiNodeAnim *channel);
-        void initScalings(const aiNodeAnim *channel);
+    glm::mat4 localTransform;
+    std::string name;
+    int ID;
 
-        float getScaleFactor(float lastTimeStamp, float nextTimeStamp, float animationTime);
+    void initPositions(const aiNodeAnim *channel);
+    void initRotatings(const aiNodeAnim *channel);
+    void initScalings(const aiNodeAnim *channel);
 
-        glm::mat4 interpolatePosition(float animationTime);
-        glm::mat4 interpolateRotation(float animationTime);
-        glm::mat4 interpolateScaling(float animationTime);
-    public:
+    float getScaleFactor(float lastTimeStamp, float nextTimeStamp, float animationTime);
 
-        Bone(const std::string& name, int ID, const aiNodeAnim* channel);
+    glm::mat4 interpolatePosition(float animationTime);
+    glm::mat4 interpolateRotation(float animationTime);
+    glm::mat4 interpolateScaling(float animationTime);
 
-        /*interpolates b/w positions, rotations & scaling keys based on the current time of 
-        the animation and prepares the local transformation matrix by combining all keys 
-        tranformations*/
-        void update(float animationTime);
+public:
+    Bone(const std::string &name, int ID, const aiNodeAnim *channel);
 
-        glm::mat4 getLocalTransform();
-        std::string getBoneName() const;
-        int getBoneID();
+    /*interpolates b/w positions, rotations & scaling keys based on the current time of
+    the animation and prepares the local transformation matrix by combining all keys
+    tranformations*/
+    void update(float animationTime);
 
-        int getPositionIndex(float animationTime);
+    glm::mat4 getLocalTransform();
+    std::string getBoneName() const;
+    int getBoneID();
 
-        int getRotationIndex(float animationTime);
+    int getPositionIndex(float animationTime);
 
-        int getScaleIndex(float animationTime);
+    int getRotationIndex(float animationTime);
+
+    int getScaleIndex(float animationTime);
 };

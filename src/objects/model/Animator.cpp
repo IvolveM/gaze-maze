@@ -30,13 +30,14 @@ void Animator::playAnimation(Animation *animation)
 
 void Animator::calculateBoneTransform(const AssimpNodeData *node, glm::mat4 parentTransform)
 {
-    if (node == nullptr){
+    if (node == nullptr)
+    {
         return;
     }
     std::string nodeName = node->name;
     glm::mat4 nodeTransform = node->transformation;
 
-    Bone* Bone = currentAnimation->findBone(nodeName);
+    Bone *Bone = currentAnimation->findBone(nodeName);
 
     if (Bone)
     {
@@ -59,6 +60,6 @@ void Animator::calculateBoneTransform(const AssimpNodeData *node, glm::mat4 pare
 }
 
 std::vector<glm::mat4> Animator::getFinalBoneMatrices()
-{ 
-    return finalBoneMatrices;  
+{
+    return finalBoneMatrices;
 }

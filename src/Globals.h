@@ -1,7 +1,9 @@
 #pragma once
 
-namespace MazeItem {
-    enum Object {
+namespace MazeItem
+{
+    enum Object
+    {
         WALL,
         EMPTY
     };

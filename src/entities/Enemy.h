@@ -15,43 +15,41 @@
 #include "../objects/model/Animation.h"
 #include "../objects/model/Animator.h"
 
+class Enemy : public Entity
+{
+public:
+    Enemy(
+        float health,
+        glm::ivec2 initialPos,
+        std::vector<std::vector<MazeItem::Object>> grid,
+        glm::vec3 gridBlockSize);
+    ~Enemy();
+    void update(float dt) override;
+    void draw() override;
+    void drawPicker(glm::vec3 id) override;
 
+    void attack(float damage);
+    bool isDead();
 
-class Enemy : public Entity {
-    public:
-        Enemy(
-            float health, 
-            glm::ivec2 initialPos, 
-            std::vector<std::vector<MazeItem::Object>> grid,
-            glm::vec3 gridBlockSize
-        );
-        ~Enemy();
-        void update(float dt) override;
-        void draw() override;
-        void drawPicker(glm::vec3 id) override;
+private:
+    glm::vec3 calculateNewTargetPos();
+    void updateNewPosition(float dt);
+    bool inBounds(const glm::ivec2 &pos);
+    void updateRotation();
 
-        void attack(float damage);
-        bool isDead();
+    float health;
+    float speed = 2.0f;
 
-    private:
-        glm::vec3 calculateNewTargetPos();
-        void updateNewPosition(float dt);
-        bool inBounds(const glm::ivec2 &pos);
-        void updateRotation();
+    glm::vec3 movingDir;
+    glm::vec3 targetPos;
+    float distanceToTravel = 0.0f;
 
-        float health;
-        float speed = 2.0f;
+    std::vector<std::vector<MazeItem::Object>> grid;
+    glm::vec3 gridBlockSize;
+    glm::ivec2 gridPosition;
 
-        glm::vec3 movingDir;
-        glm::vec3 targetPos;
-        float distanceToTravel = 0.0f;
-
-        std::vector<std::vector<MazeItem::Object>> grid;
-        glm::vec3 gridBlockSize;
-        glm::ivec2 gridPosition;
-
-        Model* model;
-        Animation* animation;
-        Animator* animator;
-        ParticleGenerator particleGenerator;
+    Model *model;
+    Animation *animation;
+    Animator *animator;
+    ParticleGenerator particleGenerator;
 };

@@ -1,31 +1,31 @@
 #pragma once
 
 #include <iostream>
-#include <fstream> 
+#include <fstream>
 #include <string>
 #include <vector>
 #include "../objects/based/Cube.h"
 #include "../core/Maze.h"
 #include "MazeGenerator.h"
 
-class MazeLoader {
+class MazeLoader
+{
+public:
     static const char WALLCHAR = '#';
     static const char EMPTYCHAR = ' ';
+    MazeLoader();
+    ~MazeLoader();
 
-    public:
-        MazeLoader();
-        ~MazeLoader();
+    Maze *loadMazeFromFile(std::string fileName);
 
-        Maze* loadMazeFromFile(std::string fileName);
+private:
+    void loadMaze();
+    void loadLine(const std::string &line);
 
-    private:
-        void loadMaze();
-        void loadLine(const std::string& line);
+    Maze::MazeBuilder mazeBuilder;
 
-        Maze::MazeBuilder mazeBuilder;
+    std::ifstream *mazeFile;
 
-        std::ifstream* mazeFile;
-
-        int colOffset = 0;
-        int rowOffset = 0;
+    int colOffset = 0;
+    int rowOffset = 0;
 };

@@ -6,38 +6,39 @@ Model::Model(
     glm::vec3 size,
     float rotationAngle,
     bool flipUvs,
-    Shader shader
-): shader{shader},
-    pickerShader{ResourceManager::getShader("picker")},
-    position{position},
-    size{size},
-    rotationAngle{rotationAngle}
+    Shader shader)
+    : shader{shader},
+      pickerShader{ResourceManager::getShader("picker")},
+      position{position},
+      size{size},
+      rotationAngle{rotationAngle}
 {
     loadModel(path, flipUvs);
 }
 
 Model::Model(
     std::string path,
-    std::vector<glm::mat4> instanceMatrices, 
+    std::vector<glm::mat4> instanceMatrices,
     bool flipUvs,
-    Shader shader
-): shader{shader},
-    instanceMatrices{instanceMatrices},
-    pickerShader{ResourceManager::getShader("picker")}
+    Shader shader)
+    : shader{shader},
+      instanceMatrices{instanceMatrices},
+      pickerShader{ResourceManager::getShader("picker")}
 {
     loadModel(path, flipUvs);
 }
 
 Model::Model(
     std::string path,
-    std::vector<glm::vec3> instancePositions, 
+    std::vector<glm::vec3> instancePositions,
     glm::vec3 instanceSize,
     bool flipUvs,
-    Shader shader
-): shader{shader},
-    pickerShader{ResourceManager::getShader("picker")}
+    Shader shader)
+    : shader{shader},
+      pickerShader{ResourceManager::getShader("picker")}
 {
-    for (auto pos: instancePositions){
+    for (auto pos : instancePositions)
+    {
         glm::mat4 model{1.0f};
         model = glm::translate(model, pos);
         model = glm::scale(model, instanceSize);
@@ -51,14 +52,16 @@ Model::Model(
 void Model::draw()
 {
     shader.use();
-    if (instanceMatrices.empty()){
+    if (instanceMatrices.empty())
+    {
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, this->position);
         model = glm::rotate(model, glm::radians(this->rotationAngle), glm::vec3{0.0f, 1.0f, 0.0f});
         model = glm::scale(model, this->size);
         shader.setMatrixFloat4("model", model);
     }
-    for(unsigned int i = 0; i < meshes.size(); i++){
+    for (unsigned int i = 0; i < meshes.size(); i++)
+    {
         meshes[i].draw(shader);
     }
 }
@@ -71,7 +74,7 @@ void Model::loadModel(std::string path, bool flipUvs)
     // * aiProcess_OptimizeMeshes: joins several meshes to reduce draw calls
     auto postprocessing = flipUvs ? (aiProcess_Triangulate | aiProcess_FlipUVs) : (aiProcess_Triangulate);
     const aiScene *scene = importer.ReadFile(path, postprocessing);
-    if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
         std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
         return;
@@ -80,20 +83,21 @@ void Model::loadModel(std::string path, bool flipUvs)
     processNode(scene->mRootNode, scene);
 }
 
-glm::vec3 Model::getPosition() const {
+glm::vec3 Model::getPosition() const
+{
     return this->position;
 }
 
 void Model::processNode(aiNode *node, const aiScene *scene)
 {
     // process meshes
-    for(unsigned int i = 0; i < node->mNumMeshes; i++)
+    for (unsigned int i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
         meshes.push_back(processMesh(mesh, scene));
     }
     // process children
-    for(unsigned int i = 0; i < node->mNumChildren; i++)
+    for (unsigned int i = 0; i < node->mNumChildren; i++)
     {
         processNode(node->mChildren[i], scene);
     }
@@ -104,7 +108,7 @@ ModelMesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
     std::vector<MeshTexture> textures;
-    for(unsigned int i = 0; i < mesh->mNumVertices; i++)
+    for (unsigned int i = 0; i < mesh->mNumVertices; i++)
     {
         Vertex vertex;
 
@@ -114,28 +118,30 @@ ModelMesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
         vertex.position = AssimpGLMHelpers::getGLMVec(mesh->mVertices[i]);
         vertex.normal = AssimpGLMHelpers::getGLMVec(mesh->mNormals[i]);
 
-        if(mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
+        if (mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
         {
             glm::vec2 vec;
             vec.x = mesh->mTextureCoords[0][i].x;
             vec.y = mesh->mTextureCoords[0][i].y;
             vertex.texCoords = vec;
         }
-        else{
+        else
+        {
             vertex.texCoords = glm::vec2(0.0f, 0.0f);
         }
         vertices.push_back(vertex);
     }
     // process indices
-    for(unsigned int i = 0; i < mesh->mNumFaces; i++)
+    for (unsigned int i = 0; i < mesh->mNumFaces; i++)
     {
         aiFace face = mesh->mFaces[i];
-        for(unsigned int j = 0; j < face.mNumIndices; j++){
+        for (unsigned int j = 0; j < face.mNumIndices; j++)
+        {
             indices.push_back(face.mIndices[j]);
         }
     }
     // process material
-    if(mesh->mMaterialIndex >= 0)
+    if (mesh->mMaterialIndex >= 0)
     {
         aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
         std::vector<MeshTexture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
@@ -145,9 +151,12 @@ ModelMesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
     }
 
     extractBoneWeightForVertices(vertices, mesh, scene);
-    if (instanceMatrices.empty()){
+    if (instanceMatrices.empty())
+    {
         return ModelMesh(vertices, indices, textures);
-    }else{
+    }
+    else
+    {
         return ModelMesh(instanceMatrices, vertices, indices, textures); // instancing
     }
 }
@@ -155,7 +164,7 @@ ModelMesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
 std::vector<MeshTexture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)
 {
     std::vector<MeshTexture> textures;
-    for(unsigned int i = 0; i < mat->GetTextureCount(type); i++)
+    for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
     {
         aiString str;
         mat->GetTexture(type, i, &str);
@@ -171,16 +180,18 @@ std::vector<MeshTexture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureT
     return textures;
 }
 
-void Model::drawPicker(glm::vec3 id) {
+void Model::drawPicker(glm::vec3 id)
+{
     this->pickerShader.use();
     this->pickerShader.setVec3Float("idCol", id);
 
     glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, this->position);
+    model = glm::translate(model, this->position);
     model = glm::rotate(model, glm::radians(this->rotationAngle), glm::vec3{0.0f, 1.0f, 0.0f});
     model = glm::scale(model, this->size);
     pickerShader.setMatrixFloat4("model", model);
-    for(unsigned int i = 0; i < meshes.size(); i++){
+    for (unsigned int i = 0; i < meshes.size(); i++)
+    {
         meshes[i].drawPicker(pickerShader);
     }
 }
@@ -200,7 +211,8 @@ std::vector<Collisioner> Model::getCollisioners()
     return collisioners;
 }
 
-void Model::setVertexBoneDataToDefault(Vertex &vertex){
+void Model::setVertexBoneDataToDefault(Vertex &vertex)
+{
     for (int i = 0; i < MAX_BONE_WEIGHTS; i++)
     {
         vertex.boneIDs[i] = -1;

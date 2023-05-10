@@ -10,13 +10,16 @@ Texture::Texture(std::string texturePath, bool pixelated)
     glBindTexture(GL_TEXTURE_2D, textureId);
 
     // set the texture wrapping/filtering options
-    // GL_REPEAT, GL_MIRRORED_REPEAT, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_BORDER 
+    // GL_REPEAT, GL_MIRRORED_REPEAT, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_BORDER
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    if (pixelated){
+    if (pixelated)
+    {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    }else{
+    }
+    else
+    {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }
@@ -24,11 +27,14 @@ Texture::Texture(std::string texturePath, bool pixelated)
     data = stbi_load(texturePath.c_str(), &width, &height, &nrChannels, 0);
 
     std::string suffix = ".jpg";
-    int colorChannels; 
+    int colorChannels;
     // check if path ends with .png, then we can use RGBA
-    if (texturePath.size() >= suffix.size() && 0 == texturePath.compare(texturePath.size()-suffix.size(), suffix.size(), suffix)){
+    if (texturePath.size() >= suffix.size() && 0 == texturePath.compare(texturePath.size() - suffix.size(), suffix.size(), suffix))
+    {
         colorChannels = GL_RGB;
-    }else{
+    }
+    else
+    {
         colorChannels = GL_RGBA;
     }
     if (data)

@@ -1,16 +1,17 @@
 
 #include "MazeLoader.h"
 
-MazeLoader::MazeLoader() 
+MazeLoader::MazeLoader()
     : mazeBuilder{Maze::MazeBuilder(21, 31)}
 {
-
 }
 
-MazeLoader::~MazeLoader() {
+MazeLoader::~MazeLoader()
+{
     delete this->mazeFile;
 }
-Maze* MazeLoader::loadMazeFromFile(std::string fileName) {
+Maze *MazeLoader::loadMazeFromFile(std::string fileName)
+{
     this->mazeFile = new std::ifstream(fileName);
     loadMaze();
     this->mazeFile->close();
@@ -18,25 +19,34 @@ Maze* MazeLoader::loadMazeFromFile(std::string fileName) {
     return mazeBuilder.build();
 }
 
-void MazeLoader::loadMaze() {
-    if (this->mazeFile->is_open()) {
+void MazeLoader::loadMaze()
+{
+    if (this->mazeFile->is_open())
+    {
         std::string line;
-        while (this->mazeFile->good()) {
+        while (this->mazeFile->good())
+        {
             std::getline(*(this->mazeFile), line);
             loadLine(line);
         }
     }
-    else {
+    else
+    {
         std::cout << "Couldn't open file" << std::endl;
     }
 }
 
-void MazeLoader::loadLine(const std::string& line) {
-    for (const char& el : line) {
-        if (WALLCHAR == el) {
+void MazeLoader::loadLine(const std::string &line)
+{
+    for (const char &el : line)
+    {
+        if (WALLCHAR == el)
+        {
             mazeBuilder.addWall(this->rowOffset, this->colOffset);
         }
-        else if (EMPTYCHAR == el) {}
+        else if (EMPTYCHAR == el)
+        {
+        }
         this->colOffset++;
     }
     this->colOffset = 0;

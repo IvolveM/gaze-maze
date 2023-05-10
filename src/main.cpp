@@ -15,8 +15,9 @@
 #include "stb_image.h"
 #include "Game.h"
 
-int main() {
+int main()
+{
     srand(unsigned(time(NULL)));
-    Game game = Game(1920,1080);
+    Game game = Game(1920, 1080);
     game.mainloop();
 }

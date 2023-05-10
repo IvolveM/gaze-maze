@@ -8,16 +8,17 @@
 #include "../resources/shaders/Shader.h"
 #include "../resources/ResourceManager.h"
 
-class Crosshair {
-    public:
-        Crosshair(float width, float height);
-        ~Crosshair();
+class Crosshair
+{
+public:
+    Crosshair(float width, float height);
+    ~Crosshair();
 
-        void draw();
+    void draw();
 
-    private:
-        Shader shader;
-        std::vector<float> vertices;
+private:
+    Shader shader;
+    std::vector<float> vertices;
 
-        unsigned int VAO, VBO;
+    unsigned int VAO, VBO;
 };

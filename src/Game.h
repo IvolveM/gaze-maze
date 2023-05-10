@@ -1,6 +1,6 @@
 #pragma once
 
-#include <glad/glad.h> 
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include <glm/glm.hpp>
@@ -23,56 +23,61 @@
 #include "core/Skybox.h"
 #include "objects/Crosshair.h"
 
-class Game{
-    private:
-        GLFWwindow* window;
+class Game
+{
+private:
+    GLFWwindow *window;
 
-        int windowHeight = 0;
-        int windowWidth = 0;
+    int windowHeight = 0;
+    int windowWidth = 0;
 
-        unsigned int uboMatrices;
+    unsigned int uboMatrices;
 
-        float dt = 0.0f;
+    float dt = 0.0f;
 
-        Crosshair* crosshair;
-        Player* player;
-        Maze* maze;
-        std::vector<Model*> lights{};
-        Plane* ground;
+    Crosshair *crosshair;
+    Player *player;
+    Maze *maze;
+    std::vector<Model *> lights{};
+    Plane *ground;
 
-        Skybox* skybox;
+    Skybox *skybox;
 
-        void initGlfw();
+    void initGlfw();
 
-        unsigned int pickerBuffer;
-        void initPickerBuffer();
+    unsigned int pickerBuffer;
+    void initPickerBuffer();
 
-        void fillMaze();
+    void fillMaze();
 
-        void render();
-        void renderPickerBuffer();
-        
-        void handleMouseClick();
-        void processInput();
-        void processEvents();
+    void render();
+    void renderPickerBuffer();
 
-        void handleMouse();
+    void handleMouseClick();
+    void processInput();
+    void processEvents();
 
-    public:
-        Game(int width, int height);
-        ~Game();
+    void handleMouse();
 
-        void mainloop();
+public:
+    Game(int width, int height);
+    ~Game();
+
+    void mainloop();
 };
 
-struct FailedGLADInit : public std::exception {
-    const char * what () const throw () {
+struct FailedGLADInit : public std::exception
+{
+    const char *what() const throw()
+    {
         return "Failed to initialize GLAD";
     }
 };
 
-struct FailedGLFWInit : public std::exception {
-    const char * what () const throw () {
+struct FailedGLFWInit : public std::exception
+{
+    const char *what() const throw()
+    {
         return "Failed to initialize GLFW";
     }
 };

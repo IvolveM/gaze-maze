@@ -1,17 +1,16 @@
 #include "Skybox.h"
 
-Skybox::Skybox() :
- shader{ResourceManager::getShader("skybox")} 
+Skybox::Skybox() : shader{ResourceManager::getShader("skybox")}
 {
     skyboxVertices = {
-        -1.0f, -1.0f,  1.0f,
-        1.0f, -1.0f,  1.0f,
+        -1.0f, -1.0f, 1.0f,
+        1.0f, -1.0f, 1.0f,
         1.0f, -1.0f, -1.0f,
         -1.0f, -1.0f, -1.0f,
-        -1.0f,  1.0f,  1.0f,
-        1.0f,  1.0f,  1.0f,
-        1.0f,  1.0f, -1.0f,
-        -1.0f,  1.0f, -1.0f
+        -1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, -1.0f,
+        -1.0f, 1.0f, -1.0f
     };
 
     // reverse order
@@ -36,57 +35,60 @@ Skybox::Skybox() :
         6, 2, 1
     };
 
-	glGenVertexArrays(1, &skyboxVAO);
-	glGenBuffers(1, &skyboxVBO);
-	glGenBuffers(1, &skyboxEBO);
+    glGenVertexArrays(1, &skyboxVAO);
+    glGenBuffers(1, &skyboxVBO);
+    glGenBuffers(1, &skyboxEBO);
 
-	glBindVertexArray(skyboxVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
-	glBufferData(GL_ARRAY_BUFFER, skyboxVertices.size() * sizeof(float), &(skyboxVertices.front()), GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, skyboxEBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, skyboxIndices.size() * sizeof(unsigned int), &(skyboxIndices.front()), GL_STATIC_DRAW);
+    glBindVertexArray(skyboxVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+    glBufferData(GL_ARRAY_BUFFER, skyboxVertices.size() * sizeof(float), &(skyboxVertices.front()), GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, skyboxEBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, skyboxIndices.size() * sizeof(unsigned int), &(skyboxIndices.front()), GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     glGenTextures(1, &cubemapTexture);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
 
     int width, height, nrChannels;
-	for (unsigned int i = 0; i < 6; i++) {
-		unsigned char* data = stbi_load(cubemap[i].c_str(), &width, &height, &nrChannels, 0);
-		if (data) {
-			stbi_set_flip_vertically_on_load(false);
-			glTexImage2D(
-                GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, 
-                width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data
-            );
-		}
-		else {
-			std::cout << "Failed to load texture: " << cubemap[i] << std::endl;
-		}
+    for (unsigned int i = 0; i < 6; i++)
+    {
+        unsigned char *data = stbi_load(cubemap[i].c_str(), &width, &height, &nrChannels, 0);
+        if (data)
+        {
+            stbi_set_flip_vertically_on_load(false);
+            glTexImage2D(
+                GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB,
+                width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        }
+        else
+        {
+            std::cout << "Failed to load texture: " << cubemap[i] << std::endl;
+        }
         stbi_image_free(data);
-	}
+    }
 
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 };
 
-Skybox::~Skybox() {
-    
+Skybox::~Skybox()
+{
 }
 
-void Skybox::draw() {
+void Skybox::draw()
+{
     glDepthFunc(GL_LEQUAL);
 
     shader.use();
-    
+
     glBindVertexArray(skyboxVAO);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);

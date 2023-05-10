@@ -11,9 +11,10 @@ bool Particle::isAlive()
 
 void Particle::update(float dt)
 {
-    if (this->isAlive()){
+    if (this->isAlive())
+    {
         life -= dt;
-        position += velocity*dt;
+        position += velocity * dt;
     }
 }
 
@@ -26,8 +27,8 @@ void Particle::respawn(glm::vec3 position)
     position.x += randomX;
     position.y += randomY;
     position.z += randomZ;
-    velocity.x = randomX/10.0f;
-    velocity.z = randomZ/10.0f;
+    velocity.x = randomX / 10.0f;
+    velocity.z = randomZ / 10.0f;
     this->position = position;
 }
 
@@ -36,6 +37,7 @@ glm::vec3 Particle::getPosition()
     return this->position;
 }
 
-glm::vec3 Particle::getSize(){
+glm::vec3 Particle::getSize()
+{
     return this->size;
 }

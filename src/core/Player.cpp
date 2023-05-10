@@ -43,10 +43,11 @@ void Player::handleKeyInput(InputEvent event)
 
 void Player::update(float dt)
 {
-    //update particles
-    if(movingDirection != glm::vec2{0.0f} && isOnGround){
+    // update particles
+    if (movingDirection != glm::vec2{0.0f} && isOnGround)
+    {
         glm::vec3 pos = this->getPosition();
-        glm::vec3 particlePosition = {pos.x, pos.y-0.45f, pos.z};
+        glm::vec3 particlePosition = {pos.x, pos.y - 0.45f, pos.z};
         particleGenerator.addParticles(dt, particlePosition);
     }
     particleGenerator.update(dt);
@@ -91,24 +92,30 @@ void Player::handleVerticalMovement(float dt)
 void Player::doCollisions(std::vector<Collisioner> collisioners)
 {
     std::vector<Collisioner> collisions = findColliding(collisioners);
-    for (auto col: collisions) {
+    for (auto col : collisions)
+    {
         // resolve each collision by itself
-        if (col.isColliding(this->collisioner)){
+        if (col.isColliding(this->collisioner))
+        {
             resolveCollision(col);
         }
     }
 }
 
-void Player::resolveCollision(Collisioner c) {
+void Player::resolveCollision(Collisioner c)
+{
     auto vec = this->collisioner.getVectorToTranslate(c);
     incrementPosition(vec);
     this->movingDirection = glm::vec2{0.0f, 0.0f};
 }
 
-std::vector<Collisioner> Player::findColliding(std::vector<Collisioner> collisioners) {
+std::vector<Collisioner> Player::findColliding(std::vector<Collisioner> collisioners)
+{
     std::vector<Collisioner> collisionResults = {};
-    for (auto box : collisioners) {
-        if (this->collisioner.isColliding(box)) {
+    for (auto box : collisioners)
+    {
+        if (this->collisioner.isColliding(box))
+        {
             collisionResults.push_back(box);
         }
     }
